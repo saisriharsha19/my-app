@@ -7,7 +7,7 @@ const Portfolio = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/portfolio/');
+        const response = await fetch('https://personalwebsitebackend-gthafrgadzc2argc.eastus2-01.azurewebsites.net/portfolio/');
         const data = await response.json();
         setItems(data);
       } catch (error) {
