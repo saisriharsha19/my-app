@@ -15,7 +15,7 @@ const Blog = () => {
     const fetchPosts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://127.0.0.1:8000/blog/', {
+        const response = await fetch('https://personalwebsitebackend-gthafrgadzc2argc.eastus2-01.azurewebsites.net/blog/', {
           signal: abortController.signal
         });
 
