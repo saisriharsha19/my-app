@@ -7,11 +7,11 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-brand">
-          <span className="footer-logo">MyBrand</span>
+          <span className="footer-logo">#SaiSriHarsha#</span>
         </div>
         <div className="footer-links">
           <ul className="footer-nav">
-            <li><Link to="/home" className="footer-link">About</Link></li>
+            <li><Link to="/" className="footer-link">About</Link></li>
             <li><Link to="/blog" className="footer-link">Services</Link></li>
             <li><Link to="/portfolio" className="footer-link">Portfolio</Link></li>
             <li><Link to="/contact" className="footer-link">Contact</Link></li>
@@ -26,7 +26,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2025 MyBrand. All rights reserved.</p>
+        <p>&copy; 2025 Sai Sri Harsha Guddati. All rights reserved.</p>
       </div>
     </footer>
   );
