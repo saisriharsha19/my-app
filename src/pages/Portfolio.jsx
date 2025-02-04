@@ -23,9 +23,9 @@ const Portfolio = () => {
       <div className="portfolio-items">
         {items.map(item => (
           <div key={item.id} className="portfolio-item">
-            <h2>{item.title}</h2>
-            <img src={item.image_url} alt={item.title} />
+            <h1>{item.title}</h1>
             <p>{item.description}</p>
+            <h3>Project URL - <a href={item.project_url}>{item.project_url}</a></h3>
           </div>
         ))}
       </div>
