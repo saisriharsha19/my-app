@@ -12,7 +12,7 @@ const FullPost = () => {
     const fetchPost = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`http://127.0.0.1:8000/blog/${postId}`);
+        const response = await fetch(`https://personalwebsitebackend-gthafrgadzc2argc.eastus2-01.azurewebsites.net/blog/${postId}`);
         console.log('API Response:', response);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

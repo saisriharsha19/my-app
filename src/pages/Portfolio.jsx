@@ -7,7 +7,7 @@ const Portfolio = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/portfolio/');
+        const response = await fetch('https://personalwebsitebackend-gthafrgadzc2argc.eastus2-01.azurewebsites.net/portfolio/');
         const data = await response.json();
         setItems(data);
       } catch (error) {
@@ -19,13 +19,13 @@ const Portfolio = () => {
 
   return (
     <div className="portfolio-page">
-      <h1>Portfolio</h1>
+      <h1 className="portfolio-heading">Portfolio</h1>
       <div className="portfolio-items">
         {items.map(item => (
           <div key={item.id} className="portfolio-item">
-            <h2>{item.title}</h2>
-            <img src={item.image_url} alt={item.title} />
+            <h1>{item.title}</h1>
             <p>{item.description}</p>
+            <h3>Project URL - <a href={item.project_url}>{item.project_url}</a></h3>
           </div>
         ))}
       </div>

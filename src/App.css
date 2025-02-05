@@ -21,6 +21,7 @@
   --navbar-hover-bg: rgba(0, 255, 136, 0.1);
   --error-bg: #ff4c4c;
   --error-text: #fff;
+
 }
 
 * {
@@ -286,6 +287,12 @@ body {
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+.post-card .progress {
+  width: 100%;
+  margin: 2rem auto;
+  display: flex;
+  justify-content: center;
+}
 
 .post-card:hover {
   transform: translateY(-5px);
@@ -392,6 +399,21 @@ body {
   padding: calc(var(--spacing) * 2) var(--spacing);
   max-width: 1440px;
   margin: 0 auto;
+  background: var(--bg);
+  color: var(--text);
+  border-radius: var(--radius);
+}
+
+.portfolio-heading, 
+.contactme-heading{
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeIn 1s ease-out;
+  font-weight: bold;
 }
 
 .portfolio-items {
@@ -402,18 +424,19 @@ body {
 }
 
 .portfolio-item {
-  background: var(--glass);
+  background: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
   backdrop-filter: var(--blur);
-  padding: 1.5rem;
+  padding: 2rem;
   border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s ease;
+  color: var(--text);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .portfolio-item:hover {
-  transform: translateY(-3px);
+  transform: translateY(5px);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
 }
 
 .portfolio-item img {

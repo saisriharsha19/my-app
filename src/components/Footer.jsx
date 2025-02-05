@@ -11,17 +11,17 @@ const Footer = () => {
         </div>
         <div className="footer-links">
           <ul className="footer-nav">
-            <li><a href="#about" className="footer-link">About</a></li>
-            <li><a href="#services" className="footer-link">Services</a></li>
-            <li><a href="#portfolio" className="footer-link">Portfolio</a></li>
+            <li><Link to="/" className="footer-link">About</Link></li>
+            <li><Link to="/blog" className="footer-link">Services</Link></li>
+            <li><Link to="/portfolio" className="footer-link">Portfolio</Link></li>
             <li><Link to="/contact" className="footer-link">Contact</Link></li>
           </ul>
         </div>
         <div className="footer-social">
           <ul className="social-links">
-            <li><a href="#" className="social-icon">🐦</a></li>
-            <li><a href="#" className="social-icon">📘</a></li>
-            <li><a href="#" className="social-icon">📸</a></li>
+            <li><a href="https://x.com/SriHarsha_19" className="social-icon">Twitter</a></li>
+            <li><a href="https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/" className="social-icon">LinkedIn</a></li>
+            <li><a href="https://github.com/saisriharsha19" className="social-icon">GitHub</a></li>
           </ul>
         </div>
       </div>
