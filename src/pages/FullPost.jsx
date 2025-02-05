@@ -1,6 +1,6 @@
-// src/pages/FullPost.jsx
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 const FullPost = () => {
   const { postId } = useParams();
@@ -13,7 +13,6 @@ const FullPost = () => {
       try {
         setIsLoading(true);
         const response = await fetch(`https://personalwebsitebackend-gthafrgadzc2argc.eastus2-01.azurewebsites.net/blog/${postId}`);
-        console.log('API Response:', response);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -53,7 +52,9 @@ const FullPost = () => {
     <div className="full-post-container">
       <h1 className="full-post-title">{post.title}</h1>
       <time className="full-post-date">{new Date(post.created_at).toLocaleDateString()}</time>
-      <div className="full-post-content">{post.content}</div>
+      <div className="full-post-content">
+        <ReactMarkdown>{post.content}</ReactMarkdown>
+      </div>
       <Link to="/blog" className="go-back">Go Back</Link>
     </div>
   );

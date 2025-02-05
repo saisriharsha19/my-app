@@ -222,14 +222,32 @@ body {
   animation: fadeIn 1s ease-out;
 }
 
-/* Responsive Adjustments */
+/* Adjust for smaller screens */
 @media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
   .home-page {
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing);
+    gap: 2rem;
+  }
+
+  .home-content {
+    padding-right: 0;
     text-align: center;
   }
 
   .home-image {
-    max-width: 90%;
+    max-width: 80%;
   }
 
   .bio-section {
@@ -237,7 +255,7 @@ body {
   }
 
   .bio-section h3 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   .bio-section p {
@@ -245,6 +263,21 @@ body {
   }
 }
 
+/* Small mobile screens adjustments */
+@media (max-width: 480px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .home-content h1,
+  .home-content h2 {
+    font-size: 2rem;
+  }
+
+  .home-image img {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); /* Simplify for smaller screens */
+  }
+}
 
 /* Common Page Title Styling (Blog, Full Post, etc.) */
 .page-title,
@@ -299,24 +332,51 @@ body {
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
 }
 
+
+
+/* Date styling */
 .post-date {
-  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.9rem;
-  margin-top: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
+/* Author styling */
 .post-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
-  margin-top: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
 }
+
+/* Optional: Add icons before date & author */
+.post-date::before {
+  content: "📅"; /* Calendar icon */
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.post-author::before {
+  content: "✍️"; /* Pen icon */
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+
 
 /* Full Post */
 .full-post-container {
   padding: calc(var(--spacing) * 2) var(--spacing);
   max-width: 1440px;
   margin: 0 auto;
-  text-align: center;
+  text-align: justify; /* Better readability */
   background: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
   backdrop-filter: var(--blur);
   border-radius: var(--radius);
@@ -324,7 +384,58 @@ body {
   color: var(--text);
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  line-height: 1.6; /* Better readability */
 }
+
+/* Headings for structure */
+.full-post-container h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: left;
+  color: var(--highlight-color);
+  margin-bottom: 10px;
+}
+
+.full-post-container h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: left;
+  color: var(--highlight-color);
+  margin-bottom: 8px;
+}
+
+.full-post-container p {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+}
+
+/* Make blockquotes stand out */
+.full-post-container blockquote {
+  font-style: italic;
+  border-left: 4px solid var(--highlight-color);
+  padding-left: 12px;
+  margin: 20px 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Improve list styling */
+.full-post-container ul, 
+.full-post-container ol {
+  margin: 10px 0 20px 20px;
+  padding-left: 20px;
+}
+
+.full-post-container li {
+  margin-bottom: 6px;
+}
+
+/* Highlight important text */
+.full-post-container strong {
+  color: var(--highlight-color);
+}
+
 
 .full-post-container:hover {
   transform: translateY(5px);
@@ -385,17 +496,33 @@ body {
 /* Read More Button */
 .read-more {
   display: inline-block;
-  margin-top: 1.5rem;
-  padding: 0.8rem 1.5rem;
-  background: var(--primary);
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem; /* Reduced padding */
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   color: #fff;
   text-decoration: none;
-  border-radius: var(--radius);
-  transition: background-color 0.3s ease;
+  font-size: 0.85rem; /* Smaller font */
+  font-weight: 500; /* Adjusted weight */
+  border-radius: calc(var(--radius) * 1.2);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Lighter shadow */
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 
+
+/* Hover Effect */
 .read-more:hover {
-  background-color: var(--secondary);
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Active/Pressed Effect */
+.read-more:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Portfolio Page */
@@ -425,6 +552,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   padding: 2rem 0;
+  border-radius: var(--radius);
 }
 
 .portfolio-item {
@@ -436,21 +564,160 @@ body {
   color: var(--text);
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
 }
+
+/* Portfolio Title */
+.portfolio-item h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+  text-align: center; /* Ensure title is centered */
+}
+
+/* Portfolio Description */
+.portfolio-item p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  max-width: 80%;
+  margin: 0 auto 1.5rem auto; /* Adjust bottom margin for better spacing */
+  text-align: center; /* Center the paragraph text */
+}
+
+/* Call-to-Action Link */
+.portfolio-item a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: calc(var(--radius) * 1.2);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border: none;
+  letter-spacing: 0.5px;
+}
+
+.portfolio-item a:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Optional: Aligning for smaller devices */
+/* Mobile Enhancements */
+@media (max-width: 768px) {
+
+  /* Adjust page title font size */
+  .page-title,
+  .full-post-title,
+  .portfolio-heading,
+  .contactme-heading {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Blog page layout */
+  .blog-page {
+    padding: var(--spacing);
+  }
+
+  /* Posts container (one column on mobile) */
+  .posts-container {
+    grid-template-columns: 1fr;
+    padding: 1rem 0;
+  }
+
+  /* Post card */
+  .post-card {
+    padding: 1.5rem;
+    box-shadow: 0 6px 15px rgba(0, 255, 136, 0.2);
+  }
+
+  /* Full post container */
+  .full-post-container {
+    padding: var(--spacing);
+    font-size: 0.95rem;
+  }
+
+  /* Full post headings */
+  .full-post-container h2,
+  .full-post-container h3 {
+    font-size: 1.5rem;
+  }
+
+  /* Adjust text in portfolio items */
+  .portfolio-item {
+    padding: 1.5rem;
+    height: auto;
+    text-align: center;
+  }
+
+  /* Portfolio item description */
+  .portfolio-item p {
+    font-size: 0.9rem;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  /* Portfolio item title */
+  .portfolio-item h3 {
+    font-size: 1.2rem;
+  }
+
+  /* Read More button */
+  .read-more {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  /* Go Back button */
+  .go-back {
+    font-size: 0.95rem;
+  }
+
+  /* Error and loading states */
+  .error-container,
+  .loading-container {
+    padding: 2rem;
+  }
+
+  /* Portfolio items grid */
+  .portfolio-items {
+    grid-template-columns: 1fr;
+  }
+
+  /* Portfolio call-to-action */
+  .portfolio-item a {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  /* Spinner size */
+  .spinner {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 
 .portfolio-item:hover {
   transform: translateY(5px);
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
 }
 
-.portfolio-item img {
-  width: 100%; /* Ensure the image spans the entire width of the container */
-  height: 100%; /* Ensure the image spans the entire height of the container */
-  object-fit: cover; /* Scale the image to cover the container without distorting it */
-  object-position: center; /* Keeps the focal point centered */
-  border-radius: calc(var(--radius) / 2);
-  margin-bottom: 1rem;
-}
+
 
 .portfolio-item::before {
   content: '';
@@ -756,4 +1023,43 @@ button:hover {
 
 .footer-bottom p {
   margin: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .footer {
+    padding: 1.5rem; /* Smaller padding for mobile */
+    font-size: 0.9rem;
+  }
+
+  .footer-container {
+    gap: 1rem; /* Reduced gap */
+  }
+
+  .footer-brand {
+    font-size: 1.2rem;
+  }
+
+  .footer-links {
+    gap: 1rem;
+  }
+
+  .footer-nav {
+    flex-direction: column; /* Stack vertically */
+    gap: 1rem;
+  }
+
+  .footer-social {
+    flex-direction: column; /* Stack social icons vertically */
+    gap: 1rem;
+  }
+
+  .social-links {
+    flex-direction: column; /* Stack social links vertically */
+    gap: 1rem;
+  }
+
+  .footer-bottom {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+  }
 }

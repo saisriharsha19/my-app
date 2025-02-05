@@ -1,5 +1,5 @@
 // src/pages/Portfolio.jsx
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'; 
 
 const Portfolio = () => {
   const [items, setItems] = useState([]);
