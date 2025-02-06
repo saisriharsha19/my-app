@@ -61,59 +61,94 @@ body {
   background: var(--secondary);
 }
 
-/* Navbar */
+
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: var(--dark-bg);
-  padding: 1rem 2rem;
+  background: var(--dark-bg); /* Define your dark background in CSS variables */
+  padding: 0.5rem 2rem; /* Adjust as needed */
   z-index: 1000;
-  color: var(--highlight-color);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Inner container for alignment and spacing */
 .navbar .container {
   max-width: 1440px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Prevents wrapping of items */
 }
 
+/* Navbar Brand (Logo/Text) */
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: 700;
   background: linear-gradient(45deg, var(--primary), var(--secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  white-space: nowrap;  /* Ensure the brand doesn't wrap */
   transition: transform 0.3s ease;
 }
-
 .navbar-brand:hover {
   transform: scale(1.1);
 }
 
+/* ==========================================================================
+   Navigation Menu: Horizontal, Scrollable, No Wrapping
+   ========================================================================== */
 .navbar-nav {
-  display: flex;
-  gap: 2rem;
+  display: flex !important;      /* Force flex display */
+  flex-direction: row !important; /* Ensure horizontal layout */
+  flex-wrap: nowrap;              /* Prevent wrapping into multiple lines */
+  overflow-x: auto;               /* Allow horizontal scrolling if needed */
+  overflow-y: hidden;             /* Prevent vertical scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
+/* Each list item in the nav menu */
+.navbar-nav ul {
+  flex: 0 0 auto;  /* Prevent items from shrinking or growing */
+  display: flex;
+  align-items: center;
+}
+
+/* Nav links styling */
 .navbar-nav a {
-  color: var(--highlight-color);
+  color: var(--highlight-color); /* Define this variable for your text color */
   text-decoration: none;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 14px;
+  white-space: nowrap;  /* Prevent link text from wrapping */
+  display: inline-block;
+  line-height: 1;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
-
 .navbar-nav a:hover {
-  background-color: var(--navbar-hover-bg);
-  color: var(--hover-color);
+  background-color: var(--navbar-hover-bg); /* Set your hover background color */
+  color: var(--hover-color);               /* Set your hover text color */
 }
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem 1rem; /* Reduce side padding on smaller screens */
+  }
+  .navbar-nav a {
+    font-size: 12px;      /* Smaller text for nav links */
+    padding: 0.4rem 0.6rem; /* Adjust link padding */
+  }
+  .navbar-nav {
+    flex-direction: row !important;
+  }
+}
+
 
 /* Home Page Layout */
 .home-page {
@@ -224,15 +259,13 @@ body {
 
 /* Adjust for smaller screens */
 @media (max-width: 768px) {
-  .navbar {
-    padding: 1rem;
-  }
 
   .navbar-nav {
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: center;
-  }
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row; /* Ensure items are in a row */
+}
+
 
   .home-page {
     flex-direction: column;
@@ -525,7 +558,7 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Portfolio Page */
+/* Portfolio Page Container */
 .portfolio-page {
   padding: calc(var(--spacing) * 2) var(--spacing);
   max-width: 1440px;
@@ -535,8 +568,9 @@ body {
   border-radius: var(--radius);
 }
 
-.portfolio-heading, 
-.contactme-heading{
+/* Headings */
+.portfolio-heading,
+.contactme-heading {
   font-size: 2.5rem;
   text-align: center;
   margin-bottom: 3rem;
@@ -547,6 +581,7 @@ body {
   font-weight: bold;
 }
 
+/* Portfolio Items Grid */
 .portfolio-items {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -555,7 +590,9 @@ body {
   border-radius: var(--radius);
 }
 
+/* Portfolio Item */
 .portfolio-item {
+  position: relative; /* Ensure the ::before overlay is contained */
   background: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
   backdrop-filter: var(--blur);
   padding: 2rem;
@@ -579,7 +616,7 @@ body {
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 1rem;
   letter-spacing: 1px;
-  text-align: center; /* Ensure title is centered */
+  text-align: center;
 }
 
 /* Portfolio Description */
@@ -588,8 +625,8 @@ body {
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.6;
   max-width: 80%;
-  margin: 0 auto 1.5rem auto; /* Adjust bottom margin for better spacing */
-  text-align: center; /* Center the paragraph text */
+  margin: 0 auto 1.5rem;
+  text-align: center;
 }
 
 /* Call-to-Action Link */
@@ -605,120 +642,23 @@ body {
   border-radius: calc(var(--radius) * 1.2);
   transition: all 0.3s ease-in-out;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  border: none;
   letter-spacing: 0.5px;
+  text-align: center;
 }
 
+/* Hover Effects */
 .portfolio-item a:hover {
   background: var(--secondary);
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* Optional: Aligning for smaller devices */
-/* Mobile Enhancements */
-@media (max-width: 768px) {
-
-  /* Adjust page title font size */
-  .page-title,
-  .full-post-title,
-  .portfolio-heading,
-  .contactme-heading {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  /* Blog page layout */
-  .blog-page {
-    padding: var(--spacing);
-  }
-
-  /* Posts container (one column on mobile) */
-  .posts-container {
-    grid-template-columns: 1fr;
-    padding: 1rem 0;
-  }
-
-  /* Post card */
-  .post-card {
-    padding: 1.5rem;
-    box-shadow: 0 6px 15px rgba(0, 255, 136, 0.2);
-  }
-
-  /* Full post container */
-  .full-post-container {
-    padding: var(--spacing);
-    font-size: 0.95rem;
-  }
-
-  /* Full post headings */
-  .full-post-container h2,
-  .full-post-container h3 {
-    font-size: 1.5rem;
-  }
-
-  /* Adjust text in portfolio items */
-  .portfolio-item {
-    padding: 1.5rem;
-    height: auto;
-    text-align: center;
-  }
-
-  /* Portfolio item description */
-  .portfolio-item p {
-    font-size: 0.9rem;
-    max-width: 100%;
-    margin-bottom: 1rem;
-  }
-
-  /* Portfolio item title */
-  .portfolio-item h3 {
-    font-size: 1.2rem;
-  }
-
-  /* Read More button */
-  .read-more {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-  }
-
-  /* Go Back button */
-  .go-back {
-    font-size: 0.95rem;
-  }
-
-  /* Error and loading states */
-  .error-container,
-  .loading-container {
-    padding: 2rem;
-  }
-
-  /* Portfolio items grid */
-  .portfolio-items {
-    grid-template-columns: 1fr;
-  }
-
-  /* Portfolio call-to-action */
-  .portfolio-item a {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-  }
-
-  /* Spinner size */
-  .spinner {
-    width: 40px;
-    height: 40px;
-  }
-}
-
-
 .portfolio-item:hover {
   transform: translateY(5px);
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
 }
 
-
-
+/* Overlay Effect */
 .portfolio-item::before {
   content: '';
   position: absolute;
@@ -728,6 +668,41 @@ body {
   height: 100%;
   background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1));
   z-index: -1;
+}
+
+/* Responsive Adjustments for Mobile Devices */
+@media (max-width: 768px) {
+  .portfolio-heading,
+  .contactme-heading {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .portfolio-items {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+  }
+  
+  .portfolio-item {
+    padding: 1.5rem;
+  }
+  
+  .portfolio-item h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .portfolio-item p {
+    font-size: 0.9rem;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .portfolio-item a {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
 }
 
 /* Contact Page */
@@ -778,12 +753,12 @@ body {
 button {
   background: linear-gradient(45deg, var(--primary), var(--secondary));
   color: var(--bg);
-  padding: 1rem 2rem;
+  padding: 1rem;
   border: none;
   border-radius: calc(var(--radius) / 2);
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;;
 }
 
 button:hover {
@@ -871,81 +846,8 @@ button:hover {
   }
 }
 
-/* Responsive Design Adjustments */
-@media (max-width: 768px) {
-  /* Navbar adjustments */
-  .navbar .container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .navbar-nav {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  /* Home Page Title */
-  .home-page h1 {
-    font-size: clamp(1.5rem, 8vw, 3rem);
-  }
-
-  /* Page Titles */
-  .page-title,
-  .full-post-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  /* Containers */
-  .posts-container,
-  .portfolio-items {
-    padding: 1rem;
-  }
-
-  .post-card,
-  .portfolio-item,
-  .full-post-container {
-    padding: 1.5rem;
-  }
-
-  .go-back {
-    font-size: 1rem;
-  }
-
-  .error-container {
-    padding: 2rem;
-  }
-
-  .spinner {
-    width: 40px;
-    height: 40px;
-  }
-
-  .read-more {
-    padding: 0.8rem 1.2rem;
-  }
-
-  /* Thank You Page Button */
-  .thank-you-page .return-btn {
-    width: 100%;
-    padding: 1.2rem;
-    font-size: 1.1rem;
-  }
-
-  /* Form Inputs */
-  .form-group input,
-  .form-group textarea {
-    padding: 0.8rem;
-  }
-
-  /* Navbar Padding */
-  .navbar {
-    padding: 1rem;
-  }
-}
-
 .footer {
-  background: var(--bg-light);
+  background: var(--bg-dark);
   color: var(--text);
   padding: 2rem;
   text-align: center;
@@ -1044,17 +946,17 @@ button:hover {
   }
 
   .footer-nav {
-    flex-direction: column; /* Stack vertically */
+    flex-direction: row; /* Stack vertically */
     gap: 1rem;
   }
 
   .footer-social {
-    flex-direction: column; /* Stack social icons vertically */
+    flex-direction: row; /* Stack social icons vertically */
     gap: 1rem;
   }
 
   .social-links {
-    flex-direction: column; /* Stack social links vertically */
+    flex-direction: row; /* Stack social links vertically */
     gap: 1rem;
   }
 

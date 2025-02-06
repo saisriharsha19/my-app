@@ -1,6 +1,12 @@
 import React from "react";
 import "../App.css"; // Import the CSS file
 import { Link } from "react-router-dom";
+// Import as React components
+import twitterIcon from '../icons/twitter.png';
+import linkedinIcon from '../icons/linkedin.png';
+import githubIcon from '../icons/github.png';
+
+
 
 const Footer = () => {
   return (
@@ -18,11 +24,23 @@ const Footer = () => {
           </ul>
         </div>
         <div className="footer-social">
-          <ul className="social-links">
-            <li><a href="https://x.com/SriHarsha_19" className="social-icon">Twitter</a></li>
-            <li><a href="https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/" className="social-icon">LinkedIn</a></li>
-            <li><a href="https://github.com/saisriharsha19" className="social-icon">GitHub</a></li>
-          </ul>
+        <ul className="social-links">
+      <li>
+        <a href="https://x.com/SriHarsha_19" className="social-icon" aria-label="Twitter">
+          <img src={twitterIcon} alt="Twitter" />
+        </a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/" className="social-icon" aria-label="LinkedIn">
+          <img src={linkedinIcon} alt="LinkedIn" />
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/saisriharsha19" className="social-icon" aria-label="GitHub">
+          <img src={githubIcon} alt="GitHub" />
+        </a>
+      </li>
+    </ul>
         </div>
       </div>
       <div className="footer-bottom">
