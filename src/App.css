@@ -340,6 +340,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   padding: 2rem 0;
+  border-radius: var(--radius);
   animation: slideUp 1s ease-out;
 }
 
@@ -658,17 +659,7 @@ body {
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
 }
 
-/* Overlay Effect */
-.portfolio-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1));
-  z-index: -1;
-}
+
 
 /* Responsive Adjustments for Mobile Devices */
 @media (max-width: 768px) {
@@ -745,10 +736,18 @@ body {
 
 .form-group input:focus,
 .form-group textarea:focus {
+  transform: translateY(-2px);
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
 }
+
+.contact-page form:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+  border-color: var(--secondary);
+}
+
 
 button {
   background: linear-gradient(45deg, var(--primary), var(--secondary));
@@ -758,7 +757,7 @@ button {
   border-radius: calc(var(--radius) / 2);
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease;;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 button:hover {
@@ -766,13 +765,35 @@ button:hover {
   opacity: 0.9;
 }
 
+@media (max-width: 768px) {
+  .contact-page {
+    padding: var(--spacing);
+  }
+
+  .contact-page form {
+    padding: 1.5rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.75rem;
+  }
+
+  button {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
 .success-message {
   background: rgba(0, 255, 136, 0.1);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: var(--radius);
   text-align: center;
   border: 1px solid var(--primary);
   animation: fadeIn 0.5s ease-out;
+  max-width: 90%;
+  margin: auto;
 }
 
 /* Thank You Page */
@@ -783,10 +804,11 @@ button:hover {
   justify-content: center;
   height: 100vh;
   text-align: center;
+  padding: 1rem;
 }
 
 .thank-you-page h1 {
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(1.5rem, 5vw, 3.5rem);
   line-height: 1.2;
   margin-bottom: 1rem;
   background: linear-gradient(45deg, var(--primary), var(--secondary));
@@ -796,15 +818,16 @@ button:hover {
 }
 
 .thank-you-page p {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  margin-bottom: 1.5rem;
   color: var(--text);
+  padding: 0 1rem;
 }
 
 .thank-you-page .return-btn {
   background: linear-gradient(45deg, var(--primary), var(--secondary));
   color: var(--bg);
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   border: none;
   border-radius: var(--radius);
   font-weight: 600;
@@ -812,9 +835,26 @@ button:hover {
   text-transform: uppercase;
   text-decoration: none;
   transition: all 0.3s ease;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: inline-block;
-  max-width: 250px;
+  max-width: 200px;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .thank-you-page .return-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    max-width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thank-you-page .return-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    max-width: 150px;
+  }
 }
 
 .thank-you-page .return-btn:hover {
@@ -822,6 +862,7 @@ button:hover {
   opacity: 0.9;
   background: linear-gradient(45deg, var(--secondary), var(--primary));
 }
+
 
 /* Animations */
 @keyframes fadeIn {
