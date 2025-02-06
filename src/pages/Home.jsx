@@ -1,5 +1,5 @@
 import React from 'react';
-import profileImage from '../images/Profile.JPEG'; // adjust the path/filename as needed
+import profileImage from '../images/IMG_6153.jpeg'; // adjust the path/filename as needed
 
 const Home = () => {
   return (
