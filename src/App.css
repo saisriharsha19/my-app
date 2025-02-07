@@ -168,7 +168,73 @@ body {
   background: linear-gradient(45deg, var(--secondary), var(--primary));
 }
 
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .experience-page {
+    padding: var(--spacing);
+  }
 
+  .experience-list {
+    grid-template-columns: 1fr; /* Single column for mobile */
+    gap: 1.5rem;
+  }
+
+  .experience-card {
+    padding: 1.5rem;
+  }
+
+  .experience-page h1 {
+    font-size: 1.8rem;
+  }
+
+  .experience-card h2 {
+    font-size: 1.4rem;
+  }
+
+  .experience-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .experience-card p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .return-btn {
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+    max-width: 160px;
+  }
+}
+
+/* Extra Small Screens */
+@media (max-width: 480px) {
+  .experience-page h1 {
+    font-size: 1.5rem;
+  }
+
+  .experience-card {
+    padding: 1rem;
+  }
+
+  .experience-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .experience-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .experience-card p {
+    font-size: 0.85rem;
+  }
+
+  .return-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8rem;
+    max-width: 140px;
+  }
+}
 
 
 
