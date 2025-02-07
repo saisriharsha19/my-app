@@ -19,7 +19,7 @@ const Portfolio = () => {
 
   return (
     <div className="portfolio-page">
-      <h1 className="portfolio-heading">Portfolio</h1>
+      <h1 className="portfolio-heading">Projects</h1>
       <div className="portfolio-items">
         {items.map(item => (
           <div key={item.id} className="portfolio-item">

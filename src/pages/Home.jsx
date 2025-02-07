@@ -16,7 +16,7 @@ const Home = () => {
       <div className="bio-section">
         <h3>Hi there! I’m Sai Sri Harsha Guddati</h3>
         <p>
-          I’m a software engineer with a passion for building creative, impactful solutions. I’m currently studying for my Master’s in Computer Science at the University of Florida, where I get to explore the latest in machine learning, cloud computing, and software development.
+          I’m a software engineer with a passion for building creative, impactful solutions. I’m currently pursuing my Master’s Degree in Computer Science at the University of Florida, where I get to explore the latest in machine learning, cloud computing, and software development.
         </p>
         <p>
           My journey so far has taken me from developing innovative cloud systems and AI projects at Tata Consultancy Services to diving into hands-on work with technologies like Python, Flask, React, and many more. I love the challenge of turning complex problems into user-friendly, scalable solutions that make a real difference.

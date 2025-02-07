@@ -62,6 +62,121 @@ body {
 }
 
 
+
+
+
+
+
+
+
+
+.experience-page {
+  padding: calc(var(--spacing) * 2) var(--spacing);
+  max-width: 1440px;
+  margin: 0 auto;
+  background: var(--bg);
+  color: var(--text);
+  border-radius: var(--radius);
+}
+
+.experience-list {
+  display:inline-block;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 5rem;
+  padding: 2rem 0;
+  border-radius: var(--radius);
+  animation: slideUp 1s ease-out;
+}
+
+.experience-card {
+  background: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
+  backdrop-filter: var(--blur);
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.experience-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+}
+
+.experience-card .progress{
+  width: 100%;
+  margin: 2rem auto;
+  display: flex;
+  justify-content: center;
+}
+
+.experience-page h1 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeIn 1s ease-out;
+  font-weight: bold;
+}
+
+.experience-card h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: left;
+  color: var(--highlight-color);
+  margin-bottom: 10px;
+}
+
+.experience-card h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: left;
+  color: var(--highlight-color);
+  margin-bottom: 8px;
+}
+
+.experience-card p {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+}
+
+.return-btn {
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  color: var(--bg);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  display: inline-block;
+  max-width: 200px;
+  font-size: 1rem;
+}
+
+.return-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+  background: linear-gradient(45deg, var(--secondary), var(--primary));
+}
+
+
+
+
+
+
+
+
+
+
 .navbar {
   position: fixed;
   top: 0;

@@ -7,6 +7,8 @@ import Portfolio from './pages/Portfolio';
 import Contact from './pages/Contact';
 import ThankYouPage from './pages/ThankYouPage';
 import FullPost from './pages/FullPost';
+import ExperiencePage from './pages/ExperiencePage';
+
 import './App.css';
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/thank-you" element={<ThankYouPage />} />
           <Route path="/blog/:postId" element={<FullPost />} />
+          <Route path="/experience" element={<ExperiencePage />} />
         </Routes>
       </div>
       <Footer />
