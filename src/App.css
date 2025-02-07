@@ -94,7 +94,6 @@ body {
   padding: 2rem;
   border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
   color: var(--text);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -517,9 +516,9 @@ body {
 }
 
 .posts-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: column; /* Ensures elements stack in a row-wise manner */
+  gap: 1.5rem; /* Space between rows */
   padding: 2rem 0;
   border-radius: var(--radius);
   animation: slideUp 1s ease-out;
