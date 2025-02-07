@@ -5,11 +5,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import favicon from "./icons/favicon.ico"; // Import the favicon
 
-// Dynamically add favicon to head
-const link = document.createElement("link");
-link.rel = "icon";
-link.href = favicon;
-document.head.appendChild(link);
+const favicons = [
+  { rel: "icon", href: favicon, sizes: "32x32" },
+  { rel: "apple-touch-icon", href: favicon, sizes: "180x180" }, // iOS devices
+  { rel: "shortcut icon", href: favicon } // General fallback
+];
+
+favicons.forEach((icon) => {
+  const link = document.createElement("link");
+  link.rel = icon.rel;
+  link.href = icon.href;
+  link.sizes = icon.sizes || "";
+  document.head.appendChild(link);
+});
 document.title = "Sai Sri Harsha Guddati Portfolio";
 
 
