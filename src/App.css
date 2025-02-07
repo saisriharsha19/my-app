@@ -137,11 +137,23 @@ body {
   margin-bottom: 8px;
 }
 
-.experience-card p, ul, li{
+.experience-card p {
   font-size: 1rem;
   margin-bottom: 16px;
   letter-spacing: 0.5px;
   line-height: 1.8;
+}
+
+.experience-card ul {
+  margin-bottom: 16px;
+  padding-left: 20px; /* Ensures proper indentation */
+}
+
+.experience-card li {
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+  margin-bottom: 8px; /* Adds spacing between list items */
 }
 
 .return-btn {
