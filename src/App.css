@@ -72,7 +72,7 @@ body {
 
 .experience-page {
   padding: calc(var(--spacing) * 2) var(--spacing);
-  max-width: 1440px;
+  max-width: 900px;
   margin: 0 auto;
   background: var(--bg);
   color: var(--text);
@@ -81,17 +81,18 @@ body {
 
 .experience-list {
   display: flex;
-  flex-direction: column; /* Ensures elements stack in a row-wise manner */
-  gap: 1.5rem; /* Space between rows */
+  flex-direction: column;
+  gap: 1.5rem;
   padding: 2rem 0;
-  border-radius: var(--radius);
-  animation: slideUp 1s ease-out;
 }
 
 .experience-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
   background: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
   backdrop-filter: var(--blur);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text);
@@ -103,48 +104,52 @@ body {
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
 }
 
-.experience-card .progress{
-  width: 100%;
-  margin: 2rem auto;
-  display: flex;
-  justify-content: center;
+.experience-icon {
+  font-size: 3rem;
+  color: var(--highlight-color);
 }
 
-.experience-page h1 {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: 3rem;
-  background: linear-gradient(45deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: fadeIn 1s ease-out;
-  font-weight: bold;
+.experience-details {
+  flex: 1;
 }
 
 .experience-card h2 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  text-align: left;
-  color: var(--highlight-color);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  color: var(--secondary);
 }
 
 .experience-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  text-align: left;
-  color: var(--highlight-color);
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.experience-card .duration {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--secondary);
   margin-bottom: 8px;
 }
 
 .experience-card p {
   font-size: 1rem;
-  margin-bottom: 16px;
   letter-spacing: 0.5px;
-  line-height: 1.8;
+  line-height: 1.6;
 }
 
-.return-btn {
+.button-container {
+  display: flex;
+  justify-content: space-between; /* Space out the buttons */
+  align-items: center;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.return-btn,
+.download-btn {
   background: linear-gradient(45deg, var(--primary), var(--secondary));
   color: var(--bg);
   padding: 0.75rem 1.5rem;
@@ -152,38 +157,66 @@ body {
   border-radius: var(--radius);
   font-weight: 600;
   cursor: pointer;
-  text-transform: uppercase;
   text-decoration: none;
   transition: all 0.3s ease;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: inline-block;
   max-width: 200px;
   font-size: 1rem;
 }
 
+.download-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+
 .return-btn:hover {
   transform: scale(1.05);
   opacity: 0.9;
-  background: linear-gradient(45deg, var(--secondary), var(--primary));
 }
+
+.experience-page-points {
+  font-size: 16px;
+  margin: 8px 0;
+  padding-left: 20px; /* Space for indentation */
+  position: relative;
+}
+
+.experience-page-points::before {
+  content: counter(point) ". "; /* Add number before text */
+  counter-increment: point; /* Increment the counter */
+  position: absolute;
+  left: 0px; /* Position the number outside */
+  font-weight: bold;
+}
+
+.experience-page-points-container {
+  counter-reset: point; /* Reset the counter for each new set of points */
+}
+
+
 
 /* Mobile Optimization */
 @media (max-width: 768px) {
-  .experience-page {
-    padding: var(--spacing);
-  }
-
-  .experience-list {
-    grid-template-columns: 1fr; /* Single column for mobile */
-    gap: 1.5rem;
-  }
-
   .experience-card {
-    padding: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .button-container {
+    flex-direction: column;
+    align-items: center;
   }
 
-  .experience-page h1 {
-    font-size: 1.8rem;
+  .return-btn,
+  .download-btn {
+    width: 35%;
+    margin: 1rem 0;
+    text-align: center;
+  }
+  .experience-icon {
+    font-size: 2.5rem;
   }
 
   .experience-card h2 {
@@ -191,49 +224,23 @@ body {
   }
 
   .experience-card h3 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  .experience-card .duration {
+    font-size: 0.9rem;
   }
 
   .experience-card p {
     font-size: 0.9rem;
     line-height: 1.5;
   }
-
-  .return-btn {
-    font-size: 0.85rem;
-    padding: 0.6rem 1rem;
-    max-width: 160px;
+  .experience-page-points-container{
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 }
 
-/* Extra Small Screens */
-@media (max-width: 480px) {
-  .experience-page h1 {
-    font-size: 1.5rem;
-  }
-
-  .experience-card {
-    padding: 1rem;
-  }
-
-  .experience-card h2 {
-    font-size: 1.3rem;
-  }
-
-  .experience-card h3 {
-    font-size: 1.1rem;
-  }
-
-  .experience-card p {
-    font-size: 0.85rem;
-  }
-
-  .return-btn {
-    font-size: 0.8rem;
-    padding: 0.5rem 0.8rem;
-    max-width: 140px;
-  }
-}
 
 
 
@@ -304,7 +311,7 @@ body {
 .navbar-nav a {
   color: var(--highlight-color); /* Define this variable for your text color */
   text-decoration: none;
-  padding: 0.5rem 0.8rem;
+  padding: 0.2rem 0.5rem;
   font-size: 14px;
   white-space: nowrap;  /* Prevent link text from wrapping */
   display: inline-block;
@@ -312,7 +319,8 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 .navbar-nav a:hover {
-  background-color: var(--navbar-hover-bg); /* Set your hover background color */
+  background-color: var(--navbar-hover-bg);
+  border-radius: var(--radius); /* Set your hover background color */
   color: var(--hover-color);               /* Set your hover text color */
 }
 
@@ -322,7 +330,7 @@ body {
   }
   .navbar-nav a {
     font-size: 12px;      /* Smaller text for nav links */
-    padding: 0.4rem 0.6rem; /* Adjust link padding */
+    padding: 0.2rem 0.4rem; /* Adjust link padding */
   }
   .navbar-nav {
     flex-direction: row !important;
@@ -494,7 +502,8 @@ body {
 
 /* Common Page Title Styling (Blog, Full Post, etc.) */
 .page-title,
-.full-post-title {
+.full-post-title,
+.experience-page-title {
   font-size: 2.5rem;
   text-align: center;
   margin-bottom: 3rem;
@@ -1185,5 +1194,68 @@ button:hover {
   .footer-bottom {
     margin-top: 1rem;
     font-size: 0.85rem;
+  }
+}
+
+
+
+
+
+
+
+.resume-container {
+  margin: 0 auto;
+  padding: 50px;
+  border-radius: var(--radius);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeIn 1s ease-out;
+  font-weight: bold;
+}
+
+.pdf-viewer {
+  position: relative;
+  border-radius: var(--radius);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Animation for mobile-friendly loading */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Improve touch interaction */
+@media (hover: none) and (pointer: coarse) {
+  .pdf-viewer {
+    touch-action: pan-y; /* Better vertical scrolling on mobile */
+  }
+}
+
+
+@media (max-width: 768px) {
+  .resume-container {
+    margin: 0 auto;
+    padding: 70px;
+    border-radius: var(--radius);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (max-width: 480px) {
+  .resume-container {
+    margin: 0 auto;
+    padding: 50px;
+    border-radius: var(--radius);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
 }
