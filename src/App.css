@@ -137,7 +137,7 @@ body {
   margin-bottom: 8px;
 }
 
-.experience-card p {
+.experience-card p, ul, li{
   font-size: 1rem;
   margin-bottom: 16px;
   letter-spacing: 0.5px;
