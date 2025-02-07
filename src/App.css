@@ -206,7 +206,7 @@ body {
     font-size: 1.2rem;
   }
 
-  .experience-card p {
+  .experience-card p, li, ul{
     font-size: 0.9rem;
     line-height: 1.5;
   }
