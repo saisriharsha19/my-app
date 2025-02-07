@@ -136,12 +136,26 @@ body {
   color: var(--highlight-color);
   margin-bottom: 8px;
 }
-
-.experience-card p, ul, li{
+.experience-card p {
   font-size: 1rem;
   margin-bottom: 16px;
   letter-spacing: 0.5px;
   line-height: 1.8;
+}
+
+.experience-card ul {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  line-height: 1.8
+  padding-left: 16px; /* Ensures proper indentation */
+}
+
+.experience-card li {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  line-height: 1.8/* Adds spacing between list 
 }
  
 
