@@ -6,7 +6,7 @@ const Portfolio = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 3;
 
   useEffect(() => {
     const abortController = new AbortController();
