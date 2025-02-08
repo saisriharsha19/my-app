@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import pdf from "../images/resume.pdf";
+import { Link } from 'react-router-dom';
 
 const Resume = () => {
   const lastOrientation = useRef(
@@ -30,6 +31,7 @@ const Resume = () => {
   }, []);
 
   return (
+    <div>
     <div className="resume-heading">
       <h1>Resume</h1>
       <div className="resume-container">
@@ -40,6 +42,10 @@ const Resume = () => {
         </div>
       </div>
     </div>
+            <Link to="/" className="resume-return-btn">
+            Home↩️
+            </Link>
+            </div>
   );
 };
 
