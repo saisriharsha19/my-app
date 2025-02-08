@@ -1269,19 +1269,11 @@ h1 {
 }
 
 
-@media (max-width: 768px) {
-  .resume-container {
-    margin: 0 auto;
-    padding: 100px;
-    border-radius: var(--radius);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-}
 
-@media (max-width: 480px) {
+@media (max-width: 450px) {
   .resume-container {
     margin: 0 auto;
-    padding: 80px;
+    padding: 40px;
     border-radius: var(--radius);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
