@@ -9,10 +9,17 @@ import ThankYouPage from './pages/ThankYouPage';
 import FullPost from './pages/FullPost';
 import ExperiencePage from './pages/ExperiencePage';
 import Resume  from './pages/Resume';
-
 import './App.css';
+// In your App.js or main component:
+import { useEffect } from 'react';
+import { initGA, logPageView } from './analytics';
+
 
 function App() {
+  useEffect(() => {
+    initGA();
+    logPageView();
+  }, []);
   return (
     <Router>
       <div className="App">
