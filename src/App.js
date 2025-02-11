@@ -23,7 +23,7 @@ function App() {
 
     // Initialize Google Tag Manager
     const tagManagerArgs = {
-      gtmId: 'GTM-K5B486R5', // Make sure this is correct and published in GTM
+      gtmId: 'GTM-K5B486R5', // Verify this is correct and published in GTM
     };
     TagManager.initialize(tagManagerArgs);
   }, []);
@@ -54,23 +54,20 @@ function PageTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    // Check if TagManager is loaded and dataLayer exists
-    if (window.dataLayer) {
-      TagManager.dataLayer({
-        dataLayer: {
-          event: 'pageview',
-          page: location.pathname + location.search,
-        },
-      });
-      console.log('GTM pageview event pushed:', location.pathname + location.search);
-    } else {
-      console.warn('window.dataLayer not found');
-    }
+    // Ensure window.dataLayer exists; if not, initialize it
+    window.dataLayer = window.dataLayer || [];
+    
+    // Push the pageview event to GTM
+    TagManager.dataLayer({
+      dataLayer: {
+        event: 'pageview',
+        page: location.pathname + location.search,
+      },
+    });
+    console.log('GTM pageview event pushed:', location.pathname + location.search);
   }, [location]);
 
   return null;
 }
-
-
 
 export default App;
