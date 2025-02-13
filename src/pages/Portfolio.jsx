@@ -1,4 +1,3 @@
-// src/pages/Portfolio.jsx
 import { useEffect, useState } from 'react';
 
 const Portfolio = () => {
