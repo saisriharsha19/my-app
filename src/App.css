@@ -3,6 +3,7 @@
   --primary: #00ff88;
   --secondary: #60efff;
 
+
   /* Background & Text */
   --bg: #0a0a0a;
   --bg-light: #1a1a1a; /* For sections needing a lighter background */
@@ -958,25 +959,93 @@ button:hover {
   opacity: 0.9;
 }
 
+
+
+/* Base styling */
+.contact-info {
+  background: var(--glass); /* Glass effect */
+  backdrop-filter: var(--blur); /* Blur effect */
+  padding: 1.5rem; /* General padding */
+  border-radius: var(--radius); /* Rounded corners */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Soft border */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* Soft shadow */
+  margin-top: var(--spacing); /* Spacing from other sections */
+  font-size: 1rem; /* Default font size */
+  line-height: 1.5; /* Spacing between lines */
+  color: var(--text); /* Text color */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.contact-info:hover {
+  transform: translateY(-2px); /* Lift effect */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  border-color: var(--secondary); /* Change border color */
+}
+
+/* Paragraph styling */
+.contact-info p {
+  margin-bottom: 1rem;
+  text-align: justify; /* Ensure text fits neatly */
+  word-wrap: break-word; /* Prevent overflow */
+}
+
+/* Link styling */
+.contact-info a {
+  color: var(--secondary); /* Link color */
+  text-decoration: none; /* Remove underline */
+  font-weight: 500; /* Bold link */
+}
+
+.contact-info a:hover {
+  color: var(--primary); /* On hover link color */
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Icon styling */
+.contact-info-icons {
+  color: var(--primary);
+  margin-right: 0.5rem; /* Space between icon and text */
+  font-size: 1.2rem; /* Icon size */
+  vertical-align: middle; /* Align icons with text */
+}
+
+.contact-info p:hover .contact-info-icons {
+  color: var(--hover-color); /* Icon color on hover */
+}
+
+/* Mobile responsiveness */
 @media (max-width: 768px) {
+  .contact-info {
+    padding: 1rem; /* Adjust padding for smaller screens */
+    font-size: 0.9rem; /* Slightly smaller font */
+    line-height: 1.4; /* Slightly reduced line spacing */
+  }
+
+  .contact-info p {
+    margin-bottom: 0.75rem; /* Reduce margin for mobile */
+  }
+
+  /* Mobile adjustments for form */
   .contact-page {
-    padding: var(--spacing);
+    padding: 1rem; /* Reduce padding */
   }
 
   .contact-page form {
-    padding: 1.5rem;
+    padding: 1.5rem; /* Ensure form has space on mobile */
   }
 
   .form-group input,
   .form-group textarea {
-    padding: 0.75rem;
+    padding: 0.75rem; /* Smaller input padding */
   }
 
   button {
-    padding: 0.75rem;
-    font-size: 0.9rem;
+    padding: 0.75rem; /* Adjust button padding */
+    font-size: 0.9rem; /* Button text size */
   }
 }
+
 
 .success-message {
   background: rgba(0, 255, 136, 0.1);
