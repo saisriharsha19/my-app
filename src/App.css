@@ -120,7 +120,6 @@ body {
   gap: 0.5rem;
   color: var(--bg-alt);
   transition: all 0.3s ease;
-  z-index: 1000; /* Ensure it stays on top of other elements */
 }
 
 .theme-toggle:hover {
