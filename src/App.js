@@ -1,5 +1,5 @@
 // App.js
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 import Navbar from './components/Navbar';
@@ -12,10 +12,21 @@ import ThankYouPage from './pages/ThankYouPage';
 import FullPost from './pages/FullPost';
 import ExperiencePage from './pages/ExperiencePage';
 import Resume from './pages/Resume';
+import { ThemeContext, ThemeProvider } from './ThemeContext';
+import ThemeToggle from './pages/ThemeToggle';
 import './App.css';
 import { initGA, logPageView } from './analytics';
 
 function App() {
+  const { isDarkMode } = useContext(ThemeContext);
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [isDarkMode]);
+
   useEffect(() => {
     // Initialize Google Analytics
     initGA();
@@ -30,21 +41,24 @@ function App() {
 
   return (
     <Router>
-      <PageTracker /> {/* Listens for route changes and pushes GTM pageview events */}
-      <div className="App">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/thank-you" element={<ThankYouPage />} />
-          <Route path="/blog/:postId" element={<FullPost />} />
-          <Route path="/experience" element={<ExperiencePage />} />
-          <Route path="/resume" element={<Resume />} />
-        </Routes>
-      </div>
-      <Footer />
+      <ThemeProvider>
+        <PageTracker />
+        <div className={`App ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+          <Navbar />
+          <ThemeToggle />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/thank-you" element={<ThankYouPage />} />
+            <Route path="/blog/:postId" element={<FullPost />} />
+            <Route path="/experience" element={<ExperiencePage />} />
+            <Route path="/resume" element={<Resume />} />
+          </Routes>
+        </div>
+        <Footer />
+      </ThemeProvider>
     </Router>
   );
 }

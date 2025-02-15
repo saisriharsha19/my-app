@@ -5,9 +5,10 @@ const Home = () => {
   return (
     <div className="home-page">
       <div className="home-content">
-        <strong><h1>Sai Sri Harsha Guddati</h1></strong>
-        <h2>Welcome to My Personal Blog</h2>
-        <p>This is where I share my thoughts and projects</p>
+      <p>Hey, I'm</p>
+      <h1>Sai Sri Harsha Guddati</h1>
+      <p>Software Development Engineer 💻</p>
+      <p>This is where I share my thoughts and projects 🚀</p>
       </div>
       <div className="home-image">
         <img src={profileImage} alt="Sai Sri Harsha" />
