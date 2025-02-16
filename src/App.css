@@ -106,7 +106,7 @@ body {
 
 /* Theme toggle button */
 .theme-toggle {
-  position:-webkit-sticky;
+  position:sticky;
   left: 1rem;
   padding: 0.1rem 0.3rem;
   top: 0.2rem;
