@@ -1,14 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import profileImage from '../images/IMG_6153.jpeg'; // adjust the path/filename as needed
 
 const Home = () => {
+    const typewriterTexts = useMemo(() => [
+      "I'm a Software Development/AIML Engineer 💻",
+      "I build creative solutions. ✨",
+      "I love coding innovative projects 🚀"
+    ], []);
+  
+    const [text, setText] = useState(""); 
+    const [isTyping, setIsTyping] = useState(true);
+    const [index, setIndex] = useState(0);
+    const [charIndex, setCharIndex] = useState(0);
+  
+    useEffect(() => {
+      const interval = setTimeout(() => {
+        if (isTyping) {
+          if (charIndex < typewriterTexts[index].length) {
+            setText(prevText => prevText + typewriterTexts[index].charAt(charIndex));
+            setCharIndex(charIndex + 1);
+          } else {
+            setTimeout(() => setIsTyping(false), 1500);
+          }
+        } else {
+          if (charIndex > 0) {
+            setText(prevText => prevText.slice(0, -1));
+            setCharIndex(charIndex - 1);
+          } else {
+            setIsTyping(true);
+            setIndex((index + 1) % typewriterTexts.length);
+          }
+        }
+      }, isTyping ? 100 : 50);
+  
+      return () => clearTimeout(interval);
+    }, [text, isTyping, charIndex, index, typewriterTexts]);
+    
   return (
     <div className="home-page">
       <div className="home-content">
-      <p>Hey, I'm</p>
-      <h1>Sai Sri Harsha Guddati</h1>
-      <p>Software Development Engineer 💻</p>
-      <p>This is where I share my thoughts and projects 🚀</p>
+        <p>Hey, I'm</p>
+        <h1>Sai Sri Harsha Guddati</h1>
+        <p className="typewriter">
+          {text}
+          <span className="cursor">|</span>
+        </p>
       </div>
       <div className="home-image">
         <img src={profileImage} alt="Sai Sri Harsha" />
