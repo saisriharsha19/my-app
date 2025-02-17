@@ -3,9 +3,9 @@ import profileImage from '../images/IMG_6153.jpeg'; // adjust the path/filename 
 
 const Home = () => {
     const typewriterTexts = useMemo(() => [
-      "I'm a Software Development/AIML Engineer 💻",
-      "I build creative solutions. ✨",
-      "I love coding innovative projects 🚀"
+  "I'm a Software Development/AIML Engineer!!",
+  "I build creative solutions. \u{2728}",
+  "I love coding innovative projects!!!"
     ], []);
   
     const [text, setText] = useState(""); 
