@@ -3,7 +3,6 @@
   /* Core colors */
   --primary: #00ff88;
   --secondary: #60efff;
-  --highlight-color: var(--primary);
   --hover-color: var(--secondary);
   
   
@@ -54,16 +53,40 @@ html {
   transition: all 0.3s ease;
 
 }
-/* Define styles for light mode */
+/* Define styles for modern light mode */
 [data-theme="light"] {
-  --text: var(--text-dark);
-  --bg: var(--bg-light);
-  --bg-alt: var(--bg-alt-light);  
-  --glass: var(--glass-light);
-  --navbar-hover-bg: var(--navbar-hover-light);
-  --border-color: rgba(0, 0, 0, 0.1);
-  --shadow-color: rgba(0, 0, 0, 0.1);
+  /* Text and backgrounds */
+  --text: #1a1a1a; /* Dark, modern gray for better readability */
+  --bg: #f3f4f6; /* Soft, neutral gray for a subtle modern look */
+  --bg-alt: #ffffff; /* Clean white for contrast */
+  --glass: rgba(255, 255, 255, 0.7); /* More transparency for a modern glass effect */
+  
+  /* Accent colors */
+  --primary: #0078d4; /* Modern blue for a fresh, tech-savvy feel */
+  --secondary: #ff8c42; /* Complementary orange for contrast */
+  --highlight-color: var(--primary); /* Matches primary for consistency */
+  --hover-color: #005bb5; /* Darker blue for hover state on buttons/links */
+  
+  /* Borders and shadows */
+  --border-color: rgba(0, 0, 0, 0.08); /* Light borders for subtle separation */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* Soft shadows to create a floating effect */
+  
+  /* Button and input styles */
+  --button-bg: var(--primary);
+  --button-text: #ffffff;
+  --button-hover-bg: var(--hover-color);
+  
+  /* Navbar hover background */
+  --navbar-hover-bg: rgba(0, 120, 212, 0.1); /* Light blue hover effect */
+  
+  /* Error styles */
+  --error-bg: #ff5f5f; /* Brighter red for modern error feedback */
+  --error-text: #000000;
+  --box-shadow:rgba(0, 120, 212, 0.5); 
+  --box-shadow-portfolio-item: rgba(0, 120, 212, 0.2);
+  --box-shadow-home: rgba(0, 120, 212, 0.1);
 }
+
 
 /* Define styles for dark mode */
 [data-theme="dark"] {
@@ -74,6 +97,10 @@ html {
   --navbar-hover-bg: var(--navbar-hover-dark);
   --border-color: rgba(255, 255, 255, 0.1);
   --shadow-color: rgba(255, 255, 255, 0.1);
+  --box-shadow: rgba(0, 255, 136, 0.5);
+  --box-shadow-portfolio-item: rgba(0, 255, 136, 0.2);
+  --box-shadow-home: rgba(0, 255, 136, 0.1);
+  --highlight-color: var(--primary);
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -210,7 +237,7 @@ body {
 .experience-card:hover {
   transform: translateY(-5px);
   /* Updated shadow to use primary color with proper opacity */
-  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.15);
+  box-shadow: 0 10px 30px var(--box-shadow);
 }
 
 .experience-icon {
@@ -444,7 +471,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   padding: calc(var(--spacing) * 2) var(--spacing);
-  background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+  background: radial-gradient(circle at 50% 50%, var(--box-shadow-home), transparent);
   flex-wrap:wrap;
   font-family: 'Roboto', sans-serif;
 }
@@ -573,7 +600,7 @@ body {
 
 .bio-section:hover {
   transform: translateY(5px);
-  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
+  box-shadow: 0 10px 30px var(--box-shadow);
 }
 /* Heading inside Bio Section */
 .bio-section h3 {
@@ -744,7 +771,7 @@ body {
   border-radius: var(--radius);
   border: 1px solid var(--bg);
   color: var(--text);
-  box-shadow: 0 5px 30px rgba(0, 255, 136, 0.2);
+  box-shadow: 0 5px 10px var(--box-shadow-portfolio-item);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .post-card .progress {
@@ -756,7 +783,7 @@ body {
 
 .post-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 10px rgba(0, 255, 136, 0.3);
+  box-shadow: 0 5px 10px var(--box-shadow);
 }
 
 /* Date styling */
@@ -804,7 +831,7 @@ body {
   border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text);
-  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+  box-shadow: 0 10px 30px var(--box-shadow);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   line-height: 1.6; /* Better readability */
 }
@@ -861,7 +888,7 @@ body {
 
 .full-post-container:hover {
   transform: translateY(5px);
-  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
+  box-shadow: 0 10px 30px var(--box-shadow);
 }
 
 .go-back {
@@ -882,7 +909,6 @@ body {
 .error-container {
   text-align: center;
   padding: 3rem;
-  background-color: var(--error-bg);
   border-radius: 8px;
   color: var(--error-text);
 }
@@ -924,7 +950,7 @@ body {
   color: var(--text);
   text-decoration: none;
   font-size: 0.85rem; /* Smaller font */
-  font-weight: 500; /* Adjusted weight */
+  font-weight: 700; /* Adjusted weight */
   border-radius: calc(var(--radius) * 1.2);
   transition: all 0.2s ease-in-out;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Lighter shadow */
@@ -953,7 +979,6 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   background: var(--bg);
-  color: var(--text);
   border-radius: var(--radius);
 }
 
@@ -988,7 +1013,7 @@ body {
   border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text);
-  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+  box-shadow: 0 10px 30px var(--box-shadow-portfolio-item);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: center;
   display: flex;
@@ -1047,7 +1072,7 @@ body {
 
 .portfolio-item:hover {
   transform: translateY(5px);
-  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
+  box-shadow: 0 10px 30px var(--box-shadow);
 }
 
 
@@ -1136,7 +1161,7 @@ body {
 
 .contact-page form:hover{
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 12px var(--box-shadow);
   transition: all 0.3s ease;
   border-color: var(--secondary);
 }
@@ -1177,7 +1202,7 @@ button:hover {
 /* Hover effect */
 .contact-info:hover {
   transform: translateY(-2px); /* Lift effect */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  box-shadow: 0 8px 16px var(--box-shadow); /* Deeper shadow */
   border-color: var(--secondary); /* Change border color */
 }
 
@@ -1246,7 +1271,7 @@ button:hover {
 
 
 .success-message {
-  background: rgba(0, 255, 136, 0.1);
+  background: var(--bg);
   padding: 1rem;  /* Reduced padding */
   border-radius: var(--radius);
   text-align: center;
