@@ -69,6 +69,7 @@ function PageTracker() {
 
   useEffect(() => {
     // Ensure window.dataLayer exists; if not, initialize it
+    window.scrollTo(0, 0);
     window.dataLayer = window.dataLayer || [];
     
     // Push the pageview event to GTM
