@@ -396,6 +396,8 @@ body {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap; /* Prevents wrapping of items */
 }
 
 /* Navbar Brand (Logo/Text) */
@@ -428,6 +430,7 @@ body {
 .navbar-nav ul {
   flex: 0 0 auto;  /* Prevent items from shrinking or growing */
   display: flex;
+  align-items: center;
 }
 
 /* Nav links styling */
