@@ -105,35 +105,16 @@ html {
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+
 /* Body base styles */
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif, 'Courier New', 'Segoe UI Emoji';
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif,  'Courier New', 'Segoe UI Emoji',;
   line-height: 1.6;
   min-height: 100vh;
   padding-top: 80px; /* Prevent content being hidden under navbar */
 }
-
-/* Heading styles */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-}
-
-/* Optional: Apply different font weights for body text and headings */
-h1 {
-  font-weight: 700; /* Bold for main headings */
-}
-
-h2, h3 {
-  font-weight: 600; /* Semi-bold for subheadings */
-}
-
-p, ul, ol {
-  font-weight: 400; /* Regular weight for body text */
-}
-
 
 /* Scrollbar styles */
 ::-webkit-scrollbar {
@@ -492,6 +473,7 @@ p, ul, ol {
   padding: calc(var(--spacing) * 2) var(--spacing);
   background: radial-gradient(circle at 50% 50%, var(--box-shadow-home), transparent);
   flex-wrap:wrap;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Text Content */
@@ -503,6 +485,7 @@ p, ul, ol {
 .home-content h2 {
   padding: 0;
   font-size: 3rem;
+  font-family: 'Courier New', 'Segoe UI Emoji', sans-serif;
   font-weight: 700;
   background: linear-gradient(45deg, var(--primary), var(--secondary));
   -webkit-background-clip: text;
@@ -514,6 +497,7 @@ p, ul, ol {
 }
 
 .home-content p {
+  font-family: 'Courier New', 'Segoe UI Emoji', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: clamp(1rem, 2vw, 1.5rem);
   line-height: 1.4;
   margin-bottom: 1rem;
@@ -528,6 +512,7 @@ p, ul, ol {
 .typewriter {
   font-size: clamp(1rem, 1.5vw, 1em);
   font-weight: 500;
+  font-family: 'Courier New', 'Segoe UI Emoji', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--primary);
   white-space: nowrap;
   overflow: hidden;
@@ -610,6 +595,7 @@ p, ul, ol {
   border-radius: var(--radius);
   box-shadow: 0 2px 10px var(--bg-alt) 0.1;
   margin: 0 auto;
+  font-family: 'Courier New', 'Segoe UI Emoji', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .bio-section:hover {
@@ -1190,6 +1176,7 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  font-family: 'Courier New', 'Segoe UI Emoji', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 button:hover {
@@ -1339,26 +1326,8 @@ button:hover {
   font-size: 1rem;
 }
 
-
-@media (max-width: 480px) {
-  .thank-you-page .return-btn {
-    padding: 0.5rem 1rem;  /* Adjust padding for smaller screens */
-    font-size: clamp(0.7rem, 5vw, 0.8rem);  /* Smaller font size for small screens */
-    max-width: 90%;  /* Button width adjusts to available space */
-  }
-}
-
-@media (max-width: 280px) {
-  .thank-you-page .return-btn {
-    padding: 0.3rem 0.5rem;  /* Adjust padding for smaller screens */
-    font-size: clamp(0.5rem, 4vw, 0.6rem);  /* Smaller font size for small screens */
-    max-width: 90%;  /* Button width adjusts to available space */
-  }
-}
-
-
 @media (max-width: 768px) {
-  .thank-you-page .return-btn .success-message{
+  .thank-you-page .return-btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     max-width: 180px;
@@ -1366,7 +1335,7 @@ button:hover {
 }
 
 @media (max-width: 480px) {
-  .thank-you-page .return-btn .success-message{
+  .thank-you-page .return-btn {
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
     max-width: 150px;
@@ -1408,6 +1377,7 @@ button:hover {
   color: var(--text);
   padding: 2rem;
   text-align: center;
+  font-family: 'Courier New', 'Segoe UI Emoji', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   margin-top: 3rem;
   border-top: 2px solid var(--bg-alt);
 }
