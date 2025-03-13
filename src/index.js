@@ -19,8 +19,41 @@ favicons.forEach((icon) => {
   link.sizes = icon.sizes || "";
   document.head.appendChild(link);
 });
+
+// Set document title
 document.title = "Sai Sri Harsha Guddati Portfolio";
 
+// SEO Meta Tags
+const metaTags = [
+  { name: "description", content: "Portfolio of Sai Sri Harsha Guddati - Software Engineer skilled in Python, React, and Cloud Technologies." },
+  { name: "keywords", content: "Sai Sri Harsha Guddati, Software Engineer, Portfolio, React, Python, Cloud, AI, ML" },
+  { name: "author", content: "Sai Sri Harsha Guddati" },
+  { name: "robots", content: "index, follow" }
+];
+
+// Open Graph Meta Tags (for social sharing)
+const openGraphTags = [
+  { property: "og:title", content: "Sai Sri Harsha Guddati Portfolio" },
+  { property: "og:description", content: "Software Engineer skilled in Python, React, Cloud, and AI/ML." },
+  { property: "og:image", content: "/images/portfolio-thumbnail.jpg" }, // Replace with an actual image URL
+  { property: "og:url", content: "https://your-portfolio-url.com" }, // Replace with your actual portfolio URL
+  { property: "og:type", content: "website" }
+];
+
+// Twitter Card Meta Tags
+const twitterTags = [
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Sai Sri Harsha Guddati Portfolio" },
+  { name: "twitter:description", content: "Software Engineer skilled in Python, React, Cloud, and AI/ML." },
+  { name: "twitter:image", content: "/images/portfolio-thumbnail.jpg" } // Replace with an actual image URL
+];
+
+// Append all meta tags to the document head
+[...metaTags, ...openGraphTags, ...twitterTags].forEach(tag => {
+  const meta = document.createElement("meta");
+  Object.keys(tag).forEach(key => meta.setAttribute(key, tag[key]));
+  document.head.appendChild(meta);
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -31,8 +64,5 @@ root.render(
   </React.StrictMode>
 );
 
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Measure performance
 reportWebVitals();
