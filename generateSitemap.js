@@ -16,7 +16,7 @@ async function fetchBlogPosts() {
 }
 
 async function generateSitemap() {
-  const BASE_URL = "https://your-website.com";
+  const BASE_URL = "https://saisriharsha.me";
   const smStream = new SitemapStream({ hostname: BASE_URL });
 
   const staticPages = [
