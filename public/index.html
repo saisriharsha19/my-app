@@ -12,7 +12,7 @@
     <!-- Open Graph Meta Tags (for better social sharing) -->
     <meta property="og:title" content="Sai Sri Harsha Guddati - AI & Cloud Engineer">
     <meta property="og:description" content="Sai Sri Harsha Guddati - Software Engineer with expertise in Python, React, Cloud, AI/ML, and Software Engineering. Explore my portfolio to learn more about my projects and experience.">
-    <meta property="og:image" content="https://saisriharsha.me/"> <!-- Replace with actual image URL -->
+    <meta property="og:image" content="/images/IMG_6153.jpeg"> <!-- Replace with actual image URL -->
     <meta property="og:url" content="https://saisriharsha.me/"> <!-- Replace with your actual portfolio URL -->
     <meta property="og:type" content="website">
 
@@ -20,7 +20,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Sai Sri Harsha Guddati - AI & Cloud Engineer">
     <meta name="twitter:description" content="Sai Sri Harsha Guddati - Software Engineer with expertise in Python, React, Cloud, AI/ML, and Software Engineering. Explore my portfolio to learn more about my projects and experience.">
-    <meta name="twitter:image" content="https://saisriharsha.me/"> <!-- Replace with actual image URL -->
+    <meta name="twitter:image" content="/images/IMG_6153.jpeg"> <!-- Replace with actual image URL -->
 
     <title>Sai Sri Harsha Guddati | Software Engineer | AI/ML, Cloud & React Developer</title>
     <link rel="icon" href="/favicon.ico">
@@ -31,7 +31,6 @@
     <link rel="stylesheet" href="../src/App.css">
 </head>
 <body>
-    <h1>Sai Sri Harsha Guddati - Software Engineer | AI & Cloud Developer</h1> <!-- Main heading -->
 
     <!-- Structured Data (JSON-LD) for Person schema -->
     <script type="application/ld+json">
@@ -44,7 +43,10 @@
             "https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/",
             "https://github.com/saisriharsha19",
             "https://x.com/SriHarsha_19",
-            "https://chatbot-ui-saisriharsha19-sai-sri-harshas-projects.vercel.app/"
+            "https://chatbot-ui-saisriharsha19-sai-sri-harshas-projects.vercel.app/",
+            "https://www.kaggle.com/saisriharshaguddati/",
+            "https://www.instagram.com/sai_sri_harsha_guddati/",
+            "https://www.facebook.com/harsha.naidu.56481/"
           ],
           "jobTitle": "Software Engineer",
           "worksFor": {
@@ -58,7 +60,19 @@
           "knowsAbout": ["Python", "Machine Learning", "AI", "Software Engineering"]
         }
     </script>
-    
+        <!-- Predefined Routes for SEO Crawlers -->
+    <script>
+        window.routes = [
+            { "path": "/", "title": "Home" },
+            { "path": "/blog", "title": "Blog" },
+            { "path": "/portfolio", "title": "Portfolio" },
+            { "path": "/contact", "title": "Contact" },
+            { "path": "/thank-you", "title": "Thank You" },
+            { "path": "/blog/:postId", "title": "Blog Post" },
+            { "path": "/experience", "title": "Experience" },
+            { "path": "/resume", "title": "Resume" }
+        ];
+    </script>
     <div id="root"></div>
     <script type="module" src="../src/index.js"></script>
 </body>
