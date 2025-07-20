@@ -53,19 +53,19 @@ const Home = () => {
       <div className="bio-section">
         <h3>Hi there! I’m Sai Sri Harsha Guddati</h3>
         <p>
-          I’m a software engineer with a passion for building creative, impactful solutions. I’m currently pursuing my Master’s Degree in Computer Science at the University of Florida, where I get to explore the latest in machine learning, cloud computing, and software development.
+          I’m a software engineer and AI enthusiast, currently pursuing my Master’s in Computer Science at the University of Florida. My work lies at the intersection of backend systems, AI infrastructure, and real-world problem-solving—turning cutting-edge ideas into scalable, production-grade tools.
         </p>
         <p>
-          My journey so far has taken me from developing innovative cloud systems and AI projects at Tata Consultancy Services to diving into hands-on work with technologies like Python, Flask, React, and many more. I love the challenge of turning complex problems into user-friendly, scalable solutions that make a real difference.
+          At UF Information Technology, I work as an AI Engineer Intern, developing intelligent assistants powered by LLMs, integrating NeMo Guardrails, Redis, FastAPI, and PostgreSQL. Previously, at Tata Consultancy Services, I led the development of cloud-based AI platforms using Python, Flask, and Azure.
         </p>
         <p>
-          Beyond the code, I’m all about continuous learning and collaboration. Whether I’m fine-tuning a machine learning model, optimizing a database, or just brainstorming with a team, I’m always looking for ways to push the boundaries and improve. I’m also proud of the personal projects I’ve built—like a text redaction tool and a data visualization app—which have allowed me to combine my technical skills with my creative side.
+          My projects span across areas like prompt optimization systems, RAG pipelines, browser privacy extensions, web scrapers, and even sentiment-aware social platforms. I’m passionate about building with purpose—whether it's deploying secure AI workflows, visualizing real-time data, or engineering privacy-first tools using OCR, LLMs, and DOM parsing.
         </p>
         <p>
-          When I’m not immersed in tech, you might find me exploring new technologies, working on side projects, or simply enjoying some time away from the screen. I believe in keeping things human, approachable, and always open to new ideas.
+          Outside of work, I enjoy shipping side projects, experimenting with streaming LLM APIs, and refining AI evaluation systems. I’m a strong believer in thoughtful design, clean code, and pushing the limits of what tech can do—always with a human-first mindset.
         </p>
         <p>
-          Thanks for stopping by, and feel free to reach out if you want to chat or collaborate on something exciting!
+          Thanks for stopping by! If you’re building something meaningful—or just want to jam on ideas—I’d love to connect.
         </p>
       </div>
     </div>
