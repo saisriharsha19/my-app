@@ -6,7 +6,7 @@ const ExperiencePage = () => {
     {
       title: "AI Engineer Intern",
       company: "University of Florida Information Technology",
-      duration: "Jan 2024 - Present",
+      duration: "Mar 2025 - Present",
       description: [
         "Built and deployed AI assistants using FastAPI, Redis, PostgreSQL, and OpenAI/Gemini APIs for university departments.",
         "Integrated self-hosted and API-based LLMs (Mistral, Claude, LLaMA) using LangChain, Semantic Kernel, and LangGraph.",
