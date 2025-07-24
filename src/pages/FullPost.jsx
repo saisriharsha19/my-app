@@ -12,7 +12,7 @@ const FullPost = () => {
     const fetchPost = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`https://personalwebsitebackend-gthafrgadzc2argc.eastus2-01.azurewebsites.net/blog/${postId}`);
+        const response = await fetch(`https://backend-482511937770.europe-west1.run.app/blog/${postId}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

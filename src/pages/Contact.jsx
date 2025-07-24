@@ -18,7 +18,7 @@ const Contact = () => {
     setIsLoading(true);
     
     try {
-      const response = await fetch('https://personalwebsitebackend-gthafrgadzc2argc.eastus2-01.azurewebsites.net/contact/', {
+      const response = await fetch('https://backend-482511937770.europe-west1.run.app/contact/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
