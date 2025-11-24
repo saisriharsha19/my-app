@@ -651,16 +651,24 @@ a, button {
   display: flex;
 }
 
+/* ============================================
+   FIXED NAVBAR ACTIVE INDICATOR
+   ============================================ */
+
+/* Navigation Links - Fixed Structure */
 .nav-link {
   position: relative;
   text-decoration: none;
   color: var(--text-secondary);
   font-weight: 600;
   font-size: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .nav-link:hover {
@@ -672,52 +680,134 @@ a, button {
   color: #667eea;
 }
 
+/* Fixed Active Indicator - No more weird behavior */
 .active-indicator {
   position: absolute;
-  bottom: -8px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 6px;
   height: 6px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #667eea;
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 8px rgba(102, 126, 234, 0.6);
 }
 
-/* Navbar Actions */
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  z-index: 10;
-}
-
-.mobile-menu-toggle {
-  display: none;
-  width: 45px;
-  height: 45px;
-  border: none;
-  background: var(--card-bg);
-  border-radius: 12px;
-  color: var(--text-primary);
-  font-size: 1.5rem;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.nav-progress-bar {
+/* Alternative: Bar style indicator (choose one) */
+.active-indicator-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 3px;
   background: linear-gradient(90deg, #667eea, #764ba2);
-  transform-origin: left;
-  transform: scaleX(0);
+  border-radius: 2px 2px 0 0;
 }
 
+/* Ensure proper spacing for the indicator */
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.navbar-nav li {
+  position: relative;
+}
+
+/* Mobile Active Dot - Fixed */
+.mobile-active-dot {
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(102, 126, 234, 0.6);
+  flex-shrink: 0;
+}
+
+/* Fix progress bar position */
+.nav-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.1s ease-out;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Ensure navbar container doesn't interfere */
+.navbar-container {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Remove any conflicting animations */
+.nav-link span {
+  transition: none;
+}
+
+/* Fix layout shift issues */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+/* Prevent dot from jumping on page load */
+.navbar-nav li {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* Fix for Safari and iOS */
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+  .navbar {
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* Ensure smooth transitions */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile specific fixes */
+@media (max-width: 768px) {
+  .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .active-indicator {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+/* Fix for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .active-indicator {
+    transition: none;
+  }
+}
 /* ============================================
    7. MOBILE MENU STYLES
    ============================================ */
