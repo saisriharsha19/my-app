@@ -178,6 +178,385 @@ a, button {
   user-select: none;
 }
 
+
+/* ============================================
+   PROFESSIONAL & QUIRKY FOOTER STYLES
+   ============================================ */
+
+.footer-pro {
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #e2e8f0;
+  margin-top: 6rem;
+  overflow: hidden;
+}
+
+.footer-pro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.5), transparent);
+}
+
+/* Scroll to Top - Professional */
+.scroll-to-top-pro {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  z-index: 998;
+  transition: all 0.3s ease;
+}
+
+.scroll-to-top-pro:hover {
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+  transform: translateY(-3px);
+}
+
+/* Footer Content */
+.footer-content-pro {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4rem 2rem 2rem;
+}
+
+.footer-grid-pro {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+/* Brand Section */
+.footer-section-pro {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.brand-section {
+  gap: 1.5rem;
+}
+
+.footer-brand-pro {
+  text-decoration: none;
+}
+
+.brand-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.brand-tagline {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.brand-description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+  max-width: 400px;
+  margin: 0;
+}
+
+/* Quick Info */
+.quick-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.info-icon {
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.info-text {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.info-text:hover {
+  color: #667eea;
+}
+
+/* Section Title */
+.section-title-pro {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.section-title-pro::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+}
+
+/* Links */
+.footer-links-pro {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-link-pro {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.footer-link-pro:hover {
+  color: #667eea;
+}
+
+/* Connect Text */
+.connect-text {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Social Links - Professional Grid */
+.social-links-pro {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.social-link-pro {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.social-link-pro:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Quirky Coffee Section */
+.coffee-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 12px;
+  border: 1px dashed rgba(102, 126, 234, 0.2);
+}
+
+.coffee-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.coffee-btn:hover {
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.coffee-count {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+/* Footer Bottom */
+.footer-bottom-pro {
+  border-top: 1px solid rgba(102, 126, 234, 0.2);
+  padding: 2rem 2rem 2rem;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.footer-bottom-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.copyright,
+.made-with,
+.fun-fact {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.made-with {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.heart-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.fun-fact {
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .footer-pro {
+  background: linear-gradient(135deg, #0a0f1e 0%, #151b2e 100%);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .footer-grid-pro {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .brand-section {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-content-pro {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+
+  .footer-grid-pro {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .footer-bottom-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .scroll-to-top-pro {
+    bottom: 1rem;
+    right: 1rem;
+    width: 45px;
+    height: 45px;
+  }
+
+  .brand-name {
+    font-size: 1.5rem;
+  }
+
+  .social-links-pro {
+    justify-content: flex-start;
+  }
+
+  .coffee-section {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content-pro {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .brand-name {
+    font-size: 1.3rem;
+  }
+
+  .section-title-pro {
+    font-size: 1.1rem;
+  }
+
+  .social-link-pro {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Accessibility */
+.footer-link-pro:focus,
+.social-link-pro:focus,
+.coffee-btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Print */
+@media print {
+  .scroll-to-top-pro,
+  .coffee-section {
+    display: none;
+  }
+}
+
 /* ============================================
    6. NAVBAR STYLES
    ============================================ */
