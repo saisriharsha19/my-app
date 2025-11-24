@@ -157,14 +157,17 @@ const Blog = () => {
                       ? post.content.substring(0, 150) + '...'
                       : 'No content available'}
                   </p>
-
                   <div className="post-footer">
                     <div className="post-author">
                       <FiUser className="author-icon" />
                       <span>{post.author || 'Unknown'}</span>
                     </div>
                     
-                    <Link to={`/blog/${post.id}`} className="read-more">
+                    <Link 
+                      to={`/blog/${post.id}`} 
+                      className="read-more-link"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <span>Read more</span>
                       <motion.div
                         animate={{ x: hoveredCard === post.id ? 5 : 0 }}
