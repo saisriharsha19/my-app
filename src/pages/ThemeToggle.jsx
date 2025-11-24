@@ -10,10 +10,10 @@ const ThemeToggle = () => {
   return (
     <motion.button
       onClick={toggleTheme}
-      className="theme-toggle"
+      className="theme-toggle-btn"
       aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
       <motion.div
         className="toggle-track"
@@ -45,48 +45,7 @@ const ThemeToggle = () => {
             transition={{ duration: 0.3 }}
             className="theme-icon"
           >
-            <motion.div
-              animate={{
-                rotate: [0, 5, -5, 0]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatDelay: 3
-              }}
-            >
-              <FiMoon />
-            </motion.div>
-            {/* Stars around moon */}
-            <motion.div
-              className="star star-1"
-              animate={{
-                scale: [0, 1, 0],
-                opacity: [0, 1, 0]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatDelay: 1
-              }}
-            >
-              ✨
-            </motion.div>
-            <motion.div
-              className="star star-2"
-              animate={{
-                scale: [0, 1, 0],
-                opacity: [0, 1, 0]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: 0.5,
-                repeatDelay: 1
-              }}
-            >
-              ✨
-            </motion.div>
+            <FiMoon />
           </motion.div>
         ) : (
           <motion.div
@@ -97,49 +56,10 @@ const ThemeToggle = () => {
             transition={{ duration: 0.3 }}
             className="theme-icon"
           >
-            <motion.div
-              animate={{
-                rotate: 360
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            >
-              <FiSun />
-            </motion.div>
-            {/* Sun rays */}
-            {[...Array(8)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="sun-ray"
-                style={{
-                  transform: `rotate(${i * 45}deg) translateY(-20px)`
-                }}
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.5, 1, 0.5]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  delay: i * 0.1
-                }}
-              />
-            ))}
+            <FiSun />
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Tooltip */}
-      <motion.div
-        className="theme-tooltip"
-        initial={{ opacity: 0, y: 10 }}
-        whileHover={{ opacity: 1, y: 0 }}
-      >
-        {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-      </motion.div>
     </motion.button>
   );
 };
