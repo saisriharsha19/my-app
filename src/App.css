@@ -3713,3 +3713,211 @@ a:not([class]):hover {
   }
 }
 /* EOF - End of Complete Refactored CSS File */
+/* ============================================
+   MINIMAL FIXES - Add to your App.css
+   ============================================ */
+
+/* 1. Fix Progress Bar */
+.nav-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.1s ease-out;
+  z-index: 10;
+}
+
+/* 2. Fix Theme Toggle */
+.theme-toggle-simple {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+}
+
+.theme-toggle-simple:hover {
+  transform: scale(1.05);
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.theme-toggle-simple:active {
+  transform: scale(0.95);
+}
+
+[data-theme="dark"] .theme-toggle-simple {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 3. Fix Resume Contact Links on Mobile */
+.contact-item-simple {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  min-height: 48px;
+  justify-content: center;
+}
+
+.contact-item-simple:hover {
+  background: rgba(102, 126, 234, 0.2);
+  transform: translateY(-2px);
+}
+
+.contact-item-simple:active {
+  transform: translateY(0);
+}
+
+.contact-item-simple span:first-child {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.contact-item-simple span:last-child {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* 4. Fix Blog Read More on Mobile */
+.read-more-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(102, 126, 234, 0.1);
+  min-height: 44px;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.read-more-link:hover {
+  background: rgba(102, 126, 234, 0.2);
+  gap: 1rem;
+}
+
+.read-more-link:active {
+  transform: scale(0.98);
+}
+
+.post-card {
+  cursor: default;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  gap: 1rem;
+}
+
+/* Mobile specific fixes */
+@media (max-width: 768px) {
+  /* Fix navbar progress bar on mobile */
+  .navbar-container {
+    position: relative;
+  }
+  
+  /* Fix theme toggle on mobile */
+  .theme-toggle-simple {
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* Fix resume contact on mobile */
+  .resume-contact-simple {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  
+  .contact-item-simple {
+    width: 100%;
+    padding: 1rem;
+  }
+  
+  /* Fix blog read more on mobile */
+  .post-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .read-more-link {
+    width: 100%;
+  }
+  
+  .post-card {
+    padding: 1.5rem;
+  }
+  
+  /* Ensure clickable area is large enough */
+  .post-author {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even more touch-friendly on small screens */
+  .theme-toggle-simple,
+  .mobile-menu-toggle {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .contact-item-simple {
+    padding: 1.25rem;
+    font-size: 1rem;
+  }
+  
+  .contact-item-simple span:first-child {
+    font-size: 1.75rem;
+  }
+  
+  .read-more-link {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Ensure proper stacking */
+.read-more-link {
+  isolation: isolate;
+}
+
+.post-card:hover .read-more-link {
+  z-index: 20;
+}
+
+/* Fix any hover conflicts */
+@media (hover: none) and (pointer: coarse) {
+  .post-card:hover {
+    transform: none;
+  }
+  
+  .post-card-gradient {
+    opacity: 0 !important;
+  }
+}
