@@ -1,12 +1,13 @@
 // src/pages/FullPost.jsx
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { FiArrowLeft, FiClock, FiUser, FiBookOpen } from 'react-icons/fi';
 
 const FullPost = () => {
   const { postId } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,13 +28,15 @@ const FullPost = () => {
     const fetchPost = async () => {
       try {
         setIsLoading(true);
+        setError(null);
         const response = await fetch(`https://backend-482511937770.europe-west1.run.app/blog/${postId}`);
+        
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Failed to fetch post: ${response.status}`);
         }
+        
         const data = await response.json();
         setPost(data);
-        setError(null);
       } catch (error) {
         console.error('Error fetching full post:', error);
         setError('Failed to load the post. Please try again later.');
@@ -41,8 +44,16 @@ const FullPost = () => {
         setIsLoading(false);
       }
     };
-    fetchPost();
+
+    if (postId) {
+      fetchPost();
+    }
   }, [postId]);
+
+  const handleGoBack = (e) => {
+    e.preventDefault();
+    navigate('/blog');
+  };
 
   if (error) {
     return (
@@ -57,10 +68,16 @@ const FullPost = () => {
         >
           😕
         </motion.div>
+        <h2>Oops!</h2>
         <p>{error}</p>
-        <Link to="/blog" className="go-back-btn">
+        <motion.button
+          onClick={handleGoBack}
+          className="go-back-btn"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           <FiArrowLeft /> Go Back to Blog
-        </Link>
+        </motion.button>
       </motion.div>
     );
   }
@@ -85,13 +102,32 @@ const FullPost = () => {
     );
   }
 
+  if (!post) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="error-container"
+      >
+        <p>Post not found</p>
+        <motion.button
+          onClick={handleGoBack}
+          className="go-back-btn"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <FiArrowLeft /> Go Back to Blog
+        </motion.button>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="full-post-container"
     >
-      {/* Reading Progress Bar */}
       <motion.div
         className="reading-progress-bar"
         style={{ scaleX: readingProgress / 100 }}
@@ -104,7 +140,7 @@ const FullPost = () => {
         transition={{ delay: 0.2 }}
         className="post-header"
       >
-        <Link to="/blog" className="back-link">
+        <button onClick={handleGoBack} className="back-link-button">
           <motion.div
             whileHover={{ x: -5 }}
             className="back-icon"
@@ -112,7 +148,7 @@ const FullPost = () => {
             <FiArrowLeft />
           </motion.div>
           <span>Back to Articles</span>
-        </Link>
+        </button>
 
         <motion.h1
           initial={{ y: 20, opacity: 0 }}
@@ -157,11 +193,11 @@ const FullPost = () => {
         <div className="content-wrapper">
           <ReactMarkdown
             components={{
-              h1: ({ node, ...props }) => <motion.h1 initial={{ x: -20, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} {...props} />,
-              h2: ({ node, ...props }) => <motion.h2 initial={{ x: -20, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} {...props} />,
-              p: ({ node, ...props }) => <motion.p initial={{ y: 10, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} {...props} />,
+              h1: ({ node, ...props }) => <h1 {...props} />,
+              h2: ({ node, ...props }) => <h2 {...props} />,
+              p: ({ node, ...props }) => <p {...props} />,
               code: ({ node, inline, ...props }) => 
-                inline ? <code {...props} /> : <motion.code initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} {...props} />
+                inline ? <code {...props} /> : <code {...props} />
             }}
           >
             {post.content}
@@ -175,9 +211,14 @@ const FullPost = () => {
         transition={{ delay: 0.6 }}
         className="post-footer"
       >
-        <Link to="/blog" className="go-back">
+        <motion.button
+          onClick={handleGoBack}
+          className="go-back"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           <FiArrowLeft /> Back to all articles
-        </Link>
+        </motion.button>
       </motion.div>
     </motion.div>
   );
