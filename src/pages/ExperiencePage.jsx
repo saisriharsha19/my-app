@@ -1,12 +1,10 @@
 // src/pages/ExperiencePage.jsx
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { FaBriefcase, FaDownload, FaHome } from "react-icons/fa";
-import { HiSparkles } from "react-icons/hi";
+import { FiBriefcase, FiHome, FiFileText } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const ExperiencePage = () => {
-  const [expandedCard, setExpandedCard] = useState(null);
-
   const experiences = [
     {
       title: "Software Engineer Intern",
@@ -47,118 +45,76 @@ const ExperiencePage = () => {
       icon: <FaBriefcase className="w-6 h-6" />,
     },
   ];
-
   return (
-    <div className="experience-page">
+    <div className="experience-page-simple">
+      {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -30 }}
+        className="experience-header-simple"
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="experience-header"
       >
-        <motion.div
-          animate={{ rotate: [0, 10, -10, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 3, repeatDelay: 2 }}
-        >
-          <HiSparkles className="header-icon" />
-        </motion.div>
-        <h1 className="experience-page-title">
-          My <span className="gradient-text">Journey</span>
-        </h1>
-        <p className="experience-subtitle">Building the future, one line at a time</p>
+        <h1>Work Experience</h1>
+        <p>My professional journey in software development and AI</p>
       </motion.div>
 
-      <div className="experience-timeline">
+      {/* Experience Cards */}
+      <div className="experience-list-simple">
         {experiences.map((exp, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            className="experience-card-simple"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-            className={`experience-card ${expandedCard === index ? 'expanded' : ''}`}
-            onMouseEnter={() => setExpandedCard(index)}
-            onMouseLeave={() => setExpandedCard(null)}
+            transition={{ delay: index * 0.1 }}
+            whileHover={{ y: -5 }}
           >
-            <div className={`experience-gradient bg-gradient-to-br ${exp.color}`}></div>
-            
-            <motion.div 
-              className="experience-icon"
-              whileHover={{ scale: 1.2, rotate: 360 }}
-              transition={{ duration: 0.5 }}
-            >
-              {exp.icon}
-            </motion.div>
-
-            <div className="experience-details">
-              <motion.h2
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                {exp.title}
-              </motion.h2>
-              
-              <h3>{exp.company}</h3>
-              
-              <motion.p 
-                className="duration"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                📅 {exp.duration}
-              </motion.p>
-
-              <motion.div 
-                className="experience-points-container"
-                initial="collapsed"
-                animate={expandedCard === index ? "expanded" : "collapsed"}
-                variants={{
-                  expanded: { height: "auto", opacity: 1 },
-                  collapsed: { height: "100px", opacity: 0.7 }
-                }}
-              >
-                {exp.description.map((point, i) => (
-                  <motion.p
-                    key={i}
-                    className="experience-point"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                  >
-                    <span className="bullet">▸</span> {point}
-                  </motion.p>
-                ))}
-              </motion.div>
+            <div className="exp-header">
+              <div className="exp-icon">
+                <FiBriefcase />
+              </div>
+              <div className="exp-info">
+                <h2>{exp.title}</h2>
+                <h3>{exp.company}</h3>
+                <p className="exp-duration">{exp.duration}</p>
+              </div>
             </div>
 
-            <div className="card-number">{String(index + 1).padStart(2, '0')}</div>
+            <ul className="exp-description">
+              {exp.description.map((point, i) => (
+                <li key={i}>{point}</li>
+              ))}
+            </ul>
           </motion.div>
         ))}
       </div>
 
+      {/* Action Buttons */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8 }}
-        className="button-container"
+        className="experience-actions"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
       >
-        <motion.a
-          href="/"
-          className="action-btn home-btn"
-          whileHover={{ scale: 1.05, x: -5 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <FaHome /> Home
-        </motion.a>
+        <Link to="/">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="btn-secondary"
+          >
+            <FiHome /> Home
+          </motion.button>
+        </Link>
         
-        <motion.a
-          href="/resume"
-          className="action-btn resume-btn"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <FaDownload /> View Resume
-        </motion.a>
+        <Link to="/resume">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="btn-primary"
+          >
+            <FiFileText /> View Resume
+          </motion.button>
+        </Link>
       </motion.div>
     </div>
   );
