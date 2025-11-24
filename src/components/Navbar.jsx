@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx
+// src/components/Navbar.jsx - Update the progress bar section
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
@@ -9,19 +9,30 @@ import ThemeToggle from '../pages/ThemeToggle';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      
+      setScrollProgress(scrollPercent);
+      setScrolled(scrollTop > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
+    // Call once to set initial state
+    handleScroll();
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
     setIsOpen(false);
+    // Reset scroll progress on page change
+    setScrollProgress(0);
   }, [location]);
 
   const navLinks = [
@@ -142,10 +153,13 @@ const Navbar = () => {
           </div>
         </div>
 
-        <motion.div
+        {/* Fixed Progress Bar */}
+        <div 
           className="nav-progress-bar"
-          style={{ scaleX: scrolled ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
+          style={{ 
+            width: `${scrollProgress}%`,
+            transition: 'width 0.1s ease-out'
+          }}
         />
       </motion.nav>
 
