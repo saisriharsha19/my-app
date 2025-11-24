@@ -1,11 +1,22 @@
 // src/components/Footer.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiTwitter, FiLinkedin, FiGithub, FiHeart, FiArrowUp } from "react-icons/fi";
 import { HiSparkles } from "react-icons/hi";
 
 const Footer = () => {
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -40,21 +51,23 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      {/* Scroll to Top Button */}
-      <motion.button
-        className="scroll-to-top"
-        onClick={scrollToTop}
-        whileHover={{ scale: 1.1, y: -3 }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <FiArrowUp />
-      </motion.button>
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            className="scroll-to-top"
+            onClick={scrollToTop}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            whileHover={{ scale: 1.1, y: -3 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FiArrowUp />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <div className="footer-container">
-        {/* Brand Section */}
         <motion.div
           className="footer-brand"
           initial={{ opacity: 0, y: 20 }}
@@ -97,7 +110,6 @@ const Footer = () => {
           </motion.p>
         </motion.div>
 
-        {/* Navigation Links */}
         <motion.div
           className="footer-links"
           initial={{ opacity: 0, y: 20 }}
@@ -128,7 +140,6 @@ const Footer = () => {
           </ul>
         </motion.div>
 
-        {/* Social Links */}
         <motion.div
           className="footer-social"
           initial={{ opacity: 0, y: 20 }}
@@ -154,8 +165,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   whileHover={{ 
                     scale: 1.2, 
-                    rotate: 360,
-                    backgroundColor: social.color 
+                    rotate: 5
                   }}
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: "spring", stiffness: 300 }}
@@ -168,7 +178,6 @@ const Footer = () => {
         </motion.div>
       </div>
 
-      {/* Footer Bottom */}
       <motion.div
         className="footer-bottom"
         initial={{ opacity: 0 }}
