@@ -3353,4 +3353,363 @@ a:not([class]):hover {
   color: #764ba2;
 }
 
+
+/* ============================================
+   SIMPLIFIED RESUME PAGE STYLES
+   ============================================ */
+
+.resume-page-simple {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.resume-header-simple {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.resume-header-simple h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.resume-actions-simple {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-download,
+.btn-home,
+.btn-primary,
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-download,
+.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-download:hover,
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-home,
+.btn-secondary {
+  background: var(--card-bg);
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-home:hover,
+.btn-secondary:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.resume-viewer-simple {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  min-height: 600px;
+}
+
+.resume-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.spinner-simple {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(102, 126, 234, 0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+.pdf-container-simple {
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+[data-theme="dark"] .pdf-container-simple {
+  background: #1e293b;
+}
+
+.resume-contact-simple {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 1.5rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.contact-item-simple {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.contact-item-simple span {
+  font-size: 1.25rem;
+}
+
+.contact-item-simple a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-item-simple a:hover {
+  color: #667eea;
+}
+
+/* ============================================
+   SIMPLIFIED EXPERIENCE PAGE STYLES
+   ============================================ */
+
+.experience-page-simple {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.experience-header-simple {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.experience-header-simple h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.experience-header-simple p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.experience-list-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.experience-card-simple {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-left: 4px solid #667eea;
+}
+
+.experience-card-simple:hover {
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+}
+
+.exp-header {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.exp-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.exp-info h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.exp-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #667eea;
+  margin: 0 0 0.5rem 0;
+}
+
+.exp-duration {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.exp-description {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.exp-description li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.exp-description li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.experience-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .resume-page-simple,
+  .experience-page-simple {
+    padding: 1rem;
+  }
+
+  .resume-header-simple {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .resume-header-simple h1 {
+    font-size: 2rem;
+  }
+
+  .resume-actions-simple {
+    width: 100%;
+  }
+
+  .btn-download,
+  .btn-home {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .resume-viewer-simple {
+    padding: 1rem;
+    min-height: 400px;
+  }
+
+  .resume-contact-simple {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .contact-item-simple {
+    justify-content: center;
+  }
+
+  .experience-header-simple h1 {
+    font-size: 2rem;
+  }
+
+  .experience-header-simple p {
+    font-size: 1rem;
+  }
+
+  .experience-card-simple {
+    padding: 1.5rem;
+  }
+
+  .exp-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .exp-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.25rem;
+  }
+
+  .exp-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .exp-info h3 {
+    font-size: 1rem;
+  }
+
+  .experience-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .resume-header-simple h1 {
+    font-size: 1.75rem;
+  }
+
+  .experience-header-simple h1 {
+    font-size: 1.75rem;
+  }
+
+  .exp-description li {
+    font-size: 0.9rem;
+  }
+}
 /* EOF - End of Complete Refactored CSS File */
