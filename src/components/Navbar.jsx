@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx - Update the progress bar section
+// src/components/Navbar.jsx - Fixed version
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
@@ -16,14 +16,13 @@ const Navbar = () => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       
       setScrollProgress(scrollPercent);
       setScrolled(scrollTop > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
-    // Call once to set initial state
     handleScroll();
     
     return () => window.removeEventListener('scroll', handleScroll);
@@ -31,7 +30,6 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsOpen(false);
-    // Reset scroll progress on page change
     setScrollProgress(0);
   }, [location]);
 
@@ -97,17 +95,17 @@ const Navbar = () => {
                     to={link.to}
                     className={`nav-link ${isActive ? 'active' : ''}`}
                   >
-                    <motion.span
-                      whileHover={{ y: -2 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      {link.label}
-                    </motion.span>
+                    {link.label}
                     {isActive && (
                       <motion.div
                         className="active-indicator"
                         layoutId="activeIndicator"
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        initial={false}
+                        transition={{ 
+                          type: "spring", 
+                          stiffness: 500, 
+                          damping: 30 
+                        }}
                       />
                     )}
                   </Link>
@@ -156,10 +154,7 @@ const Navbar = () => {
         {/* Fixed Progress Bar */}
         <div 
           className="nav-progress-bar"
-          style={{ 
-            width: `${scrollProgress}%`,
-            transition: 'width 0.1s ease-out'
-          }}
+          style={{ width: `${scrollProgress}%` }}
         />
       </motion.nav>
 
@@ -206,16 +201,12 @@ const Navbar = () => {
                         className={`mobile-nav-link ${isActive ? 'active' : ''}`}
                         onClick={toggleMenu}
                       >
-                        <motion.span
-                          whileHover={{ x: 10 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                        >
-                          {link.label}
-                        </motion.span>
+                        <span>{link.label}</span>
                         {isActive && (
                           <motion.div
                             className="mobile-active-dot"
                             layoutId="mobileActiveDot"
+                            initial={false}
                           />
                         )}
                       </Link>
