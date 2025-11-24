@@ -1,5 +1,5 @@
-// App.js
-import React, { useContext, useEffect } from 'react';
+// src/App.js
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import TagManager from 'react-gtm-module';
 import Navbar from './components/Navbar';
@@ -12,40 +12,56 @@ import ThankYouPage from './pages/ThankYouPage';
 import FullPost from './pages/FullPost';
 import ExperiencePage from './pages/ExperiencePage';
 import Resume from './pages/Resume';
-import { ThemeContext, ThemeProvider } from './ThemeContext';
-import ThemeToggle from './pages/ThemeToggle';
+import { ThemeProvider } from './ThemeContext';
 import './App.css';
 import { initGA, logPageView } from './analytics';
 
-function App() {
-  const { isDarkMode } = useContext(ThemeContext);
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-  }, [isDarkMode]);
+// PageTracker: Pushes a pageview event to GTM on route changes
+function PageTracker() {
+  const location = useLocation();
 
+  useEffect(() => {
+    // Scroll to top on route change
+    window.scrollTo(0, 0);
+
+    // Ensure window.dataLayer exists
+    window.dataLayer = window.dataLayer || [];
+
+    // Push the pageview event to GTM
+    TagManager.dataLayer({
+      dataLayer: {
+        event: 'pageview',
+        page: location.pathname + location.search,
+      },
+    });
+
+    // Log pageview for Google Analytics
+    logPageView();
+
+    console.log('GTM pageview event pushed:', location.pathname + location.search);
+  }, [location]);
+
+  return null;
+}
+
+function AppContent() {
   useEffect(() => {
     // Initialize Google Analytics
     initGA();
-    logPageView();
 
     // Initialize Google Tag Manager
     const tagManagerArgs = {
-      gtmId: 'GTM-K5B486R5', // Verify this is correct and published in GTM
+      gtmId: 'GTM-K5B486R5',
     };
     TagManager.initialize(tagManagerArgs);
   }, []);
 
   return (
     <Router>
-      <ThemeProvider>
-        <PageTracker />
-        <div className={`App ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-          <Navbar />
-          <ThemeToggle />
+      <PageTracker />
+      <div className="App">
+        <Navbar />
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/blog" element={<Blog />} />
@@ -56,33 +72,19 @@ function App() {
             <Route path="/experience" element={<ExperiencePage />} />
             <Route path="/resume" element={<Resume />} />
           </Routes>
-        </div>
+        </main>
         <Footer />
-      </ThemeProvider>
+      </div>
     </Router>
   );
 }
 
-// PageTracker: Pushes a pageview event to GTM on route changes
-function PageTracker() {
-  const location = useLocation();
-
-  useEffect(() => {
-    // Ensure window.dataLayer exists; if not, initialize it
-    window.scrollTo(0, 0);
-    window.dataLayer = window.dataLayer || [];
-    
-    // Push the pageview event to GTM
-    TagManager.dataLayer({
-      dataLayer: {
-        event: 'pageview',
-        page: location.pathname + location.search,
-      },
-    });
-    console.log('GTM pageview event pushed:', location.pathname + location.search);
-  }, [location]);
-
-  return null;
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
 }
 
 export default App;
