@@ -107,20 +107,23 @@ const Resume = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <div className="contact-item-simple">
+        <a href="mailto:saisriharshaguddati1@gmail.com" className="contact-item-simple">
           <span>📧</span>
-          <a href="mailto:saisriharshaguddati1@gmail.com">saisriharshaguddati1@gmail.com</a>
-        </div>
-        <div className="contact-item-simple">
+          <span>Email Me</span>
+        </a>
+        <a href="tel:+13526658709" className="contact-item-simple">
           <span>📱</span>
-          <a href="tel:+13526658709">+1 352 665 8709</a>
-        </div>
-        <div className="contact-item-simple">
+          <span>Call Me</span>
+        </a>
+        <a 
+          href="https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="contact-item-simple"
+        >
           <span>🔗</span>
-          <a href="https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/" target="_blank" rel="noopener noreferrer">
-            LinkedIn Profile
-          </a>
-        </div>
+          <span>LinkedIn</span>
+        </a>
       </motion.div>
     </div>
   );
