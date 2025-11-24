@@ -3921,3 +3921,262 @@ a:not([class]):hover {
     opacity: 0 !important;
   }
 }
+
+/* ============================================
+   ENHANCED THEME TOGGLE STYLES
+   ============================================ */
+
+.theme-toggle-enhanced {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-track-enhanced {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+}
+
+.toggle-thumb-enhanced {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.toggle-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.toggle-icon.sun {
+  color: #f59e0b;
+}
+
+.toggle-icon.moon {
+  color: #fbbf24;
+}
+
+/* Star particles for dark mode */
+.star-particle {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 8px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.star-1 {
+  top: 4px;
+  left: 8px;
+}
+
+.star-2 {
+  bottom: 6px;
+  left: 14px;
+}
+
+/* Tooltip */
+.toggle-tooltip {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.toggle-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid var(--card-bg);
+}
+
+.theme-toggle-enhanced:hover .toggle-tooltip {
+  opacity: 1;
+}
+
+/* Glow effect on hover */
+.theme-toggle-enhanced:hover .toggle-track-enhanced {
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(102, 126, 234, 0.3),
+    0 0 20px rgba(102, 126, 234, 0.2);
+}
+
+/* Animation for sun rays */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.toggle-icon.sun {
+  animation: rotate 20s linear infinite;
+}
+
+/* Pulse animation for stars */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+}
+
+.star-particle {
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.star-1 {
+  animation-delay: 0s;
+}
+
+.star-2 {
+  animation-delay: 1s;
+}
+
+/* Navbar positioning */
+.navbar .theme-toggle-enhanced {
+  margin: 0;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .toggle-tooltip {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .toggle-tooltip::before {
+  border-bottom-color: #1e293b;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .toggle-track-enhanced {
+    width: 54px;
+    height: 28px;
+  }
+
+  .toggle-thumb-enhanced {
+    width: 24px;
+    height: 24px;
+  }
+
+  .toggle-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .toggle-tooltip {
+    display: none;
+  }
+
+  .theme-toggle-enhanced:active .toggle-track-enhanced {
+    box-shadow: 
+      inset 0 2px 4px rgba(0, 0, 0, 0.3),
+      0 2px 6px rgba(102, 126, 234, 0.4);
+  }
+}
+
+@media (max-width: 480px) {
+  .toggle-track-enhanced {
+    width: 50px;
+    height: 26px;
+  }
+
+  .toggle-thumb-enhanced {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .toggle-track-enhanced {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .toggle-icon.sun {
+    animation: none;
+  }
+  
+  .star-particle {
+    animation: none;
+  }
+  
+  .toggle-thumb-enhanced {
+    transition: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.theme-toggle-enhanced:focus {
+  outline: none;
+}
+
+.theme-toggle-enhanced:focus-visible .toggle-track-enhanced {
+  outline: 2px solid #667eea;
+  outline-offset: 4px;
+}
+
+/* Better touch targets */
+.theme-toggle-enhanced {
+  padding: 0.5rem;
+  margin: -0.5rem;
+}
