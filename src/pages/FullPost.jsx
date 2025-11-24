@@ -1,7 +1,7 @@
 // src/pages/FullPost.jsx
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { FiArrowLeft, FiClock, FiUser, FiBookOpen } from 'react-icons/fi';
 
