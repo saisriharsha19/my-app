@@ -1,7 +1,7 @@
 // src/pages/FullPost.jsx
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { FiArrowLeft, FiClock, FiUser, FiBookOpen } from 'react-icons/fi';
 
@@ -193,11 +193,18 @@ const FullPost = () => {
         <div className="content-wrapper">
           <ReactMarkdown
             components={{
-              h1: ({ node, ...props }) => <h1 {...props} />,
-              h2: ({ node, ...props }) => <h2 {...props} />,
-              p: ({ node, ...props }) => <p {...props} />,
-              code: ({ node, inline, ...props }) => 
-                inline ? <code {...props} /> : <code {...props} />
+              h1: ({ children, ...props }) => <h1 {...props}>{children}</h1>,
+              h2: ({ children, ...props }) => <h2 {...props}>{children}</h2>,
+              h3: ({ children, ...props }) => <h3 {...props}>{children}</h3>,
+              p: ({ children, ...props }) => <p {...props}>{children}</p>,
+              code: ({ inline, children, ...props }) =>
+                inline ? (
+                  <code {...props}>{children}</code>
+                ) : (
+                  <pre>
+                    <code {...props}>{children}</code>
+                  </pre>
+                )
             }}
           >
             {post.content}
