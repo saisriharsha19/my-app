@@ -4180,3 +4180,333 @@ a:not([class]):hover {
   padding: 0.5rem;
   margin: -0.5rem;
 }
+
+
+/* ============================================
+   REMOVE UNWANTED BORDERS - Add to App.css
+   ============================================ */
+
+/* Remove all default borders and outlines that are irritating */
+* {
+  outline: none !important;
+}
+
+/* Remove input borders on focus (keep functionality) */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+/* Remove button borders */
+button {
+  outline: none !important;
+  border: none;
+}
+
+button:focus,
+button:active {
+  outline: none !important;
+}
+
+/* Remove link borders */
+a {
+  outline: none !important;
+  text-decoration: none;
+}
+
+a:focus,
+a:active {
+  outline: none !important;
+}
+
+/* Remove card borders */
+.post-card,
+.portfolio-item,
+.experience-card,
+.experience-card-simple,
+.info-card,
+.contact-form {
+  border: none !important;
+}
+
+/* Remove navbar borders */
+.navbar {
+  border: none !important;
+  border-bottom: none !important;
+}
+
+.navbar.scrolled {
+  border: none !important;
+  border-bottom: none !important;
+}
+
+/* Remove footer borders */
+.footer {
+  border: none !important;
+  border-top: none !important;
+}
+
+/* Remove theme toggle borders */
+.theme-toggle-enhanced,
+.theme-toggle-fancy,
+.theme-toggle-simple {
+  border: none !important;
+  outline: none !important;
+}
+
+.toggle-track-enhanced,
+.toggle-background {
+  border: none !important;
+}
+
+/* Remove mobile menu borders */
+.mobile-menu {
+  border: none !important;
+  border-left: none !important;
+}
+
+/* Remove divider borders that might be showing */
+.section-divider,
+.footer-divider {
+  border: none !important;
+}
+
+/* Remove borders from buttons */
+.btn-download,
+.btn-home,
+.btn-primary,
+.btn-secondary,
+.action-btn,
+.primary-btn,
+.secondary-btn,
+.submit-btn {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Remove borders from navigation */
+.nav-link,
+.mobile-nav-link,
+.footer-link {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Remove borders from form elements */
+.input-wrapper input,
+.input-wrapper textarea {
+  outline: none !important;
+}
+
+.input-wrapper input:focus,
+.input-wrapper textarea:focus {
+  outline: none !important;
+  border: 2px solid #667eea !important;
+}
+
+/* Remove borders from resume viewer */
+.resume-viewer-simple,
+.resume-container,
+.pdf-container-simple,
+.pdf-viewer {
+  border: none !important;
+}
+
+/* Remove borders from contact items */
+.contact-item-simple {
+  border: none !important;
+}
+
+/* Remove borders from pagination */
+.page-number {
+  border: none !important;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.page-number.active {
+  border: none !important;
+}
+
+/* Remove borders from blog elements */
+.read-more-link {
+  border: none !important;
+}
+
+/* Remove any webkit/browser default borders */
+*::-webkit-input-placeholder {
+  border: none !important;
+}
+
+*:-moz-placeholder {
+  border: none !important;
+}
+
+*::-moz-placeholder {
+  border: none !important;
+}
+
+*:-ms-input-placeholder {
+  border: none !important;
+}
+
+/* Remove focus rings but keep accessibility with subtle shadow */
+*:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3) !important;
+}
+
+/* Remove borders from images */
+img {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Remove borders from iframe (PDF viewer) */
+iframe {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Remove any remaining borders */
+.rpv-core__viewer,
+.rpv-core__inner-page {
+  border: none !important;
+}
+
+/* Remove borders from experience cards */
+.experience-card-simple {
+  border: none !important;
+  border-left: 4px solid #667eea !important; /* Keep only left accent */
+}
+
+/* Ensure no borders appear on hover */
+*:hover {
+  outline: none !important;
+}
+
+/* Remove borders from select dropdowns */
+select {
+  border: 2px solid rgba(102, 126, 234, 0.2) !important;
+  outline: none !important;
+}
+
+select:focus {
+  border-color: #667eea !important;
+  outline: none !important;
+}
+
+/* Remove any box-shadow that looks like borders */
+.navbar,
+.footer,
+.post-card,
+.portfolio-item {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] .navbar,
+[data-theme="dark"] .footer,
+[data-theme="dark"] .post-card,
+[data-theme="dark"] .portfolio-item {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Completely remove borders from specific problem elements */
+.theme-toggle-enhanced .toggle-track-enhanced {
+  border: none !important;
+}
+
+/* Remove border from toggle tooltip */
+.toggle-tooltip,
+.toggle-tooltip-fancy {
+  border: none !important;
+}
+
+[data-theme="dark"] .toggle-tooltip,
+[data-theme="dark"] .toggle-tooltip-fancy {
+  border: none !important;
+}
+
+/* Remove borders from loading states */
+.spinner,
+.spinner-simple,
+.loading-spinner {
+  border-color: rgba(102, 126, 234, 0.2) transparent transparent transparent !important;
+  border-top-color: #667eea !important;
+}
+
+/* Remove webkit tap highlight */
+* {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* Remove any default browser styling borders */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="search"],
+textarea {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  border: 2px solid rgba(102, 126, 234, 0.2) !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+textarea:focus {
+  border-color: #667eea !important;
+  outline: none !important;
+}
+
+/* Remove button default styles completely */
+button {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background: none;
+  border: none !important;
+}
+
+/* Remove link default underlines and borders */
+a {
+  text-decoration: none !important;
+  border: none !important;
+}
+
+/* Remove any remaining outlines on active/focus */
+*:active,
+*:focus,
+*:focus-within {
+  outline: none !important;
+}
+
+/* Keep only necessary borders for structure */
+.post-footer,
+.footer-divider {
+  border-top: 1px solid var(--border-color) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
+/* Remove high contrast mode borders */
+@media (prefers-contrast: high) {
+  * {
+    border: none !important;
+  }
+  
+  /* Keep only essential borders for high contrast */
+  .post-card,
+  .portfolio-item,
+  .experience-card {
+    border: 2px solid var(--text-primary) !important;
+  }
+}
