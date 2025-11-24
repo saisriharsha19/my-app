@@ -43,7 +43,6 @@ const Navbar = () => {
         transition={{ type: "spring", stiffness: 100 }}
       >
         <div className="navbar-container">
-          {/* Logo/Brand */}
           <Link to="/" className="navbar-brand">
             <motion.div
               className="brand-content"
@@ -73,7 +72,6 @@ const Navbar = () => {
             </motion.div>
           </Link>
 
-          {/* Desktop Navigation */}
           <ul className="navbar-nav desktop-nav">
             {navLinks.map((link, index) => {
               const isActive = location.pathname === link.to;
@@ -107,11 +105,9 @@ const Navbar = () => {
             })}
           </ul>
 
-          {/* Right Side Actions */}
           <div className="navbar-actions">
             <ThemeToggle />
             
-            {/* Mobile Menu Toggle */}
             <motion.button
               className="mobile-menu-toggle"
               onClick={toggleMenu}
@@ -146,20 +142,16 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Progress Bar */}
         <motion.div
           className="nav-progress-bar"
-          style={{ scaleX: 0 }}
-          animate={{ scaleX: scrolled ? 1 : 0 }}
+          style={{ scaleX: scrolled ? 1 : 0 }}
           transition={{ duration: 0.3 }}
         />
       </motion.nav>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               className="mobile-menu-backdrop"
               initial={{ opacity: 0 }}
@@ -168,7 +160,6 @@ const Navbar = () => {
               onClick={toggleMenu}
             />
 
-            {/* Menu Panel */}
             <motion.div
               className="mobile-menu"
               initial={{ x: '100%' }}
