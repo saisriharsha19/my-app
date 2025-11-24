@@ -1,51 +1,195 @@
+// src/components/Footer.jsx
 import React from "react";
-import "../App.css"; // Import the CSS file
 import { Link } from "react-router-dom";
-// Import as React components
-import twitterIcon from '../icons/twitter.png';
-import linkedinIcon from '../icons/linkedin.png';
-import githubIcon from '../icons/github.png';
-
-
+import { motion } from "framer-motion";
+import { FiTwitter, FiLinkedin, FiGithub, FiHeart, FiArrowUp } from "react-icons/fi";
+import { HiSparkles } from "react-icons/hi";
 
 const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const socialLinks = [
+    { 
+      icon: <FiTwitter />, 
+      url: "https://x.com/SriHarsha_19", 
+      label: "Twitter",
+      color: "#1DA1F2"
+    },
+    { 
+      icon: <FiLinkedin />, 
+      url: "https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/", 
+      label: "LinkedIn",
+      color: "#0A66C2"
+    },
+    { 
+      icon: <FiGithub />, 
+      url: "https://github.com/saisriharsha19", 
+      label: "GitHub",
+      color: "#333"
+    }
+  ];
+
+  const footerLinks = [
+    { to: "/", label: "About" },
+    { to: "/blog", label: "Blog" },
+    { to: "/portfolio", label: "Portfolio" },
+    { to: "/contact", label: "Contact" }
+  ];
+
   return (
     <footer className="footer">
+      {/* Scroll to Top Button */}
+      <motion.button
+        className="scroll-to-top"
+        onClick={scrollToTop}
+        whileHover={{ scale: 1.1, y: -3 }}
+        whileTap={{ scale: 0.9 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <FiArrowUp />
+      </motion.button>
+
       <div className="footer-container">
-        <div className="footer-brand">
-          <span className="footer-logo">#SaiSriHarsha#</span>
-        </div>
-        <div className="footer-links">
+        {/* Brand Section */}
+        <motion.div
+          className="footer-brand"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.div
+            className="footer-logo"
+            whileHover={{ scale: 1.05 }}
+          >
+            <motion.span
+              animate={{
+                textShadow: [
+                  "0 0 10px rgba(102, 126, 234, 0.5)",
+                  "0 0 20px rgba(118, 75, 162, 0.5)",
+                  "0 0 10px rgba(102, 126, 234, 0.5)"
+                ]
+              }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              #SaiSriHarsha
+            </motion.span>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
+              className="logo-sparkle"
+            >
+              <HiSparkles />
+            </motion.div>
+          </motion.div>
+          <motion.p
+            className="footer-tagline"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            Building the future, one line at a time
+          </motion.p>
+        </motion.div>
+
+        {/* Navigation Links */}
+        <motion.div
+          className="footer-links"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <h3 className="footer-section-title">Quick Links</h3>
           <ul className="footer-nav">
-            <li><Link to="/" className="footer-link">About</Link></li>
-            <li><Link to="/blog" className="footer-link">Services</Link></li>
-            <li><Link to="/portfolio" className="footer-link">Portfolio</Link></li>
-            <li><Link to="/contact" className="footer-link">Contact</Link></li>
+            {footerLinks.map((link, index) => (
+              <motion.li
+                key={link.to}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Link to={link.to} className="footer-link">
+                  <motion.span
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    {link.label}
+                  </motion.span>
+                </Link>
+              </motion.li>
+            ))}
           </ul>
-        </div>
-        <div className="footer-social">
-        <ul className="social-links">
-      <li>
-        <a href="https://x.com/SriHarsha_19" className="social-icon" aria-label="Twitter">
-          <img src={twitterIcon} alt="Twitter" />
-        </a>
-      </li>
-      <li>
-        <a href="https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/" className="social-icon" aria-label="LinkedIn">
-          <img src={linkedinIcon} alt="LinkedIn" />
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/saisriharsha19" className="social-icon" aria-label="GitHub">
-          <img src={githubIcon} alt="GitHub" />
-        </a>
-      </li>
-    </ul>
-        </div>
+        </motion.div>
+
+        {/* Social Links */}
+        <motion.div
+          className="footer-social"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <h3 className="footer-section-title">Connect With Me</h3>
+          <ul className="social-links">
+            {socialLinks.map((social, index) => (
+              <motion.li
+                key={social.label}
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, type: "spring" }}
+              >
+                <motion.a
+                  href={social.url}
+                  className="social-icon"
+                  aria-label={social.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ 
+                    scale: 1.2, 
+                    rotate: 360,
+                    backgroundColor: social.color 
+                  }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  {social.icon}
+                </motion.a>
+              </motion.li>
+            ))}
+          </ul>
+        </motion.div>
       </div>
-      <div className="footer-bottom">
-        <p>&copy; 2025 Sai Sri Harsha Guddati. All rights reserved.</p>
-      </div>
+
+      {/* Footer Bottom */}
+      <motion.div
+        className="footer-bottom"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.6 }}
+      >
+        <motion.div className="footer-divider" />
+        <p>
+          Made with <motion.span
+            animate={{ 
+              scale: [1, 1.3, 1],
+              color: ["#ef4444", "#ec4899", "#ef4444"]
+            }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            style={{ display: "inline-block" }}
+          >
+            <FiHeart style={{ fill: "currentColor" }} />
+          </motion.span> by Sai Sri Harsha Guddati © 2025
+        </p>
+      </motion.div>
     </footer>
   );
 };
