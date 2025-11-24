@@ -2000,3 +2000,340 @@ body {
 html {
   scroll-padding-top: calc(var(--navbar-height) + 20px);
 }
+
+/* Resume Page Styles */
+.resume-page {
+  min-height: 100vh;
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.resume-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.resume-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.resume-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+}
+
+.resume-heading {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.resume-subtitle {
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.resume-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.download-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.download-btn:hover {
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+}
+
+.home-btn {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.home-btn:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+/* Controls Bar */
+.resume-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--card-bg);
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.control-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.control-btn:not(:disabled):hover {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.zoom-level {
+  min-width: 60px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.fullscreen-btn {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.fullscreen-btn:hover {
+  background: rgba(102, 126, 234, 0.2);
+}
+
+/* PDF Container */
+.resume-container {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 3rem;
+  min-height: 600px;
+}
+
+.pdf-viewer {
+  position: relative;
+  z-index: 10;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--card-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 100;
+}
+
+.loading-spinner {
+  font-size: 3rem;
+  color: #667eea;
+}
+
+/* Decorative Elements */
+.resume-decoration {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.decoration-1 {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  top: -100px;
+  left: -100px;
+}
+
+.decoration-2 {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  bottom: -80px;
+  right: -80px;
+}
+
+/* Info Section */
+.resume-info-section {
+  margin-top: 3rem;
+}
+
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-card {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.info-icon {
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 12px;
+}
+
+.info-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.info-card p,
+.info-card a {
+  margin: 0;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.info-card a:hover {
+  color: #667eea;
+  text-decoration: underline;
+}
+
+/* Fullscreen Mode */
+.resume-container:fullscreen {
+  padding: 1rem;
+  border-radius: 0;
+}
+
+.resume-container:fullscreen .pdf-viewer {
+  height: calc(100vh - 2rem);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .resume-page {
+    padding: 1rem;
+  }
+
+  .resume-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .resume-heading {
+    font-size: 2rem;
+  }
+
+  .resume-actions {
+    width: 100%;
+  }
+
+  .action-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .resume-controls {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .zoom-controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .info-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-container {
+    padding: 1rem;
+  }
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .pdf-viewer {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .rpv-core__viewer {
+  background: #1e293b !important;
+}
+
+/* PDF Viewer Custom Styles */
+.rpv-core__viewer {
+  border-radius: 12px;
+}
+
+.rpv-core__inner-page {
+  background: white;
+  margin: 1rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
