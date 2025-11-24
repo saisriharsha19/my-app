@@ -17,7 +17,6 @@ const ExperiencePage = () => {
         "Unified 6+ LLMs behind a load-balanced API gateway, reducing latency by 40% and supporting 55,000+ monthly active users.",
         "Implemented comprehensive monitoring with Prometheus and Grafana to maintain sub-second response times and optimize system performance."
       ],
-      icon: <FaBriefcase className="w-6 h-6" />,
     },
     {
       title: "Software Development Engineer",
@@ -30,7 +29,6 @@ const ExperiencePage = () => {
         "Engineered CI/CD pipelines with Terraform and Azure DevOps, reducing deployment time by 40% and achieving zero production incidents.",
         "Delivered RAG systems using Pinecone and LLMs to automate code refactoring and legacy data modernization for Fortune 500 clients."
       ],
-      icon: <FaBriefcase className="w-6 h-6" />,
     },
     {
       title: "Software Development Engineer Intern",
@@ -42,7 +40,6 @@ const ExperiencePage = () => {
         "Implemented an event-driven architecture using Apache Kafka to process 500,000+ events per day with exactly-once semantics.",
         "Optimized API latency by 30% through thread pool management and efficient connection pooling strategies."
       ],
-      icon: <FaBriefcase className="w-6 h-6" />,
     },
   ];
   return (
