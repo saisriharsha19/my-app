@@ -1,6 +1,6 @@
 // src/pages/Resume.jsx
 import React, { useEffect, useRef, useState } from 'react';
-import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
+import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiDownload, FiZoomIn, FiZoomOut, FiMaximize, FiMinimize, FiHome, FiFileText } from 'react-icons/fi';
