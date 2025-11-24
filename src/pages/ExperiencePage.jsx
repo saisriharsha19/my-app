@@ -1,71 +1,165 @@
-import React from "react";
-import { FaBriefcase } from "react-icons/fa";
+// src/pages/ExperiencePage.jsx
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { FaBriefcase, FaDownload, FaHome } from "react-icons/fa";
+import { HiSparkles } from "react-icons/hi";
 
 const ExperiencePage = () => {
+  const [expandedCard, setExpandedCard] = useState(null);
+
   const experiences = [
     {
-      title: "AI Engineer Intern",
+      title: "Software Engineer Intern",
       company: "University of Florida Information Technology",
       duration: "Mar 2025 - Present",
+      color: "from-blue-500 to-cyan-600",
       description: [
-        "Built and deployed AI assistants using FastAPI, Redis, PostgreSQL, and OpenAI/Gemini APIs for university departments.",
-        "Integrated self-hosted and API-based LLMs (Mistral, Claude, LLaMA) using LangChain, Semantic Kernel, and LangGraph.",
-        "Designed prompt workflows, vector search (pgvector/FAISS), and RAG pipelines for real-time query handling.",
-        "Developed backend architecture with authentication, caching, and scalable Celery-based background tasks."
+        "Architected and deployed a distributed full-stack AI platform using FastAPI, Next.js, Celery, and Redis, serving 30,000+ users with 99.9% uptime.",
+        "Built and maintained 15+ production microservices on Docker and Kubernetes handling 100,000+ daily requests for AI chat applications.",
+        "Unified 6+ LLMs behind a load-balanced API gateway, reducing latency by 40% and supporting 55,000+ monthly active users.",
+        "Implemented comprehensive monitoring with Prometheus and Grafana to maintain sub-second response times and optimize system performance."
       ],
-      icon: <FaBriefcase />,
+      icon: <FaBriefcase className="w-6 h-6" />,
     },
     {
-      title: "Research and Development Software Engineer",
-      company: "Tata Consultancy Services (TCS) Ltd",
+      title: "Software Development Engineer",
+      company: "Tata Consultancy Services (TCS)",
       duration: "Aug 2022 - Dec 2023",
+      color: "from-purple-500 to-indigo-600",
       description: [
-        "Developed AI-powered backend systems using Python (FastAPI, Flask) and React, improving automation and usability.",
-        "Led projects integrating OpenAI, Pinecone, and OCR models for LLM-based programming analysis and image processing.",
-        "Containerized apps with Docker and deployed via Kubernetes on Azure, improving scalability and latency by 20%.",
-        "Designed REST APIs and built CI/CD pipelines; improved MSSQL/PostgreSQL query efficiency with indexing strategies.",
-        "Implemented ML models for classification and regression using PyTorch and TensorFlow to automate business workflows."
+        "Designed and shipped enterprise-scale backend systems using Python (Flask) and React, deployed on Azure Kubernetes Service (AKS).",
+        "Optimized PostgreSQL and MSSQL clusters managing 10M+ records, utilizing advanced indexing to reduce query latency by 50%.",
+        "Engineered CI/CD pipelines with Terraform and Azure DevOps, reducing deployment time by 40% and achieving zero production incidents.",
+        "Delivered RAG systems using Pinecone and LLMs to automate code refactoring and legacy data modernization for Fortune 500 clients."
       ],
-      icon: <FaBriefcase />,
+      icon: <FaBriefcase className="w-6 h-6" />,
     },
     {
-      title: "Cloud Engineer Intern",
+      title: "Software Development Engineer Intern",
       company: "Internshala",
-      duration: "Jan 2021 - Sep 2021",
+      duration: "May 2021 - Aug 2021",
+      color: "from-orange-500 to-red-500",
       description: [
-        "Built a monitoring dashboard for live system performance using Python and JavaScript, enhancing observability.",
-        "Conducted rigorous testing and debugging on cloud environments, reducing failure rates and downtime by 25%.",
-        "Improved infrastructure reliability by optimizing deployment workflows and adding real-time analytics tracking."
+        "Developed high-throughput Java Spring Boot microservices for real-time transaction processing, handling over 10,000 transactions per second.",
+        "Implemented an event-driven architecture using Apache Kafka to process 500,000+ events per day with exactly-once semantics.",
+        "Optimized API latency by 30% through thread pool management and efficient connection pooling strategies."
       ],
-      icon: <FaBriefcase />,
+      icon: <FaBriefcase className="w-6 h-6" />,
     },
   ];
 
   return (
     <div className="experience-page">
-      <h1 className="experience-page-title">My Experience</h1>
-      <div className="experience-list">
-        {experiences.map((exp, index) => (
-          <div key={index} className="experience-card">
-            <div className="experience-icon">{exp.icon}</div>
-            <div className="experience-details">
-              <h2>{exp.title}</h2>
-              <h3>{exp.company}</h3>
-              <p className="duration">{exp.duration}</p>
-              <div className="experience-page-points-container">
-                {exp.description.map((point, i) => (
-                <p className="experience-page-points" key={i}>{point}</p>
-                ))}
-              </div>
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="experience-header"
+      >
+        <motion.div
+          animate={{ rotate: [0, 10, -10, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 3, repeatDelay: 2 }}
+        >
+          <HiSparkles className="header-icon" />
+        </motion.div>
+        <h1 className="experience-page-title">
+          My <span className="gradient-text">Journey</span>
+        </h1>
+        <p className="experience-subtitle">Building the future, one line at a time</p>
+      </motion.div>
 
+      <div className="experience-timeline">
+        {experiences.map((exp, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: index * 0.2 }}
+            className={`experience-card ${expandedCard === index ? 'expanded' : ''}`}
+            onMouseEnter={() => setExpandedCard(index)}
+            onMouseLeave={() => setExpandedCard(null)}
+          >
+            <div className={`experience-gradient bg-gradient-to-br ${exp.color}`}></div>
+            
+            <motion.div 
+              className="experience-icon"
+              whileHover={{ scale: 1.2, rotate: 360 }}
+              transition={{ duration: 0.5 }}
+            >
+              {exp.icon}
+            </motion.div>
+
+            <div className="experience-details">
+              <motion.h2
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                {exp.title}
+              </motion.h2>
+              
+              <h3>{exp.company}</h3>
+              
+              <motion.p 
+                className="duration"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                📅 {exp.duration}
+              </motion.p>
+
+              <motion.div 
+                className="experience-points-container"
+                initial="collapsed"
+                animate={expandedCard === index ? "expanded" : "collapsed"}
+                variants={{
+                  expanded: { height: "auto", opacity: 1 },
+                  collapsed: { height: "100px", opacity: 0.7 }
+                }}
+              >
+                {exp.description.map((point, i) => (
+                  <motion.p
+                    key={i}
+                    className="experience-point"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <span className="bullet">▸</span> {point}
+                  </motion.p>
+                ))}
+              </motion.div>
             </div>
-          </div>
+
+            <div className="card-number">{String(index + 1).padStart(2, '0')}</div>
+          </motion.div>
         ))}
       </div>
-      <div className="button-container">
-      <a href="/" className="return-btn">⬅️ Home</a>
-      <a href="/resume" className="download-btn">View Resume</a>
-      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="button-container"
+      >
+        <motion.a
+          href="/"
+          className="action-btn home-btn"
+          whileHover={{ scale: 1.05, x: -5 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <FaHome /> Home
+        </motion.a>
+        
+        <motion.a
+          href="/resume"
+          className="action-btn resume-btn"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <FaDownload /> View Resume
+        </motion.a>
+      </motion.div>
     </div>
   );
 };
