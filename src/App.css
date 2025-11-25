@@ -333,3 +333,273 @@ select:focus-visible {
 
 
    
+
+/* ============================================
+   16. COMPONENT-SPECIFIC RESPONSIVE OVERRIDES
+   These rules are intentionally specific and use
+   !important where necessary to override inline
+   styles coming from React components so that the
+   layout behaves well on smaller viewports.
+   Only CSS is changed per request.
+   ============================================ */
+
+/* Make images scale to container */
+img, picture, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Ensure long text and links wrap on small screens */
+body, .App, .main-content, nav, footer {
+  -webkit-text-size-adjust: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* NAVBAR tweaks */
+@media (max-width: 1024px) {
+  nav {
+    padding: 0 !important;
+  }
+  nav > div {
+    padding: 0.6rem 1rem !important;
+  }
+  nav a {
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* hide large nav lists, show menu button (many rules already inline,
+     these reinforce with !important to override inline styles) */
+  nav ul {
+    display: none !important;
+  }
+
+  nav button {
+    display: flex !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 0.25rem !important;
+  }
+
+  /* reduce brand and link paddings for small screens */
+  nav a {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.95rem !important;
+  }
+}
+
+/* FOOTER: convert grid to single column on mobile.
+   Footer uses inline styles for the grid, so use
+   a specific descendant selector with !important
+   to override grid-template-columns. */
+@media (max-width: 1024px) {
+  footer > div > div {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2rem !important;
+  }
+  footer {
+    padding-bottom: 2rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  footer > div > div {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  footer [style] {
+    max-width: 100% !important;
+  }
+
+  /* make the footer bottom content stack */
+
+  footer section,
+  footer div,
+  footer p {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* Ensure interactive controls meet touch targets on mobile */
+@media (hover: none) and (pointer: coarse) {
+  a, button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+}
+
+/* reduce large containers to fit smaller screens */
+@media (max-width: 480px) {
+  .App, .main-content {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* make sure overflowing inline-flex items wrap */
+  nav ul, .social-links, .actions {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* Small accessibility enhancement: reduce excessive shadows on tiny screens */
+@media (max-width: 360px) {
+  button, a {
+    box-shadow: none !important;
+  }
+}
+
+/* ============================================
+   17. PAGES-SPECIFIC RESPONSIVE RULES
+   Target common patterns in `src/pages/*` to
+   ensure readable typography, tighter spacing,
+   and stacked layouts on small viewports.
+   Only CSS changes — no JS/JSX edits.
+   ============================================ */
+
+/* Typography scaling for page headings */
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 2.25rem !important;
+  }
+  h2 {
+    font-size: 1.6rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem !important;
+    line-height: 1.15 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  h2 {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  p {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Make grid-based lists stack into a single column */
+  .grid,
+  .portfolio-grid,
+  .features,
+  .contact,
+  .pdf-container,
+  .resume-contact {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Shrink large paddings on page containers */
+  .container,
+  .home-container,
+  .page-container,
+  .bioSection,
+  .viewer,
+  .container > div {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Contact / Form adjustments */
+  form,
+  .form,
+  .contact form,
+  .contact .form {
+    padding: 1.25rem !important;
+    border-radius: 12px !important;
+  }
+
+  form input,
+  form textarea,
+  .form input,
+  .form textarea,
+  input,
+  textarea {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Portfolio/Projects cards become full-width */
+  .card,
+  article,
+  .project-card {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 1.5rem !important;
+    border-radius: 12px !important;
+  }
+
+  /* Hero/profile image sizing */
+  img.profile,
+  .profileImage,
+  img[alt*="profile"],
+  .imageContainer img {
+    max-width: 280px !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+
+  /* CTA stacking */
+  .ctaButtons,
+  .actions,
+  .socialLinks {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .ctaButtons a,
+  .ctaButtons button,
+  .actions a,
+  .actions button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Timeline adjustments */
+  .timeline,
+  .timeline-line,
+  .timeline-card {
+    padding-left: 0 !important;
+  }
+
+  .timeline-dot,
+  .timelineDot {
+    left: -1.25rem !important;
+  }
+
+  /* Full post/article content: make code blocks and pre scrollable and responsive */
+  pre, code, .contentWrapper pre, .content pre {
+    max-width: 100% !important;
+    overflow: auto !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+  }
+
+  /* PDF viewer: reduce min-height on small screens */
+  .viewer,
+  .pdf-viewer,
+  .pdfContainer,
+  .pdf-container {
+    min-height: 320px !important;
+  }
+}
+
+/* Slight tweaks for very small phones */
+@media (max-width: 420px) {
+  h1 { font-size: 1.6rem !important; }
+  h2 { font-size: 1.05rem !important; }
+  .profileImage { max-width: 220px !important; }
+  .socialLinks, .actions { gap: 0.5rem !important; }
+}
+
+
