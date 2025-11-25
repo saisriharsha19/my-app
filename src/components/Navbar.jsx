@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import { FiMenu, FiX, FiCode } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi';
-import ThemeToggle from './ThemeToggle';
+import ThemeToggle from '../pages/ThemeToggle';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
