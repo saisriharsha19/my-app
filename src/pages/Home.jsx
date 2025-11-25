@@ -1,4 +1,4 @@
-// src/pages/Home.jsx - Modern Design with Rich Animations
+// src/pages/Home.jsx - Fixed Image Clarity and Active Animations
 import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FiCode, FiCpu, FiZap, FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
@@ -78,12 +78,12 @@ const Home = () => {
 
   // Generate floating particles
   const particles = useMemo(() => 
-    Array.from({ length: 20 }, (_, i) => ({
+    Array.from({ length: 15 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 4 + 2,
-      duration: Math.random() * 10 + 10,
+      size: Math.random() * 3 + 2,
+      duration: Math.random() * 8 + 12,
       delay: Math.random() * 5
     })), []
   );
@@ -107,30 +107,33 @@ const Home = () => {
     },
     animatedBackground: {
       position: 'absolute',
-      inset: 0,
-      background: isDark 
-        ? 'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%)'
-        : 'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.05) 0%, transparent 50%)',
-      animation: 'backgroundPulse 8s ease-in-out infinite'
+      inset: 0
     },
-    shape: (index) => ({
+    shape: (shapeIndex) => ({
       position: 'absolute',
       borderRadius: '50%',
-      filter: 'blur(80px)',
-      opacity: 0.3,
-      ...(index === 0 && {
-        width: 'clamp(200px, 40vw, 400px)',
-        height: 'clamp(200px, 40vw, 400px)',
+      filter: 'blur(100px)',
+      opacity: 0.25,
+      ...(shapeIndex === 0 && {
+        width: 'clamp(250px, 45vw, 500px)',
+        height: 'clamp(250px, 45vw, 500px)',
         background: 'linear-gradient(135deg, #667eea, #764ba2)',
-        top: '10%',
-        left: '10%'
+        top: '5%',
+        left: '5%'
       }),
-      ...(index === 1 && {
-        width: 'clamp(150px, 30vw, 300px)',
-        height: 'clamp(150px, 30vw, 300px)',
+      ...(shapeIndex === 1 && {
+        width: 'clamp(200px, 35vw, 400px)',
+        height: 'clamp(200px, 35vw, 400px)',
         background: 'linear-gradient(135deg, #f093fb, #f5576c)',
-        bottom: '20%',
-        right: '15%'
+        bottom: '10%',
+        right: '10%'
+      }),
+      ...(shapeIndex === 2 && {
+        width: 'clamp(180px, 30vw, 350px)',
+        height: 'clamp(180px, 30vw, 350px)',
+        background: 'linear-gradient(135deg, #10b981, #059669)',
+        top: '40%',
+        right: '5%'
       })
     }),
     particle: (particle) => ({
@@ -141,18 +144,18 @@ const Home = () => {
       height: `${particle.size}px`,
       borderRadius: '50%',
       background: isDark 
-        ? 'rgba(102, 126, 234, 0.4)' 
-        : 'rgba(102, 126, 234, 0.3)',
-      boxShadow: `0 0 ${particle.size * 2}px rgba(102, 126, 234, 0.6)`
+        ? 'rgba(102, 126, 234, 0.6)' 
+        : 'rgba(102, 126, 234, 0.4)',
+      boxShadow: `0 0 ${particle.size * 3}px rgba(102, 126, 234, 0.8)`
     }),
     gridPattern: {
       position: 'absolute',
       inset: 0,
       backgroundImage: isDark
-        ? 'linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px)'
-        : 'linear-gradient(rgba(102, 126, 234, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.02) 1px, transparent 1px)',
-      backgroundSize: '50px 50px',
-      opacity: 0.5
+        ? 'linear-gradient(rgba(102, 126, 234, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.05) 1px, transparent 1px)'
+        : 'linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px)',
+      backgroundSize: '60px 60px',
+      opacity: 0.4
     },
     contentWrapper: {
       position: 'relative',
@@ -270,22 +273,14 @@ const Home = () => {
       maxWidth: 'min(450px, 85vw)',
       aspectRatio: '1 / 1'
     },
-    blobContainer: {
+    blobBackground: {
       position: 'absolute',
-      inset: '-20px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    blob: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
+      inset: '-30px',
       background: 'linear-gradient(135deg, #667eea, #764ba2, #f093fb)',
-      filter: 'blur(30px)',
-      opacity: 0.4,
-      animation: 'blobMorph 8s ease-in-out infinite',
-      borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
+      filter: 'blur(40px)',
+      opacity: 0.3,
+      zIndex: 1,
+      borderRadius: '50%'
     },
     imageFrame: {
       position: 'relative',
@@ -294,16 +289,9 @@ const Home = () => {
       borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
       overflow: 'hidden',
       background: isDark ? '#1e293b' : '#ffffff',
-      boxShadow: '0 40px 80px rgba(0, 0, 0, 0.3)',
+      boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
       border: `3px solid ${isDark ? 'rgba(102, 126, 234, 0.3)' : 'rgba(102, 126, 234, 0.2)'}`,
-      animation: 'shapeMorph 10s ease-in-out infinite'
-    },
-    glassOverlay: {
-      position: 'absolute',
-      inset: 0,
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%)',
-      backdropFilter: 'blur(10px)',
-      pointerEvents: 'none'
+      zIndex: 2
     },
     profileImage: {
       width: '100%',
@@ -311,26 +299,27 @@ const Home = () => {
       objectFit: 'cover',
       display: 'block'
     },
-    floatingElements: {
+    floatingRings: {
       position: 'absolute',
       inset: 0,
-      pointerEvents: 'none'
+      pointerEvents: 'none',
+      zIndex: 0
     },
-    floatingRing: (index) => ({
+    floatingRing: (ringIndex) => ({
       position: 'absolute',
       borderRadius: '50%',
-      border: '2px solid rgba(102, 126, 234, 0.2)',
-      ...(index === 0 && {
-        width: '120%',
-        height: '120%',
-        top: '-10%',
-        left: '-10%'
+      border: '2px solid rgba(102, 126, 234, 0.15)',
+      ...(ringIndex === 0 && {
+        width: '115%',
+        height: '115%',
+        top: '-7.5%',
+        left: '-7.5%'
       }),
-      ...(index === 1 && {
-        width: '140%',
-        height: '140%',
-        top: '-20%',
-        left: '-20%'
+      ...(ringIndex === 1 && {
+        width: '130%',
+        height: '130%',
+        top: '-15%',
+        left: '-15%'
       })
     }),
     socialLinks: {
@@ -386,10 +375,36 @@ const Home = () => {
     <div style={styles.container}>
       <div style={styles.background}>
         {/* Animated gradient background */}
-        <div style={styles.animatedBackground} />
+        <motion.div 
+          style={styles.animatedBackground}
+          animate={{
+            background: isDark 
+              ? [
+                  'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%)',
+                  'radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.15) 0%, transparent 50%)',
+                  'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%)'
+                ]
+              : [
+                  'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%)',
+                  'radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.08) 0%, transparent 50%)',
+                  'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%)'
+                ]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
         
         {/* Grid pattern */}
-        <div style={styles.gridPattern} />
+        <motion.div 
+          style={styles.gridPattern}
+          animate={{ 
+            backgroundPosition: ['0px 0px', '60px 60px']
+          }}
+          transition={{ 
+            duration: 20, 
+            repeat: Infinity, 
+            ease: "linear" 
+          }}
+        />
 
         {/* Floating particles */}
         {particles.map((particle) => (
@@ -397,36 +412,35 @@ const Home = () => {
             key={particle.id}
             style={styles.particle(particle)}
             animate={{
-              y: [0, -30, 0],
-              x: [0, Math.random() * 20 - 10, 0],
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.2, 1]
+              y: ['0vh', '-100vh'],
+              x: [0, Math.random() * 50 - 25],
+              opacity: [0, 0.8, 0],
+              scale: [0.5, 1, 0.5]
             }}
             transition={{
               duration: particle.duration,
               repeat: Infinity,
               delay: particle.delay,
-              ease: "easeInOut"
+              ease: "linear"
             }}
           />
         ))}
 
-        {/* Gradient blobs */}
-        {[0, 1].map((i) => (
+        {/* Animated gradient blobs */}
+        {[0, 1, 2].map((i) => (
           <motion.div
             key={i}
             style={styles.shape(i)}
             animate={{
-              x: mousePosition.x * (i === 0 ? 0.02 : -0.03),
-              y: mousePosition.y * (i === 0 ? 0.02 : -0.03),
-              scale: [1, 1.1, 1],
-              rotate: [0, 180, 360]
+              x: [0, 50, -30, 0],
+              y: [0, -30, 40, 0],
+              scale: [1, 1.2, 0.9, 1],
+              rotate: [0, 90, 180, 270, 360]
             }}
             transition={{ 
-              x: { type: "spring", stiffness: 50 },
-              y: { type: "spring", stiffness: 50 },
-              scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
-              rotate: { duration: 20, repeat: Infinity, ease: "linear" }
+              duration: 20 + i * 5, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
             }}
           />
         ))}
@@ -442,7 +456,7 @@ const Home = () => {
           <motion.div
             style={styles.imageWrapper}
             animate={{ 
-              y: [0, -20, 0],
+              y: [0, -20, 0]
             }}
             transition={{ 
               duration: 6,
@@ -451,18 +465,27 @@ const Home = () => {
             }}
           >
             {/* Morphing blob background */}
-            <div style={styles.blobContainer}>
-              <div style={styles.blob} />
-            </div>
+            <motion.div 
+              style={styles.blobBackground}
+              animate={{
+                scale: [1, 1.2, 1],
+                rotate: [0, 180, 360]
+              }}
+              transition={{
+                duration: 15,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
 
             {/* Floating rings */}
-            <div style={styles.floatingElements}>
+            <div style={styles.floatingRings}>
               {[0, 1].map((i) => (
                 <motion.div
                   key={i}
                   style={styles.floatingRing(i)}
                   animate={{
-                    rotate: i === 0 ? 360 : -360,
+                    rotate: i === 0 ? [0, 360] : [360, 0],
                     scale: [1, 1.05, 1]
                   }}
                   transition={{
@@ -481,17 +504,29 @@ const Home = () => {
               ))}
             </div>
 
-            {/* Image frame with morphing shape */}
-            <div style={styles.imageFrame}>
-              <motion.img
+            {/* Image frame with morphing shape - NO BLUR OR OVERLAY */}
+            <motion.div 
+              style={styles.imageFrame}
+              animate={{
+                borderRadius: [
+                  '30% 70% 70% 30% / 30% 30% 70% 70%',
+                  '60% 40% 30% 70% / 60% 70% 30% 40%',
+                  '40% 60% 60% 40% / 50% 40% 60% 50%',
+                  '30% 70% 70% 30% / 30% 30% 70% 70%'
+                ]
+              }}
+              transition={{
+                duration: 12,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <img
                 style={styles.profileImage}
                 src={profileImage}
                 alt="Sai Sri Harsha"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
               />
-              <div style={styles.glassOverlay} />
-            </div>
+            </motion.div>
           </motion.div>
         </motion.div>
 
@@ -532,8 +567,7 @@ const Home = () => {
               style={styles.cursor}
               animate={{ opacity: [1, 0, 1] }}
               transition={{ repeat: Infinity, duration: 0.8 }}
-            >
-              |
+            >|
             </motion.span>
           </motion.p>
 
@@ -548,7 +582,7 @@ const Home = () => {
                 key={i}
                 style={styles.skillBadge(skill.color)}
                 whileHover={{ 
-                  scale: 1.1,
+                  scale: 1.1, 
                   y: -5,
                   boxShadow: `0 8px 25px ${skill.color}40`
                 }}
@@ -662,47 +696,6 @@ const Home = () => {
       </motion.div>
 
       <style>{`
-        @keyframes blobMorph {
-          0%, 100% {
-            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-          }
-          25% {
-            border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
-          }
-          50% {
-            border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
-          }
-          75% {
-            border-radius: 60% 40% 60% 40% / 70% 30% 50% 60%;
-          }
-        }
-
-        @keyframes shapeMorph {
-          0%, 100% {
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-          }
-          25% {
-            border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
-          }
-          50% {
-            border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
-          }
-          75% {
-            border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
-          }
-        }
-
-        @keyframes backgroundPulse {
-          0%, 100% {
-            opacity: 0.5;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.8;
-            transform: scale(1.1);
-          }
-        }
-
         @media (min-width: 768px) {
           .home-content-wrapper { 
             grid-template-columns: 1.2fr 1fr !important; 
