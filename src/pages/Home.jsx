@@ -1,5 +1,5 @@
-// src/pages/Home.jsx
-import React, { useEffect, useState, useMemo } from 'react';
+// src/pages/Home.jsx - Updated with Modern Image Design
+import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FiCode, FiCpu, FiZap, FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
@@ -220,33 +220,69 @@ const Home = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      order: -1
+      order: -1,
+      padding: '2rem'
     },
-    imageDecoration: {
+    imageWrapper: {
+      position: 'relative',
+      width: '100%',
+      maxWidth: 'min(450px, 85vw)',
+      aspectRatio: '1 / 1'
+    },
+    gradientBorder: {
       position: 'absolute',
+      inset: '-4px',
+      background: 'linear-gradient(135deg, #667eea, #764ba2, #f093fb, #667eea)',
+      borderRadius: '32px',
+      padding: '4px',
+      backgroundSize: '200% 200%',
+      animation: 'gradientShift 3s ease infinite'
+    },
+    imageInner: {
+      position: 'relative',
       width: '100%',
       height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
+      borderRadius: '28px',
+      overflow: 'hidden',
+      background: isDark ? '#1e293b' : '#ffffff',
+      boxShadow: '0 30px 60px rgba(0, 0, 0, 0.3)'
     },
-    decorationRing: (index) => ({
-      position: 'absolute',
-      width: index === 0 ? '110%' : '120%',
-      height: index === 0 ? '110%' : '120%',
-      border: '2px dashed rgba(102, 126, 234, 0.3)',
-      borderRadius: '50%'
-    }),
     profileImage: {
       width: '100%',
-      maxWidth: 'min(400px, 80vw)',
-      height: 'auto',
-      borderRadius: '50%',
-      boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2)',
-      position: 'relative',
-      zIndex: 10,
-      objectFit: 'cover'
+      height: '100%',
+      objectFit: 'cover',
+      display: 'block'
     },
+    floatingOrbs: {
+      position: 'absolute',
+      pointerEvents: 'none'
+    },
+    orb: (index) => ({
+      position: 'absolute',
+      borderRadius: '50%',
+      filter: 'blur(20px)',
+      ...(index === 0 && {
+        width: '100px',
+        height: '100px',
+        background: 'linear-gradient(135deg, #667eea80, #764ba280)',
+        top: '-30px',
+        right: '-30px'
+      }),
+      ...(index === 1 && {
+        width: '80px',
+        height: '80px',
+        background: 'linear-gradient(135deg, #f093fb80, #f5576c80)',
+        bottom: '-20px',
+        left: '-20px'
+      }),
+      ...(index === 2 && {
+        width: '60px',
+        height: '60px',
+        background: 'linear-gradient(135deg, #10b98180, #059669 80)',
+        top: '50%',
+        right: '-30px'
+      })
+    }),
     socialLinks: {
       display: 'flex',
       gap: '1rem',
@@ -317,29 +353,54 @@ const Home = () => {
           style={styles.imageContainer}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <div style={styles.imageDecoration}>
-            {[0, 1].map((i) => (
-              <motion.div
-                key={i}
-                style={styles.decorationRing(i)}
-                animate={{ rotate: i === 0 ? 360 : -360 }}
-                transition={{ 
-                  repeat: Infinity, 
-                  duration: i === 0 ? 20 : 15, 
-                  ease: "linear" 
-                }}
-              />
-            ))}
-          </div>
-          <motion.img
-            style={styles.profileImage}
-            src={profileImage}
-            alt="Sai Sri Harsha"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          />
+          <motion.div
+            style={styles.imageWrapper}
+            animate={{ 
+              y: [0, -15, 0],
+            }}
+            transition={{ 
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <motion.div 
+              style={styles.gradientBorder}
+            >
+              <div style={styles.imageInner}>
+                <motion.img
+                  style={styles.profileImage}
+                  src={profileImage}
+                  alt="Sai Sri Harsha"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Floating Orbs */}
+            <div style={styles.floatingOrbs}>
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  style={styles.orb(i)}
+                  animate={{
+                    y: [0, -20, 0],
+                    scale: [1, 1.1, 1],
+                    opacity: [0.6, 0.8, 0.6]
+                  }}
+                  transition={{
+                    duration: 3 + i,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.5
+                  }}
+                />
+              ))}
+            </div>
+          </motion.div>
         </motion.div>
 
         <motion.div
@@ -499,7 +560,7 @@ const Home = () => {
               style={styles.bioParagraph}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once:true }}
               transition={{ delay: index * 0.1 }}
             >
               {paragraph}
@@ -509,6 +570,12 @@ const Home = () => {
       </motion.div>
 
       <style>{`
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
         @media (min-width: 768px) {
           .home-content-wrapper { 
             grid-template-columns: 1.2fr 1fr !important; 
