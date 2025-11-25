@@ -7,7 +7,7 @@ import { FiTwitter, FiLinkedin, FiGithub, FiHeart, FiArrowUp, FiMail, FiMapPin, 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [coffeeCount, setCoffeeCount] = useState(0);
-  const [isDark, setIsDark] = useState(false);
+  const [, setIsDark] = useState(false);
 
   useEffect(() => {
     const theme = document.documentElement.getAttribute('data-theme');
