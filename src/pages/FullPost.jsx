@@ -181,7 +181,6 @@ const FullPost = () => {
     actionButton: (isActive) => ({
       padding: '0.75rem 1.5rem',
       borderRadius: '12px',
-      border: 'none',
       fontSize: '0.95rem',
       fontWeight: 600,
       cursor: 'pointer',

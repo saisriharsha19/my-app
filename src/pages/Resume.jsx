@@ -94,7 +94,6 @@ const Resume = () => {
     button: (isPrimary) => ({
       padding: '0.75rem 1.5rem',
       borderRadius: '12px',
-      border: 'none',
       fontSize: '1rem',
       fontWeight: 600,
       cursor: 'pointer',

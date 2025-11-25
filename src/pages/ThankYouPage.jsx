@@ -1,7 +1,7 @@
 // src/pages/ThankYouPage.jsx
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiCheckCircle, FiHome, FiFolderPlus, FiMail, FiStar } from 'react-icons/fi';
+import { FiCheckCircle, FiHome, FiFolderPlus, FiMail } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 
 const ThankYouPage = () => {
@@ -138,7 +138,6 @@ const ThankYouPage = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '0.5rem',
-      border: 'none',
       fontSize: '1rem',
       textDecoration: 'none',
       transition: 'all 0.3s ease',

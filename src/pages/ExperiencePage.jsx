@@ -132,7 +132,7 @@ const ExperiencePage = () => {
       boxShadow: `0 0 0 4px ${color.from}20, 0 0 20px ${color.from}40`,
       zIndex: 2
     }),
-    header: {
+    CardHeader: {
       display: 'flex',
       alignItems: 'flex-start',
       gap: '1.5rem',
@@ -215,7 +215,6 @@ const ExperiencePage = () => {
     button: (isPrimary) => ({
       padding: '1rem 2rem',
       borderRadius: '12px',
-      border: 'none',
       fontSize: '1rem',
       fontWeight: 600,
       cursor: 'pointer',
@@ -268,7 +267,7 @@ const ExperiencePage = () => {
                   : '0 20px 50px rgba(0, 0, 0, 0.12)'
               }}
             >
-              <div style={styles.header}>
+              <div style={styles.CardHeader}>
                 <motion.div
                   style={styles.icon(exp.color)}
                   whileHover={{ rotate: 360, scale: 1.1 }}

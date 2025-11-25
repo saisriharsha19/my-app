@@ -201,7 +201,6 @@ const Home = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '0.5rem',
-      border: 'none',
       transition: 'all 0.3s ease',
       textDecoration: 'none',
       background: isPrimary 
