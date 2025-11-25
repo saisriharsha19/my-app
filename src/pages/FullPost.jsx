@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { FiArrowLeft, FiClock, FiUser, FiBookOpen } from 'react-icons/fi';
+import { FiArrowLeft, FiClock, FiUser, FiBookOpen, FiShare2, FiHeart } from 'react-icons/fi';
 
 const FullPost = () => {
   const { postId } = useParams();
@@ -12,15 +12,41 @@ const FullPost = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [readingProgress, setReadingProgress] = useState(0);
+  const [liked, setLiked] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
+    const theme = document.documentElement.getAttribute('data-theme');
+    setIsDark(theme === 'dark');
+    
+    const observer = new MutationObserver(() => {
+      const newTheme = document.documentElement.getAttribute('data-theme');
+      setIsDark(newTheme === 'dark');
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const progress = (window.scrollY / totalHeight) * 100;
-      setReadingProgress(progress);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
+          setReadingProgress(Math.min(Math.max(progress, 0), 100));
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -50,53 +76,211 @@ const FullPost = () => {
     }
   }, [postId]);
 
-  const handleGoBack = (e) => {
-    e.preventDefault();
+  const handleGoBack = () => {
     navigate('/blog');
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: post.title,
+          text: post.content?.substring(0, 100),
+          url: window.location.href
+        });
+      } catch (err) {
+        console.log('Share cancelled');
+      }
+    }
+  };
+
+  const styles = {
+    progressBar: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      height: '3px',
+      width: `${readingProgress}%`,
+      background: 'linear-gradient(90deg, #667eea, #764ba2)',
+      transition: 'width 0.1s ease-out',
+      zIndex: 9999,
+      pointerEvents: 'none'
+    },
+    container: {
+      maxWidth: '900px',
+      margin: '0 auto',
+      padding: '4rem 2rem'
+    },
+    backButton: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      padding: '0.75rem 1.5rem',
+      background: 'transparent',
+      color: '#667eea',
+      border: '2px solid #667eea',
+      borderRadius: '12px',
+      fontSize: '1rem',
+      fontWeight: 600,
+      cursor: 'pointer',
+      marginBottom: '2rem',
+      transition: 'all 0.3s ease'
+    },
+    header: {
+      marginBottom: '3rem'
+    },
+    title: {
+      fontSize: '3rem',
+      fontWeight: 800,
+      lineHeight: 1.3,
+      margin: '1rem 0',
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundClip: 'text'
+    },
+    meta: {
+      display: 'flex',
+      gap: '2rem',
+      flexWrap: 'wrap',
+      marginTop: '1.5rem',
+      padding: '1.5rem',
+      background: isDark ? '#1e293b' : '#ffffff',
+      borderRadius: '12px',
+      boxShadow: isDark 
+        ? '0 4px 15px rgba(0, 0, 0, 0.3)' 
+        : '0 4px 15px rgba(0, 0, 0, 0.05)',
+      border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
+    },
+    metaItem: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      color: isDark ? '#94a3b8' : '#6b7280',
+      fontSize: '0.95rem'
+    },
+    metaIcon: {
+      color: '#667eea'
+    },
+    content: {
+      margin: '3rem 0'
+    },
+    contentWrapper: {
+      lineHeight: 1.8,
+      fontSize: '1.1rem',
+      color: isDark ? '#cbd5e1' : '#374151'
+    },
+    actions: {
+      display: 'flex',
+      gap: '1rem',
+      marginTop: '2rem',
+      paddingTop: '2rem',
+      borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+      flexWrap: 'wrap'
+    },
+    actionButton: (isActive) => ({
+      padding: '0.75rem 1.5rem',
+      borderRadius: '12px',
+      border: 'none',
+      fontSize: '0.95rem',
+      fontWeight: 600,
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      transition: 'all 0.3s ease',
+      background: isActive 
+        ? 'linear-gradient(135deg, #667eea, #764ba2)' 
+        : isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)',
+      color: isActive ? '#ffffff' : '#667eea',
+      border: isActive ? 'none' : `2px solid ${isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)'}`
+    }),
+    footer: {
+      marginTop: '4rem',
+      paddingTop: '2rem',
+      borderTop: `2px solid ${isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)'}`,
+      textAlign: 'center'
+    },
+    footerButton: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      padding: '1rem 2rem',
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      color: 'white',
+      textDecoration: 'none',
+      border: 'none',
+      borderRadius: '12px',
+      fontWeight: 600,
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      fontSize: '1rem'
+    },
+    skeleton: {
+      background: isDark 
+        ? 'linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%)'
+        : 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
+      backgroundSize: '200% 100%',
+      animation: 'shimmer 1.5s infinite',
+      borderRadius: '8px'
+    },
+    error: {
+      minHeight: '60vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '2rem',
+      textAlign: 'center'
+    }
   };
 
   if (error) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="error-container"
-      >
+      <div style={styles.container}>
         <motion.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
+          style={styles.error}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
         >
-          😕
+          <motion.div
+            style={{ fontSize: '4rem' }}
+            animate={{ y: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          >
+            😕
+          </motion.div>
+          <h2 style={{ fontSize: '2rem', fontWeight: 700, color: isDark ? '#f1f5f9' : '#1a1a1a' }}>
+            Oops!
+          </h2>
+          <p style={{ fontSize: '1.1rem', color: isDark ? '#94a3b8' : '#6b7280' }}>
+            {error}
+          </p>
+          <motion.button
+            style={styles.footerButton}
+            onClick={handleGoBack}
+            whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)' }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FiArrowLeft /> Go Back to Blog
+          </motion.button>
         </motion.div>
-        <h2>Oops!</h2>
-        <p>{error}</p>
-        <motion.button
-          onClick={handleGoBack}
-          className="go-back-btn"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <FiArrowLeft /> Go Back to Blog
-        </motion.button>
-      </motion.div>
+      </div>
     );
   }
 
   if (isLoading) {
     return (
-      <div className="full-post-loading">
+      <div style={styles.container}>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="loading-skeleton"
         >
-          <div className="skeleton-header-large"></div>
-          <div className="skeleton-meta"></div>
-          <div className="skeleton-content">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="skeleton-line"></div>
-            ))}
-          </div>
+          <div style={{...styles.skeleton, height: '60px', width: '80%', marginBottom: '2rem'}} />
+          <div style={{...styles.skeleton, height: '20px', width: '40%', marginBottom: '3rem'}} />
+          {[...Array(8)].map((_, i) => (
+            <div key={i} style={{...styles.skeleton, height: '20px', width: `${90 - i * 5}%`, marginBottom: '1rem'}} />
+          ))}
         </motion.div>
       </div>
     );
@@ -104,21 +288,25 @@ const FullPost = () => {
 
   if (!post) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="error-container"
-      >
-        <p>Post not found</p>
-        <motion.button
-          onClick={handleGoBack}
-          className="go-back-btn"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+      <div style={styles.container}>
+        <motion.div
+          style={styles.error}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
-          <FiArrowLeft /> Go Back to Blog
-        </motion.button>
-      </motion.div>
+          <p style={{ fontSize: '1.1rem', color: isDark ? '#94a3b8' : '#6b7280' }}>
+            Post not found
+          </p>
+          <motion.button
+            style={styles.footerButton}
+            onClick={handleGoBack}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FiArrowLeft /> Go Back to Blog
+          </motion.button>
+        </motion.div>
+      </div>
     );
   }
 
@@ -126,83 +314,119 @@ const FullPost = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="full-post-container"
+      style={styles.container}
     >
-      <motion.div
-        className="reading-progress-bar"
-        style={{ scaleX: readingProgress / 100 }}
-        initial={{ scaleX: 0 }}
-      />
+      <div style={styles.progressBar} />
+
+      <motion.button
+        style={styles.backButton}
+        onClick={handleGoBack}
+        whileHover={{ scale: 1.05, x: -5, background: 'rgba(102, 126, 234, 0.1)' }}
+        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <FiArrowLeft />
+        <span>Back to Articles</span>
+      </motion.button>
 
       <motion.div
+        style={styles.header}
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="post-header"
       >
-        <button onClick={handleGoBack} className="back-link-button">
-          <motion.div
-            whileHover={{ x: -5 }}
-            className="back-icon"
-          >
-            <FiArrowLeft />
-          </motion.div>
-          <span>Back to Articles</span>
-        </button>
-
         <motion.h1
+          style={styles.title}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="full-post-title"
         >
           {post.title}
         </motion.h1>
 
         <motion.div
+          style={styles.meta}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="post-meta-info"
         >
-          <div className="meta-item">
-            <FiClock />
+          <div style={styles.metaItem}>
+            <FiClock style={styles.metaIcon} />
             <time>{new Date(post.created_at).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
               day: 'numeric'
             })}</time>
           </div>
-          <div className="meta-item">
-            <FiUser />
+          <div style={styles.metaItem}>
+            <FiUser style={styles.metaIcon} />
             <span>{post.author || 'Anonymous'}</span>
           </div>
-          <div className="meta-item">
-            <FiBookOpen />
+          <div style={styles.metaItem}>
+            <FiBookOpen style={styles.metaIcon} />
             <span>{Math.ceil(post.content?.length / 1000) || 5} min read</span>
           </div>
         </motion.div>
       </motion.div>
 
       <motion.div
+        style={styles.content}
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="full-post-content"
       >
-        <div className="content-wrapper">
+        <div style={styles.contentWrapper}>
           <ReactMarkdown
             components={{
-              h1: ({ children, ...props }) => <h1 {...props}>{children}</h1>,
-              h2: ({ children, ...props }) => <h2 {...props}>{children}</h2>,
-              h3: ({ children, ...props }) => <h3 {...props}>{children}</h3>,
-              p: ({ children, ...props }) => <p {...props}>{children}</p>,
-              code: ({ inline, children, ...props }) =>
+              h1: ({ children }) => (
+                <h1 style={{ 
+                  fontSize: '2rem', 
+                  fontWeight: 700, 
+                  margin: '2rem 0 1rem',
+                  color: isDark ? '#f1f5f9' : '#1a1a1a'
+                }}>
+                  {children}
+                </h1>
+              ),
+              h2: ({ children }) => (
+                <h2 style={{ 
+                  fontSize: '1.5rem', 
+                  fontWeight: 700, 
+                  margin: '1.5rem 0 1rem',
+                  color: isDark ? '#f1f5f9' : '#1a1a1a'
+                }}>
+                  {children}
+                </h2>
+              ),
+              p: ({ children }) => (
+                <p style={{ 
+                  marginBottom: '1.5rem',
+                  color: isDark ? '#cbd5e1' : '#374151'
+                }}>
+                  {children}
+                </p>
+              ),
+              code: ({ inline, children }) =>
                 inline ? (
-                  <code {...props}>{children}</code>
+                  <code style={{ 
+                    background: isDark ? '#0f172a' : '#f3f4f6',
+                    padding: '0.2rem 0.5rem',
+                    borderRadius: '4px',
+                    fontSize: '0.9em',
+                    color: '#667eea'
+                  }}>
+                    {children}
+                  </code>
                 ) : (
-                  <pre>
-                    <code {...props}>{children}</code>
+                  <pre style={{ 
+                    background: isDark ? '#0f172a' : '#f3f4f6',
+                    padding: '1.5rem',
+                    borderRadius: '12px',
+                    overflow: 'auto',
+                    margin: '1.5rem 0'
+                  }}>
+                    <code>{children}</code>
                   </pre>
                 )
             }}
@@ -210,23 +434,52 @@ const FullPost = () => {
             {post.content}
           </ReactMarkdown>
         </div>
+
+        <div style={styles.actions}>
+          <motion.button
+            style={styles.actionButton(liked)}
+            onClick={() => setLiked(!liked)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FiHeart style={{ fill: liked ? 'currentColor' : 'none' }} />
+            <span>{liked ? 'Liked!' : 'Like'}</span>
+          </motion.button>
+
+          <motion.button
+            style={styles.actionButton(false)}
+            onClick={handleShare}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FiShare2 />
+            <span>Share</span>
+          </motion.button>
+        </div>
       </motion.div>
 
       <motion.div
+        style={styles.footer}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="post-footer"
       >
         <motion.button
+          style={styles.footerButton}
           onClick={handleGoBack}
-          className="go-back"
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)' }}
           whileTap={{ scale: 0.95 }}
         >
           <FiArrowLeft /> Back to all articles
         </motion.button>
       </motion.div>
+
+      <style>{`
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+      `}</style>
     </motion.div>
   );
 };
