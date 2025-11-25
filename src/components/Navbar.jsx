@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx
+// src/components/Navbar.jsx - Fixed Active Dot Animation
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
@@ -323,9 +323,10 @@ const Navbar = () => {
                     {isActive && (
                       <motion.div
                         style={styles.activeDot}
-                        layoutId="activeIndicator"
-                        initial={false}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
                       />
                     )}
                   </Link>
@@ -422,8 +423,9 @@ const Navbar = () => {
                         {isActive && (
                           <motion.div
                             style={styles.mobileActiveDot}
-                            layoutId="mobileActiveDot"
-                            initial={false}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: 0.2 }}
                           />
                         )}
                       </Link>

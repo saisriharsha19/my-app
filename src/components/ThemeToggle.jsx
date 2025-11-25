@@ -10,8 +10,8 @@ const ThemeToggle = () => {
   const styles = {
     button: {
       position: 'relative',
-      width: 'clamp(55px, 12vw, 60px)',
-      height: 'clamp(28px, 6vw, 32px)',
+      width: '60px',
+      height: '32px',
       background: isDarkMode 
         ? 'linear-gradient(135deg, #1e3a8a, #0f172a)' 
         : 'linear-gradient(135deg, #fbbf24, #f59e0b)',
@@ -27,10 +27,10 @@ const ThemeToggle = () => {
     },
     thumb: {
       position: 'absolute',
-      top: '3px',
-      left: isDarkMode ? 'calc(100% - 27px)' : '3px',
-      width: 'clamp(22px, 5vw, 26px)',
-      height: 'clamp(22px, 5vw, 26px)',
+      top: '4px',
+      left: isDarkMode ? '32px' : '4px',
+      width: '24px',
+      height: '24px',
       background: '#ffffff',
       borderRadius: '50%',
       display: 'flex',
@@ -40,7 +40,7 @@ const ThemeToggle = () => {
       transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
     },
     icon: {
-      fontSize: 'clamp(12px, 2.5vw, 14px)',
+      fontSize: '14px',
       color: isDarkMode ? '#1e3a8a' : '#f59e0b',
       display: 'flex',
       alignItems: 'center',
@@ -48,7 +48,7 @@ const ThemeToggle = () => {
     },
     stars: {
       position: 'absolute',
-      fontSize: 'clamp(6px, 1.5vw, 8px)',
+      fontSize: '8px',
       color: 'rgba(255, 255, 255, 0.8)',
       pointerEvents: 'none'
     }
@@ -66,7 +66,7 @@ const ThemeToggle = () => {
         {isDarkMode && (
           <>
             <motion.span
-              style={{...styles.stars, top: '5px', left: '7px'}}
+              style={{...styles.stars, top: '6px', left: '8px'}}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
@@ -74,7 +74,7 @@ const ThemeToggle = () => {
               ✦
             </motion.span>
             <motion.span
-              style={{...styles.stars, bottom: '5px', left: '12px'}}
+              style={{...styles.stars, bottom: '6px', left: '14px'}}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
@@ -88,7 +88,7 @@ const ThemeToggle = () => {
 
       <motion.div
         style={styles.thumb}
-        animate={{ left: isDarkMode ? 'calc(100% - 27px)' : '3px' }}
+        animate={{ left: isDarkMode ? '32px' : '4px' }}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       >
         <motion.div
