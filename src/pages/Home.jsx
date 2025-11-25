@@ -1,5 +1,5 @@
-// src/pages/Home.jsx - Updated with Modern Image Design
-import { useEffect, useState, useMemo } from 'react';
+// src/pages/Home.jsx - Modern Design with Rich Animations
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FiCode, FiCpu, FiZap, FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
@@ -76,6 +76,18 @@ const Home = () => {
     { icon: <FiMail />, url: 'mailto:saisriharshaguddati1@gmail.com', label: 'Email' }
   ];
 
+  // Generate floating particles
+  const particles = useMemo(() => 
+    Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 4 + 2,
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5
+    })), []
+  );
+
   const styles = {
     container: {
       minHeight: '100vh',
@@ -92,6 +104,14 @@ const Home = () => {
       pointerEvents: 'none',
       overflow: 'hidden',
       zIndex: 0
+    },
+    animatedBackground: {
+      position: 'absolute',
+      inset: 0,
+      background: isDark 
+        ? 'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%)'
+        : 'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.05) 0%, transparent 50%)',
+      animation: 'backgroundPulse 8s ease-in-out infinite'
     },
     shape: (index) => ({
       position: 'absolute',
@@ -113,6 +133,27 @@ const Home = () => {
         right: '15%'
       })
     }),
+    particle: (particle) => ({
+      position: 'absolute',
+      left: `${particle.x}%`,
+      top: `${particle.y}%`,
+      width: `${particle.size}px`,
+      height: `${particle.size}px`,
+      borderRadius: '50%',
+      background: isDark 
+        ? 'rgba(102, 126, 234, 0.4)' 
+        : 'rgba(102, 126, 234, 0.3)',
+      boxShadow: `0 0 ${particle.size * 2}px rgba(102, 126, 234, 0.6)`
+    }),
+    gridPattern: {
+      position: 'absolute',
+      inset: 0,
+      backgroundImage: isDark
+        ? 'linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px)'
+        : 'linear-gradient(rgba(102, 126, 234, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.02) 1px, transparent 1px)',
+      backgroundSize: '50px 50px',
+      opacity: 0.5
+    },
     contentWrapper: {
       position: 'relative',
       zIndex: 10,
@@ -229,23 +270,40 @@ const Home = () => {
       maxWidth: 'min(450px, 85vw)',
       aspectRatio: '1 / 1'
     },
-    gradientBorder: {
+    blobContainer: {
       position: 'absolute',
-      inset: '-4px',
-      background: 'linear-gradient(135deg, #667eea, #764ba2, #f093fb, #667eea)',
-      borderRadius: '32px',
-      padding: '4px',
-      backgroundSize: '200% 200%',
-      animation: 'gradientShift 3s ease infinite'
+      inset: '-20px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
     },
-    imageInner: {
+    blob: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      background: 'linear-gradient(135deg, #667eea, #764ba2, #f093fb)',
+      filter: 'blur(30px)',
+      opacity: 0.4,
+      animation: 'blobMorph 8s ease-in-out infinite',
+      borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
+    },
+    imageFrame: {
       position: 'relative',
       width: '100%',
       height: '100%',
-      borderRadius: '28px',
+      borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
       overflow: 'hidden',
       background: isDark ? '#1e293b' : '#ffffff',
-      boxShadow: '0 30px 60px rgba(0, 0, 0, 0.3)'
+      boxShadow: '0 40px 80px rgba(0, 0, 0, 0.3)',
+      border: `3px solid ${isDark ? 'rgba(102, 126, 234, 0.3)' : 'rgba(102, 126, 234, 0.2)'}`,
+      animation: 'shapeMorph 10s ease-in-out infinite'
+    },
+    glassOverlay: {
+      position: 'absolute',
+      inset: 0,
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%)',
+      backdropFilter: 'blur(10px)',
+      pointerEvents: 'none'
     },
     profileImage: {
       width: '100%',
@@ -253,34 +311,26 @@ const Home = () => {
       objectFit: 'cover',
       display: 'block'
     },
-    floatingOrbs: {
+    floatingElements: {
       position: 'absolute',
+      inset: 0,
       pointerEvents: 'none'
     },
-    orb: (index) => ({
+    floatingRing: (index) => ({
       position: 'absolute',
       borderRadius: '50%',
-      filter: 'blur(20px)',
+      border: '2px solid rgba(102, 126, 234, 0.2)',
       ...(index === 0 && {
-        width: '100px',
-        height: '100px',
-        background: 'linear-gradient(135deg, #667eea80, #764ba280)',
-        top: '-30px',
-        right: '-30px'
+        width: '120%',
+        height: '120%',
+        top: '-10%',
+        left: '-10%'
       }),
       ...(index === 1 && {
-        width: '80px',
-        height: '80px',
-        background: 'linear-gradient(135deg, #f093fb80, #f5576c80)',
-        bottom: '-20px',
-        left: '-20px'
-      }),
-      ...(index === 2 && {
-        width: '60px',
-        height: '60px',
-        background: 'linear-gradient(135deg, #10b98180, #059669 80)',
-        top: '50%',
-        right: '-30px'
+        width: '140%',
+        height: '140%',
+        top: '-20%',
+        left: '-20%'
       })
     }),
     socialLinks: {
@@ -335,6 +385,33 @@ const Home = () => {
   return (
     <div style={styles.container}>
       <div style={styles.background}>
+        {/* Animated gradient background */}
+        <div style={styles.animatedBackground} />
+        
+        {/* Grid pattern */}
+        <div style={styles.gridPattern} />
+
+        {/* Floating particles */}
+        {particles.map((particle) => (
+          <motion.div
+            key={particle.id}
+            style={styles.particle(particle)}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, Math.random() * 20 - 10, 0],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{
+              duration: particle.duration,
+              repeat: Infinity,
+              delay: particle.delay,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+
+        {/* Gradient blobs */}
         {[0, 1].map((i) => (
           <motion.div
             key={i}
@@ -342,8 +419,15 @@ const Home = () => {
             animate={{
               x: mousePosition.x * (i === 0 ? 0.02 : -0.03),
               y: mousePosition.y * (i === 0 ? 0.02 : -0.03),
+              scale: [1, 1.1, 1],
+              rotate: [0, 180, 360]
             }}
-            transition={{ type: "spring", stiffness: 50 }}
+            transition={{ 
+              x: { type: "spring", stiffness: 50 },
+              y: { type: "spring", stiffness: 50 },
+              scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
+              rotate: { duration: 20, repeat: Infinity, ease: "linear" }
+            }}
           />
         ))}
       </div>
@@ -358,47 +442,55 @@ const Home = () => {
           <motion.div
             style={styles.imageWrapper}
             animate={{ 
-              y: [0, -15, 0],
+              y: [0, -20, 0],
             }}
             transition={{ 
-              duration: 4,
+              duration: 6,
               repeat: Infinity,
               ease: "easeInOut"
             }}
           >
-            <motion.div 
-              style={styles.gradientBorder}
-            >
-              <div style={styles.imageInner}>
-                <motion.img
-                  style={styles.profileImage}
-                  src={profileImage}
-                  alt="Sai Sri Harsha"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                />
-              </div>
-            </motion.div>
+            {/* Morphing blob background */}
+            <div style={styles.blobContainer}>
+              <div style={styles.blob} />
+            </div>
 
-            {/* Floating Orbs */}
-            <div style={styles.floatingOrbs}>
-              {[0, 1, 2].map((i) => (
+            {/* Floating rings */}
+            <div style={styles.floatingElements}>
+              {[0, 1].map((i) => (
                 <motion.div
                   key={i}
-                  style={styles.orb(i)}
+                  style={styles.floatingRing(i)}
                   animate={{
-                    y: [0, -20, 0],
-                    scale: [1, 1.1, 1],
-                    opacity: [0.6, 0.8, 0.6]
+                    rotate: i === 0 ? 360 : -360,
+                    scale: [1, 1.05, 1]
                   }}
                   transition={{
-                    duration: 3 + i,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: i * 0.5
+                    rotate: {
+                      duration: 20 + i * 10,
+                      repeat: Infinity,
+                      ease: "linear"
+                    },
+                    scale: {
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }
                   }}
                 />
               ))}
+            </div>
+
+            {/* Image frame with morphing shape */}
+            <div style={styles.imageFrame}>
+              <motion.img
+                style={styles.profileImage}
+                src={profileImage}
+                alt="Sai Sri Harsha"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              />
+              <div style={styles.glassOverlay} />
             </div>
           </motion.div>
         </motion.div>
@@ -456,7 +548,7 @@ const Home = () => {
                 key={i}
                 style={styles.skillBadge(skill.color)}
                 whileHover={{ 
-                  scale: 1.1, 
+                  scale: 1.1,
                   y: -5,
                   boxShadow: `0 8px 25px ${skill.color}40`
                 }}
@@ -560,7 +652,7 @@ const Home = () => {
               style={styles.bioParagraph}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once:true }}
+              viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
               {paragraph}
@@ -570,10 +662,45 @@ const Home = () => {
       </motion.div>
 
       <style>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+        @keyframes blobMorph {
+          0%, 100% {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+          }
+          25% {
+            border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+          }
+          50% {
+            border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
+          }
+          75% {
+            border-radius: 60% 40% 60% 40% / 70% 30% 50% 60%;
+          }
+        }
+
+        @keyframes shapeMorph {
+          0%, 100% {
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+          }
+          25% {
+            border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
+          }
+          50% {
+            border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
+          }
+          75% {
+            border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
+          }
+        }
+
+        @keyframes backgroundPulse {
+          0%, 100% {
+            opacity: 0.5;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.8;
+            transform: scale(1.1);
+          }
         }
 
         @media (min-width: 768px) {
