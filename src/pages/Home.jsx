@@ -1,4 +1,4 @@
-// src/pages/Home.jsx - Fixed Image Clarity and Active Animations
+// src/pages/Home.jsx - Modern with Animated Geometric Shapes
 import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FiCode, FiCpu, FiZap, FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
@@ -10,7 +10,6 @@ const Home = () => {
   const [isTyping, setIsTyping] = useState(true);
   const [index, setIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
-  const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [isDark, setIsDark] = useState(false);
 
   const typewriterTexts = useMemo(() => [
@@ -32,14 +31,6 @@ const Home = () => {
       attributeFilter: ['data-theme']
     });
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   useEffect(() => {
@@ -76,9 +67,9 @@ const Home = () => {
     { icon: <FiMail />, url: 'mailto:saisriharshaguddati1@gmail.com', label: 'Email' }
   ];
 
-  // Generate floating particles
+  // Floating particles
   const particles = useMemo(() => 
-    Array.from({ length: 15 }, (_, i) => ({
+    Array.from({ length: 12 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -87,6 +78,51 @@ const Home = () => {
       delay: Math.random() * 5
     })), []
   );
+
+  // Geometric shapes
+  const geometricShapes = useMemo(() => [
+    {
+      id: 'triangle-1',
+      shape: 'polygon(50% 0%, 0% 100%, 100% 100%)',
+      size: 'clamp(180px, 35vw, 350px)',
+      color: 'linear-gradient(135deg, #667eea, #764ba2)',
+      position: { top: '8%', left: '5%' },
+      duration: 20
+    },
+    {
+      id: 'square-1',
+      shape: 'none',
+      size: 'clamp(150px, 30vw, 300px)',
+      color: 'linear-gradient(135deg, #f093fb, #f5576c)',
+      position: { bottom: '15%', right: '8%' },
+      duration: 25,
+      borderRadius: '30%'
+    },
+    {
+      id: 'hexagon-1',
+      shape: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
+      size: 'clamp(140px, 28vw, 280px)',
+      color: 'linear-gradient(135deg, #10b981, #059669)',
+      position: { top: '45%', right: '3%' },
+      duration: 18
+    },
+    {
+      id: 'diamond-1',
+      shape: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+      size: 'clamp(120px, 25vw, 240px)',
+      color: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+      position: { bottom: '8%', left: '10%' },
+      duration: 22
+    },
+    {
+      id: 'pentagon-1',
+      shape: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
+      size: 'clamp(100px, 20vw, 200px)',
+      color: 'linear-gradient(135deg, #a855f7, #ec4899)',
+      position: { top: '60%', left: '15%' },
+      duration: 16
+    }
+  ], []);
 
   const styles = {
     container: {
@@ -109,32 +145,16 @@ const Home = () => {
       position: 'absolute',
       inset: 0
     },
-    shape: (shapeIndex) => ({
+    geometricShape: (shape) => ({
       position: 'absolute',
-      borderRadius: '50%',
-      filter: 'blur(100px)',
-      opacity: 0.25,
-      ...(shapeIndex === 0 && {
-        width: 'clamp(250px, 45vw, 500px)',
-        height: 'clamp(250px, 45vw, 500px)',
-        background: 'linear-gradient(135deg, #667eea, #764ba2)',
-        top: '5%',
-        left: '5%'
-      }),
-      ...(shapeIndex === 1 && {
-        width: 'clamp(200px, 35vw, 400px)',
-        height: 'clamp(200px, 35vw, 400px)',
-        background: 'linear-gradient(135deg, #f093fb, #f5576c)',
-        bottom: '10%',
-        right: '10%'
-      }),
-      ...(shapeIndex === 2 && {
-        width: 'clamp(180px, 30vw, 350px)',
-        height: 'clamp(180px, 30vw, 350px)',
-        background: 'linear-gradient(135deg, #10b981, #059669)',
-        top: '40%',
-        right: '5%'
-      })
+      width: shape.size,
+      height: shape.size,
+      background: shape.color,
+      clipPath: shape.shape,
+      borderRadius: shape.borderRadius || '0',
+      filter: 'blur(60px)',
+      opacity: 0.2,
+      ...shape.position
     }),
     particle: (particle) => ({
       position: 'absolute',
@@ -426,21 +446,21 @@ const Home = () => {
           />
         ))}
 
-        {/* Animated gradient blobs */}
-        {[0, 1, 2].map((i) => (
+        {/* Animated geometric shapes */}
+        {geometricShapes.map((shape) => (
           <motion.div
-            key={i}
-            style={styles.shape(i)}
+            key={shape.id}
+            style={styles.geometricShape(shape)}
             animate={{
-              x: [0, 50, -30, 0],
-              y: [0, -30, 40, 0],
+              rotate: [0, 360],
               scale: [1, 1.2, 0.9, 1],
-              rotate: [0, 90, 180, 270, 360]
+              x: [0, 30, -20, 0],
+              y: [0, -20, 30, 0]
             }}
             transition={{ 
-              duration: 20 + i * 5, 
+              duration: shape.duration, 
               repeat: Infinity, 
-              ease: "easeInOut" 
+              ease: "easeInOut"
             }}
           />
         ))}
@@ -504,7 +524,7 @@ const Home = () => {
               ))}
             </div>
 
-            {/* Image frame with morphing shape - NO BLUR OR OVERLAY */}
+            {/* Image frame with morphing shape */}
             <motion.div 
               style={styles.imageFrame}
               animate={{
@@ -538,7 +558,7 @@ const Home = () => {
         >
           <motion.p
             style={styles.greeting}
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity:0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
@@ -567,7 +587,8 @@ const Home = () => {
               style={styles.cursor}
               animate={{ opacity: [1, 0, 1] }}
               transition={{ repeat: Infinity, duration: 0.8 }}
-            >|
+            >
+              |
             </motion.span>
           </motion.p>
 
