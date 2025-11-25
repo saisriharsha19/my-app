@@ -24,12 +24,10 @@ const Contact = () => {
       const newTheme = document.documentElement.getAttribute('data-theme');
       setIsDark(newTheme === 'dark');
     });
-
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme']
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -61,16 +59,16 @@ const Contact = () => {
 
   const styles = {
     container: {
-      padding: '4rem 2rem',
+      padding: '2rem 1rem',
       maxWidth: '1200px',
       margin: '0 auto'
     },
     header: {
       textAlign: 'center',
-      marginBottom: '4rem'
+      marginBottom: '3rem'
     },
     title: {
-      fontSize: '3rem',
+      fontSize: 'clamp(2rem, 5vw, 3rem)',
       fontWeight: 800,
       marginBottom: '1rem',
       color: isDark ? '#f1f5f9' : '#1a1a1a'
@@ -82,18 +80,18 @@ const Contact = () => {
       backgroundClip: 'text'
     },
     subtitle: {
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
       color: isDark ? '#94a3b8' : '#6b7280',
       marginTop: '1rem'
     },
     content: {
       display: 'grid',
-      gridTemplateColumns: '1.5fr 1fr',
-      gap: '3rem'
+      gridTemplateColumns: '1fr',
+      gap: '2rem'
     },
     form: {
       background: isDark ? '#1e293b' : '#ffffff',
-      padding: '3rem',
+      padding: '2rem',
       borderRadius: '24px',
       boxShadow: isDark 
         ? '0 20px 60px rgba(0, 0, 0, 0.3)' 
@@ -120,7 +118,8 @@ const Contact = () => {
       fontSize: '1rem',
       transition: 'all 0.3s ease',
       outline: 'none',
-      boxShadow: isFocused ? `0 0 0 4px ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)'}` : 'none'
+      boxShadow: isFocused ? `0 0 0 4px ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)'}` : 'none',
+      boxSizing: 'border-box'
     }),
     textarea: (isFocused) => ({
       width: '100%',
@@ -135,7 +134,8 @@ const Contact = () => {
       resize: 'vertical',
       minHeight: '150px',
       fontFamily: 'inherit',
-      boxShadow: isFocused ? `0 0 0 4px ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)'}` : 'none'
+      boxShadow: isFocused ? `0 0 0 4px ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)'}` : 'none',
+      boxSizing: 'border-box'
     }),
     submitButton: {
       width: '100%',
@@ -144,7 +144,7 @@ const Contact = () => {
       color: 'white',
       border: 'none',
       borderRadius: '12px',
-      fontSize: '1.1rem',
+      fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
       fontWeight: 600,
       cursor: 'pointer',
       display: 'flex',
@@ -156,15 +156,15 @@ const Contact = () => {
     sidebar: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '1.5rem'
+      gap: '1rem'
     },
     infoCard: {
       background: isDark ? '#1e293b' : '#ffffff',
-      padding: '2rem',
+      padding: '1.5rem',
       borderRadius: '16px',
       display: 'flex',
       alignItems: 'flex-start',
-      gap: '1.5rem',
+      gap: '1rem',
       boxShadow: isDark 
         ? '0 10px 30px rgba(0, 0, 0, 0.3)' 
         : '0 10px 30px rgba(0, 0, 0, 0.08)',
@@ -172,28 +172,29 @@ const Contact = () => {
       border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
     },
     infoIcon: {
-      width: '50px',
-      height: '50px',
+      width: '45px',
+      height: '45px',
       background: 'linear-gradient(135deg, #667eea, #764ba2)',
       borderRadius: '12px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontSize: '1.3rem',
+      fontSize: '1.2rem',
       color: 'white',
       flexShrink: 0
     },
     infoContent: {
-      flex: 1
+      flex: 1,
+      minWidth: 0
     },
     infoTitle: {
-      fontSize: '1.1rem',
+      fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
       fontWeight: 600,
       marginBottom: '0.5rem',
       color: isDark ? '#f1f5f9' : '#1a1a1a'
     },
     infoText: {
-      fontSize: '0.95rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
       color: isDark ? '#cbd5e1' : '#6b7280',
       wordBreak: 'break-word',
       textDecoration: 'none'
@@ -207,18 +208,18 @@ const Contact = () => {
       textAlign: 'center'
     },
     successIcon: {
-      fontSize: '5rem',
+      fontSize: 'clamp(3rem, 10vw, 5rem)',
       color: '#10b981',
       marginBottom: '1.5rem'
     },
     successTitle: {
-      fontSize: '2rem',
+      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
       fontWeight: 700,
       color: isDark ? '#f1f5f9' : '#1a1a1a',
       marginBottom: '1rem'
     },
     successText: {
-      fontSize: '1.1rem',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
       color: isDark ? '#94a3b8' : '#6b7280'
     }
   };
@@ -269,8 +270,8 @@ const Contact = () => {
             <motion.form
               style={styles.form}
               onSubmit={handleSubmit}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
               <div style={styles.formGroup}>
@@ -341,8 +342,8 @@ const Contact = () => {
 
             <motion.div
               style={styles.sidebar}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
               {[
@@ -357,7 +358,7 @@ const Contact = () => {
                   whileHover={{ y: -5, boxShadow: isDark ? '0 15px 40px rgba(0, 0, 0, 0.4)' : '0 15px 40px rgba(0, 0, 0, 0.12)' }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.4 + index * 0.1 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
                 >
                   <motion.div
                     style={styles.infoIcon}
@@ -388,9 +389,20 @@ const Contact = () => {
       </AnimatePresence>
 
       <style>{`
-        @media (max-width: 768px) {
+        @media (min-width: 768px) {
           .contact-content { 
-            grid-template-columns: 1fr !important; 
+            grid-template-columns: 1.5fr 1fr !important; 
+            gap: 3rem !important;
+          }
+          .contact-form {
+            padding: 3rem !important;
+          }
+          .contact-sidebar {
+            gap: 1.5rem !important;
+          }
+          .info-card {
+            padding: 2rem !important;
+            gap: 1.5rem !important;
           }
         }
       `}</style>

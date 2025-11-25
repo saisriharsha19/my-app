@@ -7,7 +7,7 @@ import { FiTwitter, FiLinkedin, FiGithub, FiHeart, FiArrowUp, FiMail, FiMapPin, 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [coffeeCount, setCoffeeCount] = useState(0);
-  const [, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const theme = document.documentElement.getAttribute('data-theme');
@@ -17,12 +17,10 @@ const Footer = () => {
       const newTheme = document.documentElement.getAttribute('data-theme');
       setIsDark(newTheme === 'dark');
     });
-
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme']
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -60,7 +58,7 @@ const Footer = () => {
       position: 'relative',
       background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
       color: '#e2e8f0',
-      marginTop: '6rem',
+      marginTop: 'clamp(3rem, 8vw, 6rem)',
       overflow: 'hidden'
     },
     topBorder: {
@@ -73,10 +71,10 @@ const Footer = () => {
     },
     scrollToTop: {
       position: 'fixed',
-      bottom: '2rem',
-      right: '2rem',
-      width: '50px',
-      height: '50px',
+      bottom: 'clamp(1rem, 3vw, 2rem)',
+      right: 'clamp(1rem, 3vw, 2rem)',
+      width: 'clamp(45px, 10vw, 50px)',
+      height: 'clamp(45px, 10vw, 50px)',
       borderRadius: '12px',
       background: 'linear-gradient(135deg, #667eea, #764ba2)',
       color: 'white',
@@ -85,31 +83,31 @@ const Footer = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontSize: '1.5rem',
+      fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
       boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)',
       zIndex: 998
     },
     container: {
       maxWidth: '1400px',
       margin: '0 auto',
-      padding: '4rem 2rem 2rem'
+      padding: 'clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem) clamp(1.5rem, 3vw, 2rem)'
     },
     grid: {
       display: 'grid',
-      gridTemplateColumns: '2fr 1fr 1fr',
-      gap: '4rem',
-      marginBottom: '3rem'
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+      gap: 'clamp(2rem, 5vw, 4rem)',
+      marginBottom: 'clamp(2rem, 4vw, 3rem)'
     },
     brandSection: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '1.5rem'
+      gap: 'clamp(1rem, 2vw, 1.5rem)'
     },
     brandLink: {
       textDecoration: 'none'
     },
     brandName: {
-      fontSize: '1.8rem',
+      fontSize: 'clamp(1.5rem, 4vw, 1.8rem)',
       fontWeight: 800,
       background: 'linear-gradient(135deg, #667eea, #764ba2, #f093fb)',
       WebkitBackgroundClip: 'text',
@@ -118,16 +116,15 @@ const Footer = () => {
       display: 'inline-block'
     },
     tagline: {
-      fontSize: '1.1rem',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
       fontWeight: 600,
       color: '#94a3b8',
       margin: 0
     },
     description: {
-      fontSize: '0.95rem',
+      fontSize: 'clamp(0.9rem, 1.5vw, 0.95rem)',
       lineHeight: 1.7,
       color: '#cbd5e1',
-      maxWidth: '400px',
       margin: 0
     },
     quickInfo: {
@@ -141,20 +138,22 @@ const Footer = () => {
       alignItems: 'center',
       gap: '0.75rem',
       color: '#cbd5e1',
-      fontSize: '0.9rem'
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.9rem)',
+      flexWrap: 'wrap'
     },
     infoIcon: {
       color: '#667eea',
-      fontSize: '1.1rem',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
       flexShrink: 0
     },
     infoLink: {
       color: '#cbd5e1',
       textDecoration: 'none',
-      transition: 'color 0.2s ease'
+      transition: 'color 0.2s ease',
+      wordBreak: 'break-word'
     },
     sectionTitle: {
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1.1rem, 2.5vw, 1.2rem)',
       fontWeight: 700,
       color: '#f1f5f9',
       marginBottom: '1.5rem',
@@ -181,12 +180,12 @@ const Footer = () => {
     footerLink: {
       color: '#cbd5e1',
       textDecoration: 'none',
-      fontSize: '0.95rem',
+      fontSize: 'clamp(0.9rem, 1.5vw, 0.95rem)',
       transition: 'all 0.2s ease',
       display: 'inline-block'
     },
     connectText: {
-      fontSize: '0.9rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.9rem)',
       color: '#cbd5e1',
       lineHeight: 1.6,
       marginBottom: '1.5rem'
@@ -194,11 +193,12 @@ const Footer = () => {
     socialLinks: {
       display: 'flex',
       gap: '1rem',
-      marginBottom: '2rem'
+      marginBottom: '2rem',
+      flexWrap: 'wrap'
     },
-    socialLink: (color) => ({
-      width: '44px',
-      height: '44px',
+    socialLink: {
+      width: 'clamp(40px, 9vw, 44px)',
+      height: 'clamp(40px, 9vw, 44px)',
       borderRadius: '10px',
       background: 'rgba(102, 126, 234, 0.1)',
       border: '1px solid rgba(102, 126, 234, 0.2)',
@@ -207,41 +207,44 @@ const Footer = () => {
       justifyContent: 'center',
       color: '#cbd5e1',
       textDecoration: 'none',
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1.1rem, 2.5vw, 1.2rem)',
       transition: 'all 0.3s ease',
-      cursor: 'pointer'
-    }),
+      cursor: 'pointer',
+      flexShrink: 0
+    },
     coffeeSection: {
       display: 'flex',
       alignItems: 'center',
       gap: '1rem',
       marginTop: '1rem',
-      padding: '1rem',
+      padding: 'clamp(0.875rem, 2vw, 1rem)',
       background: 'rgba(102, 126, 234, 0.05)',
       borderRadius: '12px',
-      border: '1px dashed rgba(102, 126, 234, 0.2)'
+      border: '1px dashed rgba(102, 126, 234, 0.2)',
+      flexWrap: 'wrap'
     },
     coffeeBtn: {
-      width: '40px',
-      height: '40px',
+      width: 'clamp(38px, 8vw, 40px)',
+      height: 'clamp(38px, 8vw, 40px)',
       borderRadius: '8px',
       background: 'linear-gradient(135deg, #667eea, #764ba2)',
       border: 'none',
       color: 'white',
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1.1rem, 2.5vw, 1.2rem)',
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      flexShrink: 0
     },
     coffeeCount: {
-      fontSize: '0.85rem',
+      fontSize: 'clamp(0.8rem, 1.5vw, 0.85rem)',
       color: '#cbd5e1',
       fontWeight: 600
     },
     footerBottom: {
       borderTop: '1px solid rgba(102, 126, 234, 0.2)',
-      padding: '2rem 2rem',
+      padding: 'clamp(1.5rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem)',
       background: 'rgba(15, 23, 42, 0.5)'
     },
     bottomContent: {
@@ -254,20 +257,22 @@ const Footer = () => {
       gap: '1rem'
     },
     copyright: {
-      fontSize: '0.9rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.9rem)',
       color: '#94a3b8',
       margin: 0
     },
     madeWith: {
-      fontSize: '0.9rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.9rem)',
       color: '#94a3b8',
       margin: 0,
       display: 'flex',
       alignItems: 'center',
-      gap: '0.25rem'
+      gap: '0.25rem',
+      flexWrap: 'wrap',
+      justifyContent: 'center'
     },
     funFact: {
-      fontSize: '0.9rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.9rem)',
       fontWeight: 600,
       color: '#cbd5e1',
       margin: 0
@@ -303,7 +308,6 @@ const Footer = () => {
 
       <div style={styles.container}>
         <div style={styles.grid}>
-          {/* Brand Section */}
           <motion.div
             style={styles.brandSection}
             initial={{ opacity: 0, y: 20 }}
@@ -351,7 +355,6 @@ const Footer = () => {
             </div>
           </motion.div>
 
-          {/* Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -390,7 +393,6 @@ const Footer = () => {
             </ul>
           </motion.div>
 
-          {/* Social & Connect */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -410,7 +412,7 @@ const Footer = () => {
                 <motion.a
                   key={social.label}
                   href={social.url}
-                  style={styles.socialLink(social.color)}
+                  style={styles.socialLink}
                   aria-label={social.label}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -490,16 +492,18 @@ const Footer = () => {
           <p style={styles.funFact}>
             {funFacts[Math.floor(Date.now() / 10000) % 3]}
           </p>
-                </div>
+        </div>
       </motion.div>
 
       <style>{`
-        @media (max-width: 1024px) {
-          .footer-grid { grid-template-columns: 1fr 1fr; }
-          .brand-section { grid-column: 1 / -1; }
-        }
-        @media (max-width: 768px) {
-          .footer-grid { grid-template-columns: 1fr; }
+        @media (max-width: 640px) {
+          .footer-bottom-content {
+            justify-content: center !important;
+            text-align: center;
+          }
+          .footer-bottom-content > * {
+            width: 100%;
+          }
         }
       `}</style>
     </footer>

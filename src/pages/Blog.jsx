@@ -22,12 +22,10 @@ const Blog = () => {
       const newTheme = document.documentElement.getAttribute('data-theme');
       setIsDark(newTheme === 'dark');
     });
-
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme']
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -83,16 +81,16 @@ const Blog = () => {
 
   const styles = {
     container: {
-      padding: '4rem 2rem',
+      padding: '2rem 1rem',
       maxWidth: '1400px',
       margin: '0 auto'
     },
     header: {
       textAlign: 'center',
-      marginBottom: '4rem'
+      marginBottom: '3rem'
     },
     title: {
-      fontSize: '3rem',
+      fontSize: 'clamp(2rem, 5vw, 3rem)',
       fontWeight: 800,
       marginBottom: '1rem',
       color: isDark ? '#f1f5f9' : '#1a1a1a'
@@ -104,14 +102,15 @@ const Blog = () => {
       backgroundClip: 'text'
     },
     subtitle: {
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
       color: isDark ? '#94a3b8' : '#6b7280',
       marginTop: '1rem'
     },
     searchContainer: {
       maxWidth: '600px',
       margin: '2rem auto 0',
-      position: 'relative'
+      position: 'relative',
+      padding: '0 1rem'
     },
     searchInput: {
       width: '100%',
@@ -122,11 +121,12 @@ const Blog = () => {
       color: isDark ? '#f1f5f9' : '#1a1a1a',
       fontSize: '1rem',
       transition: 'all 0.3s ease',
-      outline: 'none'
+      outline: 'none',
+      boxSizing: 'border-box'
     },
     searchIcon: {
       position: 'absolute',
-      left: '1rem',
+      left: '1.75rem',
       top: '50%',
       transform: 'translateY(-50%)',
       color: '#667eea',
@@ -135,15 +135,16 @@ const Blog = () => {
     },
     grid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-      gap: '2rem',
-      marginBottom: '3rem'
+      gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
+      gap: '1.5rem',
+      marginBottom: '3rem',
+      padding: '0 1rem'
     },
     card: (isHovered) => ({
       position: 'relative',
       background: isDark ? '#1e293b' : '#ffffff',
       borderRadius: '20px',
-      padding: '2rem',
+      padding: '1.5rem',
       overflow: 'hidden',
       cursor: 'pointer',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -180,12 +181,13 @@ const Blog = () => {
       gap: '0.5rem',
       marginBottom: '1rem',
       color: isDark ? '#94a3b8' : '#6b7280',
-      fontSize: '0.9rem',
+      fontSize: '0.85rem',
       position: 'relative',
-      zIndex: 1
+      zIndex: 1,
+      flexWrap: 'wrap'
     },
     postTitle: {
-      fontSize: '1.5rem',
+      fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
       fontWeight: 700,
       marginBottom: '1rem',
       color: isDark ? '#f1f5f9' : '#1a1a1a',
@@ -198,7 +200,8 @@ const Blog = () => {
       lineHeight: 1.6,
       marginBottom: '1.5rem',
       position: 'relative',
-      zIndex: 1
+      zIndex: 1,
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)'
     },
     footer: {
       display: 'flex',
@@ -208,14 +211,16 @@ const Blog = () => {
       paddingTop: '1.5rem',
       borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
       position: 'relative',
-      zIndex: 1
+      zIndex: 1,
+      gap: '1rem',
+      flexWrap: 'wrap'
     },
     author: {
       display: 'flex',
       alignItems: 'center',
       gap: '0.5rem',
       color: isDark ? '#94a3b8' : '#6b7280',
-      fontSize: '0.9rem'
+      fontSize: '0.85rem'
     },
     readMore: {
       display: 'flex',
@@ -228,18 +233,20 @@ const Blog = () => {
       borderRadius: '8px',
       background: 'rgba(102, 126, 234, 0.1)',
       transition: 'all 0.3s ease',
-      fontSize: '0.9rem'
+      fontSize: '0.85rem',
+      whiteSpace: 'nowrap'
     },
     pagination: {
       display: 'flex',
       justifyContent: 'center',
       gap: '0.5rem',
       marginTop: '3rem',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      padding: '0 1rem'
     },
     pageButton: (isActive) => ({
-      width: '45px',
-      height: '45px',
+      width: '40px',
+      height: '40px',
       borderRadius: '12px',
       border: 'none',
       background: isActive 
@@ -249,7 +256,8 @@ const Blog = () => {
       cursor: 'pointer',
       fontWeight: 600,
       transition: 'all 0.3s ease',
-      boxShadow: isActive ? '0 4px 15px rgba(102, 126, 234, 0.4)' : 'none'
+      boxShadow: isActive ? '0 4px 15px rgba(102, 126, 234, 0.4)' : 'none',
+      fontSize: '0.9rem'
     }),
     skeleton: {
       background: isDark 
@@ -270,26 +278,26 @@ const Blog = () => {
       padding: '2rem'
     },
     errorIcon: {
-      fontSize: '4rem'
+      fontSize: 'clamp(2.5rem, 8vw, 4rem)'
     },
     errorTitle: {
-      fontSize: '2rem',
+      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
       fontWeight: 700,
       color: isDark ? '#f1f5f9' : '#1a1a1a',
       margin: 0
     },
     errorText: {
-      fontSize: '1.1rem',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
       color: isDark ? '#94a3b8' : '#6b7280',
       margin: 0
     },
     retryButton: {
-      padding: '1rem 2rem',
+      padding: '0.875rem 1.75rem',
       background: 'linear-gradient(135deg, #667eea, #764ba2)',
       color: 'white',
       border: 'none',
       borderRadius: '12px',
-      fontSize: '1rem',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
       fontWeight: 600,
       cursor: 'pointer',
       display: 'flex',
@@ -340,7 +348,6 @@ const Blog = () => {
           <span style={styles.gradientText}>Latest</span> Articles
         </h1>
         <p style={styles.subtitle}>Thoughts, stories and ideas</p>
-
         <div style={styles.searchContainer}>
           <FiSearch style={styles.searchIcon} />
           <input
@@ -360,7 +367,7 @@ const Blog = () => {
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              style={{...styles.card(false), padding: '2rem'}}
+              style={{...styles.card(false), padding: '1.5rem'}}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: i * 0.1 }}
@@ -384,7 +391,7 @@ const Blog = () => {
             }}
           >
             <AnimatePresence>
-              {currentPosts.map((post, index) => (
+              {currentPosts.map((post) => (
                 <motion.article
                   key={post.id}
                   style={styles.card(hoveredCard === post.id)}
@@ -402,7 +409,6 @@ const Blog = () => {
                     <FiClock />
                     <time>{formatDate(post.created_at)}</time>
                   </div>
-
                   <h2 style={styles.postTitle}>{post.title}</h2>
                   
                   <p style={styles.excerpt}>
@@ -410,7 +416,6 @@ const Blog = () => {
                       ? post.content.substring(0, 150) + '...'
                       : 'No content available'}
                   </p>
-
                   <div style={styles.footer}>
                     <div style={styles.author}>
                       <FiUser />
@@ -469,9 +474,6 @@ const Blog = () => {
         @keyframes shimmer {
           0% { background-position: -200% 0; }
           100% { background-position: 200% 0; }
-        }
-        @media (max-width: 768px) {
-          .search-container { margin: 1rem 0 0; }
         }
       `}</style>
     </div>

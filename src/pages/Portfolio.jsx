@@ -20,12 +20,10 @@ const Portfolio = () => {
       const newTheme = document.documentElement.getAttribute('data-theme');
       setIsDark(newTheme === 'dark');
     });
-
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme']
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -71,22 +69,22 @@ const Portfolio = () => {
 
   const styles = {
     container: {
-      padding: '4rem 2rem',
+      padding: '2rem 1rem',
       maxWidth: '1400px',
       margin: '0 auto'
     },
     header: {
       textAlign: 'center',
-      marginBottom: '4rem'
+      marginBottom: '3rem'
     },
     headerIcon: {
-      fontSize: '3rem',
+      fontSize: 'clamp(2rem, 6vw, 3rem)',
       color: '#667eea',
       marginBottom: '1rem',
       display: 'inline-block'
     },
     title: {
-      fontSize: '3rem',
+      fontSize: 'clamp(2rem, 5vw, 3rem)',
       fontWeight: 800,
       marginBottom: '1rem',
       color: isDark ? '#f1f5f9' : '#1a1a1a'
@@ -98,7 +96,7 @@ const Portfolio = () => {
       backgroundClip: 'text'
     },
     subtitle: {
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
       color: isDark ? '#94a3b8' : '#6b7280',
       marginTop: '1rem'
     },
@@ -111,7 +109,7 @@ const Portfolio = () => {
       position: 'relative',
       background: isDark ? '#1e293b' : '#ffffff',
       borderRadius: '24px',
-      padding: '3rem',
+      padding: '2rem',
       overflow: 'hidden',
       boxShadow: isHovered 
         ? '0 30px 60px rgba(102, 126, 234, 0.25)' 
@@ -132,36 +130,36 @@ const Portfolio = () => {
     }),
     projectNumber: {
       position: 'absolute',
-      top: '2rem',
-      right: '2rem',
-      fontSize: '4rem',
+      top: '1.5rem',
+      right: '1.5rem',
+      fontSize: 'clamp(2.5rem, 8vw, 4rem)',
       fontWeight: 700,
       opacity: 0.05,
       color: isDark ? '#f1f5f9' : '#1a1a1a',
       pointerEvents: 'none'
     },
     iconContainer: (color) => ({
-      width: '70px',
-      height: '70px',
+      width: 'clamp(50px, 12vw, 70px)',
+      height: 'clamp(50px, 12vw, 70px)',
       background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
       borderRadius: '16px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       color: 'white',
-      fontSize: '2rem',
-      marginBottom: '2rem',
+      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+      marginBottom: '1.5rem',
       boxShadow: `0 10px 30px ${color.from}40`
     }),
     projectTitle: {
-      fontSize: '2rem',
+      fontSize: 'clamp(1.25rem, 4vw, 2rem)',
       fontWeight: 700,
       marginBottom: '1rem',
       color: isDark ? '#f1f5f9' : '#1a1a1a',
       lineHeight: 1.3
     },
     description: {
-      fontSize: '1.05rem',
+      fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
       lineHeight: 1.7,
       color: isDark ? '#cbd5e1' : '#6b7280',
       marginBottom: '2rem'
@@ -172,20 +170,24 @@ const Portfolio = () => {
       justifyContent: 'space-between',
       marginTop: '2rem',
       paddingTop: '2rem',
-      borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`
+      borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+      gap: '1rem',
+      flexWrap: 'wrap'
     },
     link: (color) => ({
       display: 'inline-flex',
       alignItems: 'center',
       gap: '0.5rem',
-      padding: '0.75rem 1.5rem',
+      padding: '0.75rem 1.25rem',
       background: `${color.from}15`,
       color: color.from,
       textDecoration: 'none',
       borderRadius: '12px',
       fontWeight: 600,
       transition: 'all 0.3s ease',
-      border: `2px solid ${color.from}30`
+      border: `2px solid ${color.from}30`,
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
+      whiteSpace: 'nowrap'
     }),
     badge: {
       display: 'inline-flex',
@@ -195,7 +197,7 @@ const Portfolio = () => {
       background: 'rgba(102, 126, 234, 0.1)',
       color: '#667eea',
       borderRadius: '20px',
-      fontSize: '0.85rem',
+      fontSize: 'clamp(0.8rem, 1.5vw, 0.85rem)',
       fontWeight: 600
     },
     pagination: {
@@ -203,11 +205,12 @@ const Portfolio = () => {
       justifyContent: 'center',
       gap: '0.5rem',
       marginTop: '3rem',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      padding: '0 1rem'
     },
     pageButton: (isActive) => ({
-      width: '50px',
-      height: '50px',
+      width: '45px',
+      height: '45px',
       borderRadius: '12px',
       border: 'none',
       background: isActive 
@@ -216,7 +219,7 @@ const Portfolio = () => {
       color: isActive ? '#ffffff' : (isDark ? '#cbd5e1' : '#1a1a1a'),
       cursor: 'pointer',
       fontWeight: 700,
-      fontSize: '1rem',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
       transition: 'all 0.3s ease',
       boxShadow: isActive ? '0 4px 15px rgba(102, 126, 234, 0.4)' : 'none'
     }),
@@ -241,32 +244,33 @@ const Portfolio = () => {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '2rem',
-            textAlign: 'center'
+            textAlign: 'center',
+            padding: '2rem'
           }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
         >
           <motion.div
-            style={{ fontSize: '4rem' }}
+            style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
           >
             😕
           </motion.div>
-          <h2 style={{ fontSize: '2rem', fontWeight: 700, color: isDark ? '#f1f5f9' : '#1a1a1a' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 700, color: isDark ? '#f1f5f9' : '#1a1a1a' }}>
             Oops! Something went wrong
           </h2>
-          <p style={{ fontSize: '1.1rem', color: isDark ? '#94a3b8' : '#6b7280' }}>
+          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.1rem)', color: isDark ? '#94a3b8' : '#6b7280' }}>
             {error}
           </p>
           <motion.button
             style={{
-              padding: '1rem 2rem',
+              padding: '0.875rem 1.75rem',
               background: 'linear-gradient(135deg, #667eea, #764ba2)',
               color: 'white',
               border: 'none',
               borderRadius: '12px',
-              fontSize: '1rem',
+              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
               fontWeight: 600,
               cursor: 'pointer'
             }}
@@ -313,16 +317,16 @@ const Portfolio = () => {
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              style={{...styles.card(false), padding: '3rem'}}
+              style={{...styles.card(false), padding: '2rem'}}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
             >
-              <div style={{...styles.skeleton, height: '70px', width: '70px', marginBottom: '2rem'}} />
-              <div style={{...styles.skeleton, height: '32px', width: '80%', marginBottom: '1rem'}} />
-              <div style={{...styles.skeleton, height: '20px', width: '100%', marginBottom: '0.5rem'}} />
-              <div style={{...styles.skeleton, height: '20px', width: '90%', marginBottom: '0.5rem'}} />
-              <div style={{...styles.skeleton, height: '20px', width: '70%'}} />
+              <div style={{...styles.skeleton, height: '60px', width: '60px', marginBottom: '2rem'}} />
+              <div style={{...styles.skeleton, height: '28px', width: '80%', marginBottom: '1rem'}} />
+              <div style={{...styles.skeleton, height: '18px', width: '100%', marginBottom: '0.5rem'}} />
+              <div style={{...styles.skeleton, height: '18px', width: '90%', marginBottom: '0.5rem'}} />
+              <div style={{...styles.skeleton, height: '18px', width: '70%'}} />
             </motion.div>
           ))}
         </div>
@@ -428,9 +432,6 @@ const Portfolio = () => {
         @keyframes shimmer {
           0% { background-position: -200% 0; }
           100% { background-position: 200% 0; }
-        }
-        @media (max-width: 768px) {
-          h1 { font-size: 2rem !important; }
         }
       `}</style>
     </div>

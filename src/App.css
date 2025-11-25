@@ -1,19 +1,15 @@
-/* ============================================
-   COMPLETE GLOBAL CSS FILE
-   ============================================ */
+/* src/App.css - Complete Mobile-Responsive Version */
 
 /* ============================================
    1. CSS VARIABLES
    ============================================ */
-
 :root {
-  --navbar-height: 70px;
+  --navbar-height: clamp(60px, 12vw, 70px);
 }
 
 /* ============================================
    2. GLOBAL RESETS & BASE STYLES
    ============================================ */
-
 * {
   margin: 0;
   padding: 0;
@@ -24,6 +20,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--navbar-height) + 20px);
+  font-size: 16px;
 }
 
 html:not([data-theme]) {
@@ -35,10 +32,8 @@ html[data-theme] {
 }
 
 /* ============================================
-   THEME BACKGROUNDS - IMPORTANT!
+   3. THEME BACKGROUNDS
    ============================================ */
-
-/* Light theme (default) */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -52,20 +47,18 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark theme */
 [data-theme="dark"] body {
   background-color: #0f172a;
   color: #f1f5f9;
 }
 
 /* ============================================
-   3. THEME TRANSITIONS
+   4. THEME TRANSITIONS
    ============================================ */
-
 html.theme-transitioning,
 html.theme-transitioning *,
 html.theme-transitioning *::before,
-html.theme-transitioning *::after {
+html.theme-transitioning *::after{
   transition: 
     background-color 0.3s ease,
     border-color 0.3s ease,
@@ -76,9 +69,8 @@ html.theme-transitioning *::after {
 }
 
 /* ============================================
-   4. APP STRUCTURE
+   5. APP STRUCTURE
    ============================================ */
-
 .App {
   min-height: 100vh;
   display: flex;
@@ -92,9 +84,8 @@ html.theme-transitioning *::after {
 }
 
 /* ============================================
-   5. SELECTION & FOCUS STYLES
+   6. SELECTION & FOCUS STYLES
    ============================================ */
-
 ::selection {
   background: rgba(102, 126, 234, 0.3);
   color: inherit;
@@ -106,9 +97,8 @@ html.theme-transitioning *::after {
 }
 
 /* ============================================
-   6. BUTTON & LINK DEFAULTS
+   7. BUTTON & LINK DEFAULTS
    ============================================ */
-
 button {
   font-family: inherit;
   cursor: pointer;
@@ -128,9 +118,8 @@ select {
 }
 
 /* ============================================
-   7. ACCESSIBILITY - FOCUS STYLES
+   8. ACCESSIBILITY - FOCUS STYLES
    ============================================ */
-
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
@@ -145,12 +134,11 @@ select:focus-visible {
 }
 
 /* ============================================
-   8. SCROLLBAR STYLING
+   9. SCROLLBAR STYLING
    ============================================ */
-
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: clamp(8px, 1.5vw, 10px);
+  height: clamp(8px, 1.5vw, 10px);
 }
 
 ::-webkit-scrollbar-track {
@@ -180,30 +168,39 @@ select:focus-visible {
 }
 
 /* ============================================
-   9. RESPONSIVE BREAKPOINTS
+   10. RESPONSIVE BREAKPOINTS
    ============================================ */
+@media (max-width: 1200px) {
+  html {
+    font-size: 15px;
+  }
+}
 
 @media (max-width: 1024px) {
-  body {
-    padding-top: 60px;
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 16px; /* Reset to 16px to prevent zoom on input focus */
   }
   
+  body {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
   :root {
     --navbar-height: 60px;
   }
 }
 
-@media (max-width: 768px) {
-  body {
-    padding-top: 60px;
-    font-size: 16px;
-  }
-}
-
 /* ============================================
-   10. REDUCED MOTION
+   11. REDUCED MOTION
    ============================================ */
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -216,9 +213,8 @@ select:focus-visible {
 }
 
 /* ============================================
-   11. HIGH CONTRAST MODE
+   12. HIGH CONTRAST MODE
    ============================================ */
-
 @media (prefers-contrast: high) {
   button, 
   a {
@@ -232,9 +228,8 @@ select:focus-visible {
 }
 
 /* ============================================
-   12. PRINT STYLES
+   13. PRINT STYLES
    ============================================ */
-
 @media print {
   body {
     padding-top: 0;
@@ -246,12 +241,18 @@ select:focus-visible {
     box-shadow: none !important;
     text-shadow: none !important;
   }
+  
+  nav,
+  footer,
+  .scroll-to-top,
+  button {
+    display: none !important;
+  }
 }
 
 /* ============================================
-   13. MOBILE OPTIMIZATION
+   14. MOBILE OPTIMIZATION
    ============================================ */
-
 @media (hover: none) and (pointer: coarse) {
   a, 
   button {
@@ -266,21 +267,23 @@ select:focus-visible {
   }
 }
 
+/* Prevent zoom on input focus on iOS */
 @media screen and (max-width: 768px) {
   input[type="text"],
   input[type="email"],
   input[type="tel"],
   input[type="password"],
   input[type="search"],
-  textarea {
+  input[type="number"],
+  textarea,
+  select {
     font-size: 16px !important;
   }
 }
 
 /* ============================================
-   14. UTILITY ANIMATIONS
+   15. UTILITY ANIMATIONS
    ============================================ */
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -307,29 +310,299 @@ select:focus-visible {
   }
 }
 
-/* ============================================
-   15. RESPONSIVE TWEAKS
-   ============================================ */
-
-@media (max-width: 1024px) and (min-width: 769px) {
-  /* Tablet specific */
-}
-
-@media (max-width: 896px) and (orientation: landscape) {
-  body {
-    padding-top: 50px;
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
   }
 }
 
+/* ============================================
+   16. MOBILE LANDSCAPE MODE
+   ============================================ */
+@media (max-width: 896px) and (orientation: landscape) {
+  body {
+    padding-top: clamp(50px, 10vw, 60px);
+  }
+}
+
+/* ============================================
+   17. SMALL MOBILE DEVICES
+   ============================================ */
 @media (max-width: 360px) {
   body {
     font-size: 14px;
   }
+  
+  :root {
+    --navbar-height: 55px;
+  }
+}
+
+/* ============================================
+   18. SAFE AREA INSETS (Notch Support)
+   ============================================ */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* ============================================
+   19. IMAGE & MEDIA OPTIMIZATION
+   ============================================ */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+picture {
+  display: contents;
+}
+
+/* ============================================
+   20. FORM ELEMENTS MOBILE OPTIMIZATION
+   ============================================ */
+@media (max-width: 768px) {
+  input,
+  textarea,
+  select,
+  button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+  }
+  
+  input[type="submit"],
+  input[type="button"],
+  button {
+    cursor: pointer;
+  }
+}
+
+/* ============================================
+   21. PREVENT HORIZONTAL SCROLL
+   ============================================ */
+body,
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+  position: relative;
+}
+
+/* ============================================
+   22. TOUCH OPTIMIZATION
+   ============================================ */
+button,
+a,
+input,
+textarea,
+select {
+  touch-action: manipulation;
+}
+
+/* ============================================
+   23. PREVENT TEXT SIZE ADJUST ON ORIENTATION
+   ============================================ */
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ============================================
+   24. SMOOTH FONT RENDERING
+   ============================================ */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================
+   25. RESPONSIVE TABLES
+   ============================================ */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ============================================
+   26. LOADING STATES
+   ============================================ */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+[data-theme="dark"] .loading-skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+}
+
+/* ============================================
+   27. HIDE ELEMENTS ON MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   28. RESPONSIVE GRID UTILITIES
+   ============================================ */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+/* ============================================
+   29. ASPECT RATIO UTILITIES
+   ============================================ */
+.aspect-ratio-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-ratio-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-ratio-1-1 {
+  aspect-ratio: 1 / 1;
+}
+
+@supports not (aspect-ratio: 1 / 1) {
+  .aspect-ratio-16-9::before {
+    float: left;
+    padding-top: 56.25%;
+    content: "";
+  }
+  
+  .aspect-ratio-16-9::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
+
+/* ============================================
+   30. CONTAINER QUERIES FALLBACK
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+}
+
+/* ============================================
+   31. VISUALLY HIDDEN (Accessibility)
+   ============================================ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================
+   32. FOCUS TRAP FOR MODALS
+   ============================================ */
+.modal-open {
+  overflow: hidden;
+}
+
+/* ============================================
+   33. SMOOTH SCROLL BEHAVIOR
+   ============================================ */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ============================================
+   34. MOBILE MENU OVERLAY
+   ============================================ */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}
+
+/* ============================================
+   35. PREVENT BODY SCROLL WHEN MODAL OPEN
+   ============================================ */
+body.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* ============================================
+   36. RESPONSIVE TEXT UTILITIES
+   ============================================ */
+.text-responsive-sm {
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+}
+
+.text-responsive-md {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+.text-responsive-lg {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+}
+
+.text-responsive-xl {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.text-responsive-2xl {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+/* ============================================
+   37. SPACING UTILITIES
+   ============================================ */
+.spacing-responsive-sm {
+  padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+.spacing-responsive-md {
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.spacing-responsive-lg {
+  padding: clamp(2rem, 5vw, 4rem);
 }
 
 /* ============================================
    END OF GLOBAL CSS
    ============================================ */
-
-
-   

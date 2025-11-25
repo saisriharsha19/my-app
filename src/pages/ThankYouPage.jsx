@@ -16,12 +16,10 @@ const ThankYouPage = () => {
       const newTheme = document.documentElement.getAttribute('data-theme');
       setIsDark(newTheme === 'dark');
     });
-
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme']
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -44,7 +42,7 @@ const ThankYouPage = () => {
       justifyContent: 'center',
       position: 'relative',
       overflow: 'hidden',
-      padding: '2rem'
+      padding: '2rem 1rem'
     },
     confettiContainer: {
       position: 'absolute',
@@ -66,7 +64,7 @@ const ThankYouPage = () => {
       position: 'relative',
       zIndex: 10,
       textAlign: 'center',
-      padding: '4rem',
+      padding: 'clamp(2rem, 5vw, 4rem)',
       background: isDark ? '#1e293b' : '#ffffff',
       borderRadius: '32px',
       boxShadow: isDark 
@@ -79,31 +77,31 @@ const ThankYouPage = () => {
     iconWrapper: {
       position: 'relative',
       display: 'inline-block',
-      marginBottom: '2rem'
+      marginBottom: '1.5rem'
     },
     icon: {
-      fontSize: '6rem',
+      fontSize: 'clamp(3.5rem, 12vw, 6rem)',
       color: '#10b981'
     },
-    ripple: (delay) => ({
+    ripple: {
       position: 'absolute',
       top: '50%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      width: '120px',
-      height: '120px',
+      width: 'clamp(80px, 20vw, 120px)',
+      height: 'clamp(80px, 20vw, 120px)',
       border: '3px solid #10b981',
       borderRadius: '50%',
       opacity: 0
-    }),
+    },
     title: {
-      fontSize: '2.5rem',
+      fontSize: 'clamp(1.75rem, 5vw, 2.5rem)',
       fontWeight: 800,
       marginBottom: '1rem',
       color: isDark ? '#f1f5f9' : '#1a1a1a'
     },
     message: {
-      fontSize: '1.1rem',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
       lineHeight: 1.6,
       color: isDark ? '#cbd5e1' : '#6b7280',
       marginBottom: '2rem'
@@ -114,14 +112,20 @@ const ThankYouPage = () => {
       justifyContent: 'center',
       gap: '1rem',
       margin: '2rem 0',
-      padding: '1rem 2rem',
+      padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.25rem, 3vw, 2rem)',
       background: 'rgba(16, 185, 129, 0.1)',
       borderRadius: '12px',
       color: '#10b981',
-      border: '2px solid rgba(16, 185, 129, 0.2)'
+      border: '2px solid rgba(16, 185, 129, 0.2)',
+      flexWrap: 'wrap'
     },
     emailIcon: {
-      fontSize: '1.5rem'
+      fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+      flexShrink: 0
+    },
+    emailText: {
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+      fontWeight: 600
     },
     actions: {
       display: 'flex',
@@ -131,28 +135,29 @@ const ThankYouPage = () => {
       flexWrap: 'wrap'
     },
     button: (isPrimary) => ({
-      padding: '1rem 2rem',
+      padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem)',
       borderRadius: '12px',
       fontWeight: 600,
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
       gap: '0.5rem',
-      fontSize: '1rem',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
       textDecoration: 'none',
       transition: 'all 0.3s ease',
       background: isPrimary 
         ? 'linear-gradient(135deg, #667eea, #764ba2)' 
         : 'transparent',
       color: isPrimary ? '#ffffff' : '#667eea',
-      border: isPrimary ? 'none' : '2px solid #667eea'
+      border: isPrimary ? 'none' : '2px solid #667eea',
+      whiteSpace: 'nowrap'
     }),
     features: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: '1.5rem',
-      marginTop: '3rem',
-      padding: '2rem',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+      gap: '1.25rem',
+      marginTop: '2.5rem',
+      padding: 'clamp(1.5rem, 3vw, 2rem)',
       background: isDark ? 'rgba(102, 126, 234, 0.05)' : 'rgba(102, 126, 234, 0.05)',
       borderRadius: '16px'
     },
@@ -160,11 +165,11 @@ const ThankYouPage = () => {
       textAlign: 'center'
     },
     featureIcon: {
-      fontSize: '2rem',
+      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
       marginBottom: '0.5rem'
     },
     featureText: {
-      fontSize: '0.85rem',
+      fontSize: 'clamp(0.8rem, 1.5vw, 0.85rem)',
       fontWeight: 600,
       color: isDark ? '#cbd5e1' : '#6b7280'
     }
@@ -233,7 +238,7 @@ const ThankYouPage = () => {
           {[0, 0.2].map((delay, i) => (
             <motion.div
               key={i}
-              style={styles.ripple(delay)}
+              style={styles.ripple}
               initial={{ scale: 0.8, opacity: 0.8 }}
               animate={{ scale: 2.5, opacity: 0 }}
               transition={{ duration: 1.2, delay: 0.4 + delay }}
@@ -278,7 +283,7 @@ const ThankYouPage = () => {
           >
             <FiMail />
           </motion.div>
-          <span style={{ fontWeight: 600 }}>Email sent successfully</span>
+          <span style={styles.emailText}>Email sent successfully</span>
         </motion.div>
         
         <motion.div
@@ -330,14 +335,6 @@ const ThankYouPage = () => {
           ))}
         </motion.div>
       </motion.div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .features { grid-template-columns: 1fr !important; }
-          .actions { flex-direction: column; width: 100%; }
-          .actions button { width: 100%; justify-content: center; }
-        }
-      `}</style>
     </div>
   );
 };

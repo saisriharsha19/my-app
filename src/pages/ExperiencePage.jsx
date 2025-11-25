@@ -15,12 +15,10 @@ const ExperiencePage = () => {
       const newTheme = document.documentElement.getAttribute('data-theme');
       setIsDark(newTheme === 'dark');
     });
-
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme']
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -67,16 +65,16 @@ const ExperiencePage = () => {
 
   const styles = {
     container: {
-      padding: '4rem 2rem',
+      padding: '2rem 1rem',
       maxWidth: '1200px',
       margin: '0 auto'
     },
     header: {
       textAlign: 'center',
-      marginBottom: '4rem'
+      marginBottom: '3rem'
     },
     title: {
-      fontSize: '3rem',
+      fontSize: 'clamp(2rem, 5vw, 3rem)',
       fontWeight: 800,
       marginBottom: '1rem',
       color: isDark ? '#f1f5f9' : '#1a1a1a'
@@ -88,16 +86,16 @@ const ExperiencePage = () => {
       backgroundClip: 'text'
     },
     subtitle: {
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
       color: isDark ? '#94a3b8' : '#6b7280',
       marginTop: '1rem'
     },
     timeline: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '3rem',
+      gap: '2rem',
       position: 'relative',
-      paddingLeft: '2rem'
+      paddingLeft: '0'
     },
     timelineLine: {
       position: 'absolute',
@@ -105,14 +103,15 @@ const ExperiencePage = () => {
       top: '40px',
       bottom: '40px',
       width: '2px',
-      background: `linear-gradient(180deg, ${isDark ? 'rgba(102, 126, 234, 0.3)' : 'rgba(102, 126, 234, 0.2)'}, transparent)`
+      background: `linear-gradient(180deg, ${isDark ? 'rgba(102, 126, 234, 0.3)' : 'rgba(102, 126, 234, 0.2)'}, transparent)`,
+      display: 'none'
     },
     card: (color) => ({
       position: 'relative',
       background: isDark ? '#1e293b' : '#ffffff',
       borderRadius: '20px',
-      padding: '2.5rem',
-      marginLeft: '2rem',
+      padding: '2rem',
+      marginLeft: '0',
       boxShadow: isDark 
         ? '0 10px 40px rgba(0, 0, 0, 0.3)' 
         : '0 10px 40px rgba(0, 0, 0, 0.08)',
@@ -127,48 +126,52 @@ const ExperiencePage = () => {
       width: '20px',
       height: '20px',
       borderRadius: '50%',
-            background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
+      background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
       border: `3px solid ${isDark ? '#1e293b' : '#ffffff'}`,
       boxShadow: `0 0 0 4px ${color.from}20, 0 0 20px ${color.from}40`,
-      zIndex: 2
+      zIndex: 2,
+      display: 'none'
     }),
-    CardHeader: {
+    cardHeader: {
       display: 'flex',
       alignItems: 'flex-start',
-      gap: '1.5rem',
-      marginBottom: '1.5rem'
+      gap: '1rem',
+      marginBottom: '1.5rem',
+      flexWrap: 'wrap'
     },
     icon: (color) => ({
-      width: '60px',
-      height: '60px',
+      width: '50px',
+      height: '50px',
       background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
       borderRadius: '14px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       color: 'white',
-      fontSize: '1.8rem',
+      fontSize: '1.5rem',
       flexShrink: 0,
       boxShadow: `0 8px 24px ${color.from}40`
     }),
     content: {
-      flex: 1
+      flex: 1,
+      minWidth: 0
     },
     jobTitle: {
-      fontSize: '1.6rem',
+      fontSize: 'clamp(1.25rem, 3vw, 1.6rem)',
       fontWeight: 700,
       marginBottom: '0.5rem',
-      color: isDark ? '#f1f5f9' : '#1a1a1a'
+      color: isDark ? '#f1f5f9' : '#1a1a1a',
+      lineHeight: 1.3
     },
     company: {
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
       fontWeight: 600,
       color: '#667eea',
       marginBottom: '0.75rem'
     },
     meta: {
       display: 'flex',
-      gap: '1.5rem',
+      gap: '1rem',
       flexWrap: 'wrap',
       marginBottom: '1.5rem'
     },
@@ -176,11 +179,12 @@ const ExperiencePage = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '0.5rem',
-      fontSize: '0.95rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
       color: isDark ? '#94a3b8' : '#6b7280'
     },
     metaIcon: {
-      color: '#667eea'
+      color: '#667eea',
+      flexShrink: 0
     },
     description: {
       listStyle: 'none',
@@ -194,7 +198,7 @@ const ExperiencePage = () => {
       display: 'flex',
       alignItems: 'flex-start',
       gap: '0.75rem',
-      fontSize: '1rem',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
       lineHeight: 1.7,
       color: isDark ? '#cbd5e1' : '#6b7280'
     },
@@ -209,13 +213,14 @@ const ExperiencePage = () => {
       display: 'flex',
       justifyContent: 'center',
       gap: '1rem',
-      marginTop: '4rem',
-      flexWrap: 'wrap'
+      marginTop: '3rem',
+      flexWrap: 'wrap',
+      padding: '0 1rem'
     },
     button: (isPrimary) => ({
-      padding: '1rem 2rem',
+      padding: '0.875rem 1.75rem',
       borderRadius: '12px',
-      fontSize: '1rem',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
       fontWeight: 600,
       cursor: 'pointer',
       display: 'flex',
@@ -227,7 +232,8 @@ const ExperiencePage = () => {
         ? 'linear-gradient(135deg, #667eea, #764ba2)' 
         : isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)',
       color: isPrimary ? '#ffffff' : '#667eea',
-      border: isPrimary ? 'none' : '2px solid #667eea'
+      border: isPrimary ? 'none' : '2px solid #667eea',
+      whiteSpace: 'nowrap'
     })
   };
 
@@ -267,7 +273,7 @@ const ExperiencePage = () => {
                   : '0 20px 50px rgba(0, 0, 0, 0.12)'
               }}
             >
-              <div style={styles.CardHeader}>
+              <div style={styles.cardHeader}>
                 <motion.div
                   style={styles.icon(exp.color)}
                   whileHover={{ rotate: 360, scale: 1.1 }}
@@ -275,7 +281,6 @@ const ExperiencePage = () => {
                 >
                   <FiBriefcase />
                 </motion.div>
-
                 <div style={styles.content}>
                   <h2 style={styles.jobTitle}>{exp.title}</h2>
                   <h3 style={styles.company}>{exp.company}</h3>
@@ -341,10 +346,30 @@ const ExperiencePage = () => {
       </motion.div>
 
       <style>{`
-        @media (max-width: 768px) {
-          .timeline { padding-left: 0 !important; }
-          .timeline-card { margin-left: 0 !important; }
-          .timeline-dot { left: -1rem !important; }
+        @media (min-width: 768px) {
+          .timeline { 
+            padding-left: 2rem !important; 
+          }
+          .timeline-line {
+            display: block !important;
+          }
+          .timeline-dot {
+            display: flex !important;
+          }
+          .timeline-card { 
+            margin-left: 2rem !important; 
+          }
+          .card-header {
+            gap: 1.5rem !important;
+          }
+          .icon {
+            width: 70px !important;
+            height: 70px !important;
+            font-size: 2rem !important;
+          }
+          .experience-card {
+            padding: 2.5rem !important;
+          }
         }
       `}</style>
     </div>

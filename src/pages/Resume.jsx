@@ -22,12 +22,10 @@ const Resume = () => {
       const newTheme = document.documentElement.getAttribute('data-theme');
       setIsDark(newTheme === 'dark');
     });
-
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme']
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -41,10 +39,8 @@ const Resume = () => {
         window.location.reload();
       }
     };
-
     window.addEventListener('resize', handleOrientationChange);
     window.addEventListener('orientationchange', handleOrientationChange);
-
     return () => {
       window.removeEventListener('resize', handleOrientationChange);
       window.removeEventListener('orientationchange', handleOrientationChange);
@@ -64,7 +60,7 @@ const Resume = () => {
     container: {
       maxWidth: '1200px',
       margin: '0 auto',
-      padding: '2rem'
+      padding: '2rem 1rem'
     },
     header: {
       display: 'flex',
@@ -72,10 +68,10 @@ const Resume = () => {
       alignItems: 'center',
       marginBottom: '2rem',
       flexWrap: 'wrap',
-      gap: '1.5rem'
+      gap: '1rem'
     },
     title: {
-      fontSize: '2.5rem',
+      fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
       fontWeight: 700,
       color: isDark ? '#f1f5f9' : '#1a1a1a',
       margin: 0
@@ -88,13 +84,13 @@ const Resume = () => {
     },
     actions: {
       display: 'flex',
-      gap: '1rem',
+      gap: '0.75rem',
       flexWrap: 'wrap'
     },
     button: (isPrimary) => ({
-      padding: '0.75rem 1.5rem',
+      padding: '0.75rem 1.25rem',
       borderRadius: '12px',
-      fontSize: '1rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 1rem)',
       fontWeight: 600,
       cursor: 'pointer',
       display: 'flex',
@@ -106,18 +102,19 @@ const Resume = () => {
         ? 'linear-gradient(135deg, #667eea, #764ba2)' 
         : isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)',
       color: isPrimary ? '#ffffff' : '#667eea',
-      border: isPrimary ? 'none' : '2px solid #667eea'
+      border: isPrimary ? 'none' : '2px solid #667eea',
+      whiteSpace: 'nowrap'
     }),
     viewer: {
       position: 'relative',
       background: isDark ? '#1e293b' : '#ffffff',
       borderRadius: '16px',
-      padding: '1.5rem',
+      padding: '1rem',
       boxShadow: isDark 
         ? '0 20px 60px rgba(0, 0, 0, 0.3)' 
         : '0 20px 60px rgba(0, 0, 0, 0.08)',
       marginBottom: '2rem',
-      minHeight: '600px',
+      minHeight: '500px',
       overflow: 'hidden'
     },
     loading: {
@@ -129,8 +126,8 @@ const Resume = () => {
       zIndex: 10
     },
     spinner: {
-      width: '50px',
-      height: '50px',
+      width: '40px',
+      height: '40px',
       border: '4px solid rgba(102, 126, 234, 0.2)',
       borderTopColor: '#667eea',
       borderRadius: '50%',
@@ -139,7 +136,7 @@ const Resume = () => {
     },
     loadingText: {
       color: isDark ? '#cbd5e1' : '#6b7280',
-      fontSize: '1rem',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
       fontWeight: 600
     },
     pdfContainer: {
@@ -149,40 +146,39 @@ const Resume = () => {
     },
     contact: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
       gap: '1rem',
-      padding: '2rem',
-      background: isDark ? '#1e293b' : '#ffffff',
-      borderRadius: '16px',
-      boxShadow: isDark 
-        ? '0 10px 30px rgba(0, 0, 0, 0.3)' 
-        : '0 10px 30px rgba(0, 0, 0, 0.08)'
+      padding: '0'
     },
     contactItem: {
       display: 'flex',
       alignItems: 'center',
       gap: '1rem',
-      padding: '1rem',
-      background: isDark ? 'rgba(102, 126, 234, 0.05)' : 'rgba(102, 126, 234, 0.05)',
+      padding: '1.25rem',
+      background:isDark ? '#1e293b' : '#ffffff',
       borderRadius: '12px',
       textDecoration: 'none',
       transition: 'all 0.3s ease',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      boxShadow: isDark 
+        ? '0 10px 30px rgba(0, 0, 0, 0.3)' 
+        : '0 10px 30px rgba(0, 0, 0, 0.08)',
+      border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
     },
     contactIcon: {
-      width: '45px',
-      height: '45px',
+      width: '40px',
+      height: '40px',
       background: 'linear-gradient(135deg, #667eea, #764ba2)',
       borderRadius: '10px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       color: 'white',
-      fontSize: '1.2rem',
+      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
       flexShrink: 0
     },
     contactText: {
-      fontSize: '0.95rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
       fontWeight: 600,
       color: isDark ? '#f1f5f9' : '#1a1a1a',
       wordBreak: 'break-word'
@@ -269,8 +265,7 @@ const Resume = () => {
             style={styles.contactItem}
             whileHover={{ 
               y: -5, 
-              background: isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.1)',
-              boxShadow: '0 8px 20px rgba(102, 126, 234, 0.2)'
+              boxShadow: isDark ? '0 15px 40px rgba(0, 0, 0, 0.4)' : '0 15px 40px rgba(0, 0, 0, 0.12)'
             }}
             whileTap={{ scale: 0.98 }}
             initial={{ opacity: 0, x: -20 }}
@@ -286,10 +281,6 @@ const Resume = () => {
       <style>{`
         @keyframes spin {
           to { transform: rotate(360deg); }
-        }
-        @media (max-width: 768px) {
-          .resume-header { flex-direction: column; align-items: flex-start; }
-          .resume-actions { width: 100%; }
         }
       `}</style>
     </div>

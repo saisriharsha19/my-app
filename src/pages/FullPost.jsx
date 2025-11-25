@@ -23,12 +23,10 @@ const FullPost = () => {
       const newTheme = document.documentElement.getAttribute('data-theme');
       setIsDark(newTheme === 'dark');
     });
-
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme']
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -45,7 +43,6 @@ const FullPost = () => {
         ticking = true;
       }
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -70,7 +67,6 @@ const FullPost = () => {
         setIsLoading(false);
       }
     };
-
     if (postId) {
       fetchPost();
     }
@@ -109,28 +105,28 @@ const FullPost = () => {
     container: {
       maxWidth: '900px',
       margin: '0 auto',
-      padding: '4rem 2rem'
+      padding: '2rem 1rem'
     },
     backButton: {
       display: 'inline-flex',
       alignItems: 'center',
       gap: '0.5rem',
-      padding: '0.75rem 1.5rem',
+      padding: '0.75rem 1.25rem',
       background: 'transparent',
       color: '#667eea',
       border: '2px solid #667eea',
       borderRadius: '12px',
-      fontSize: '1rem',
+      fontSize: 'clamp(0.85rem, 2vw, 1rem)',
       fontWeight: 600,
       cursor: 'pointer',
       marginBottom: '2rem',
       transition: 'all 0.3s ease'
     },
     header: {
-      marginBottom: '3rem'
+      marginBottom: '2rem'
     },
     title: {
-      fontSize: '3rem',
+      fontSize: 'clamp(1.75rem, 5vw, 3rem)',
       fontWeight: 800,
       lineHeight: 1.3,
       margin: '1rem 0',
@@ -141,10 +137,10 @@ const FullPost = () => {
     },
     meta: {
       display: 'flex',
-      gap: '2rem',
+      gap: '1rem',
       flexWrap: 'wrap',
       marginTop: '1.5rem',
-      padding: '1.5rem',
+      padding: '1.25rem',
       background: isDark ? '#1e293b' : '#ffffff',
       borderRadius: '12px',
       boxShadow: isDark 
@@ -157,17 +153,18 @@ const FullPost = () => {
       alignItems: 'center',
       gap: '0.5rem',
       color: isDark ? '#94a3b8' : '#6b7280',
-      fontSize: '0.95rem'
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)'
     },
     metaIcon: {
-      color: '#667eea'
+      color: '#667eea',
+      flexShrink: 0
     },
     content: {
-      margin: '3rem 0'
+      margin: '2rem 0'
     },
     contentWrapper: {
       lineHeight: 1.8,
-      fontSize: '1.1rem',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
       color: isDark ? '#cbd5e1' : '#374151'
     },
     actions: {
@@ -179,9 +176,9 @@ const FullPost = () => {
       flexWrap: 'wrap'
     },
     actionButton: (isActive) => ({
-      padding: '0.75rem 1.5rem',
+      padding: '0.75rem 1.25rem',
       borderRadius: '12px',
-      fontSize: '0.95rem',
+      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
       fontWeight: 600,
       cursor: 'pointer',
       display: 'flex',
@@ -192,19 +189,20 @@ const FullPost = () => {
         ? 'linear-gradient(135deg, #667eea, #764ba2)' 
         : isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)',
       color: isActive ? '#ffffff' : '#667eea',
-      border: isActive ? 'none' : `2px solid ${isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)'}`
+      border: isActive ? 'none' : `2px solid ${isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)'}`,
+      whiteSpace: 'nowrap'
     }),
     footer: {
-      marginTop: '4rem',
+      marginTop: '3rem',
       paddingTop: '2rem',
-      borderTop: `2px solid ${isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)'}`,
+            borderTop: `2px solid ${isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)'}`,
       textAlign: 'center'
     },
     footerButton: {
       display: 'inline-flex',
       alignItems: 'center',
       gap: '0.5rem',
-      padding: '1rem 2rem',
+      padding: '0.875rem 1.75rem',
       background: 'linear-gradient(135deg, #667eea, #764ba2)',
       color: 'white',
       textDecoration: 'none',
@@ -213,7 +211,7 @@ const FullPost = () => {
       fontWeight: 600,
       cursor: 'pointer',
       transition: 'all 0.3s ease',
-      fontSize: '1rem'
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)'
     },
     skeleton: {
       background: isDark 
@@ -230,7 +228,8 @@ const FullPost = () => {
       alignItems: 'center',
       justifyContent: 'center',
       gap: '2rem',
-      textAlign: 'center'
+      textAlign: 'center',
+      padding: '2rem'
     }
   };
 
@@ -243,16 +242,16 @@ const FullPost = () => {
           animate={{ opacity: 1, scale: 1 }}
         >
           <motion.div
-            style={{ fontSize: '4rem' }}
+            style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}
             animate={{ y: [0, -10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
           >
             😕
           </motion.div>
-          <h2 style={{ fontSize: '2rem', fontWeight: 700, color: isDark ? '#f1f5f9' : '#1a1a1a' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 700, color: isDark ? '#f1f5f9' : '#1a1a1a' }}>
             Oops!
           </h2>
-          <p style={{ fontSize: '1.1rem', color: isDark ? '#94a3b8' : '#6b7280' }}>
+          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.1rem)', color: isDark ? '#94a3b8' : '#6b7280' }}>
             {error}
           </p>
           <motion.button
@@ -275,10 +274,10 @@ const FullPost = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <div style={{...styles.skeleton, height: '60px', width: '80%', marginBottom: '2rem'}} />
+          <div style={{...styles.skeleton, height: '50px', width: '80%', marginBottom: '2rem'}} />
           <div style={{...styles.skeleton, height: '20px', width: '40%', marginBottom: '3rem'}} />
           {[...Array(8)].map((_, i) => (
-            <div key={i} style={{...styles.skeleton, height: '20px', width: `${90 - i * 5}%`, marginBottom: '1rem'}} />
+            <div key={i} style={{...styles.skeleton, height: '18px', width: `${90 - i * 5}%`, marginBottom: '1rem'}} />
           ))}
         </motion.div>
       </div>
@@ -293,7 +292,7 @@ const FullPost = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <p style={{ fontSize: '1.1rem', color: isDark ? '#94a3b8' : '#6b7280' }}>
+          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.1rem)', color: isDark ? '#94a3b8' : '#6b7280' }}>
             Post not found
           </p>
           <motion.button
@@ -380,7 +379,7 @@ const FullPost = () => {
             components={{
               h1: ({ children }) => (
                 <h1 style={{ 
-                  fontSize: '2rem', 
+                  fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
                   fontWeight: 700, 
                   margin: '2rem 0 1rem',
                   color: isDark ? '#f1f5f9' : '#1a1a1a'
@@ -390,7 +389,7 @@ const FullPost = () => {
               ),
               h2: ({ children }) => (
                 <h2 style={{ 
-                  fontSize: '1.5rem', 
+                  fontSize: 'clamp(1.25rem, 3vw, 1.5rem)', 
                   fontWeight: 700, 
                   margin: '1.5rem 0 1rem',
                   color: isDark ? '#f1f5f9' : '#1a1a1a'
