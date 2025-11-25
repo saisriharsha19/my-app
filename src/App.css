@@ -606,3 +606,15 @@ body.no-scroll {
 /* ============================================
    END OF GLOBAL CSS
    ============================================ */
+
+   /* Add to src/App.css */
+
+/* Prevent navbar from stretching children */
+nav {
+  align-items: center;
+}
+
+nav button,
+nav a {
+  align-self: center;
+}
