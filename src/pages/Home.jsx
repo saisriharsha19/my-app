@@ -10,7 +10,7 @@ const Home = () => {
   const [isTyping, setIsTyping] = useState(true);
   const [index, setIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [isDark, setIsDark] = useState(false);
 
   const typewriterTexts = useMemo(() => [
