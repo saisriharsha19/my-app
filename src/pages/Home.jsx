@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FiCode, FiCpu, FiZap, FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import profileImage from '../images/IMG_6153.jpeg';
+import profileImage from '../images/IMG_6153.webp';
 
 const Home = () => {
   const [text, setText] = useState("");
