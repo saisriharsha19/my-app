@@ -1,5 +1,5 @@
 // src/pages/Home.jsx - Performance Optimized Version
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FiCode, FiCpu, FiZap, FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
