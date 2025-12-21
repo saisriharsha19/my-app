@@ -156,14 +156,7 @@ const Blog = () => {
       transform: isHovered ? 'translateY(-8px)' : 'translateY(0)',
       border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
     }),
-    cardTopBar: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: '4px',
-      background: 'linear-gradient(90deg, #667eea, #764ba2)'
-    },
+    // REMOVED cardTopBar style from here
     cardGradient: (isHovered) => ({
       position: 'absolute',
       top: 0,
@@ -402,7 +395,7 @@ const Blog = () => {
                   onHoverStart={() => setHoveredCard(post.id)}
                   onHoverEnd={() => setHoveredCard(null)}
                 >
-                  <div style={styles.cardTopBar} />
+                  {/* REMOVED the div that was using styles.cardTopBar here */}
                   <div style={styles.cardGradient(hoveredCard === post.id)} />
                   
                   <div style={styles.meta}>
