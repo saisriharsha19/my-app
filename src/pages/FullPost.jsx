@@ -11,7 +11,6 @@ const FullPost = () => {
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [readingProgress, setReadingProgress] = useState(0);
   const [liked, setLiked] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
@@ -28,23 +27,6 @@ const FullPost = () => {
       attributeFilter: ['data-theme']
     });
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-          const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
-          setReadingProgress(Math.min(Math.max(progress, 0), 100));
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -91,17 +73,6 @@ const FullPost = () => {
   };
 
   const styles = {
-    progressBar: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      height: '3px',
-      width: `${readingProgress}%`,
-      background: 'linear-gradient(90deg, #667eea, #764ba2)',
-      transition: 'width 0.1s ease-out',
-      zIndex: 9999,
-      pointerEvents: 'none'
-    },
     container: {
       maxWidth: '900px',
       margin: '0 auto',
@@ -314,8 +285,6 @@ const FullPost = () => {
       animate={{ opacity: 1 }}
       style={styles.container}
     >
-      <div style={styles.progressBar} />
-
       <motion.button
         style={styles.backButton}
         onClick={handleGoBack}

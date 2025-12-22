@@ -1,6 +1,6 @@
 // src/pages/Home.jsx
-import React, { useEffect, useState, memo } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, memo, useMemo, useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { FiCode, FiCpu, FiZap, FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import profileImage from '../images/IMG_6153.webp';
@@ -43,17 +43,17 @@ const PARTICLES = Array.from({ length: 8 }, (_, i) => ({
 }));
 
 const STYLES = `
-  /* Performance optimized with CSS classes */
+  /* Performance optimized with CSS classes + GPU acceleration */
   .home-container { min-height: 100vh; padding: 2rem 1rem; position: relative; overflow: hidden; }
   .home-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
-  .animated-background { position: absolute; inset: 0; will-change: background; }
-  .grid-pattern { position: absolute; inset: 0; background-size: 60px 60px; opacity: 0.4; will-change: background-position; }
+  .animated-background { position: absolute; inset: 0; will-change: background; transform: translateZ(0); backface-visibility: hidden; }
+  .grid-pattern { position: absolute; inset: 0; background-size: 60px 60px; opacity: 0.4; will-change: background-position; transform: translateZ(0); backface-visibility: hidden; }
   .grid-pattern.dark { background-image: linear-gradient(rgba(102, 126, 234, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.05) 1px, transparent 1px); }
   .grid-pattern.light { background-image: linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px); }
-  .particle { position: absolute; border-radius: 50%; will-change: transform, opacity; }
+  .particle { position: absolute; border-radius: 50%; will-change: transform, opacity; transform: translateZ(0); backface-visibility: hidden; }
   .particle.dark { background: rgba(102, 126, 234, 0.6); box-shadow: 0 0 15px rgba(102, 126, 234, 0.8); }
   .particle.light { background: rgba(102, 126, 234, 0.4); box-shadow: 0 0 15px rgba(102, 126, 234, 0.8); }
-  .shape { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25; will-change: transform; }
+  .shape { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
   .shape-1 { width: clamp(250px, 45vw, 500px); height: clamp(250px, 45vw, 500px); background: linear-gradient(135deg, #667eea, #764ba2); top: 5%; left: 5%; }
   .shape-2 { width: clamp(200px, 35vw, 400px); height: clamp(200px, 35vw, 400px); background: linear-gradient(135deg, #f093fb, #f5576c); bottom: 10%; right: 10%; }
   .home-content-wrapper { position: relative; z-index: 10; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; min-height: 80vh; }
@@ -68,26 +68,26 @@ const STYLES = `
   .home-typewriter.light { color: #6b7280; }
   .cursor { display: inline-block; margin-left: 2px; }
   .skills-badges { display: flex; gap: 1rem; flex-wrap: wrap; margin: 2rem 0; justify-content: center; }
-  .skill-badge { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border-radius: 50px; font-weight: 600; font-size: clamp(0.8rem, 1.5vw, 0.9rem); border: 2px solid; transition: all 0.3s ease; will-change: transform; }
+  .skill-badge { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border-radius: 50px; font-weight: 600; font-size: clamp(0.8rem, 1.5vw, 0.9rem); border: 2px solid; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
   .skill-badge.dark { background: rgba(102, 126, 234, 0.1); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); color: #f1f5f9; }
   .skill-badge.light { background: #ffffff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); color: #1a1a1a; }
   .skill-icon { font-size: clamp(1rem, 2vw, 1.2rem); flex-shrink: 0; }
   .cta-buttons { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap; }
-  .btn-primary, .btn-secondary { padding: 0.875rem 1.75rem; border-radius: 12px; font-weight: 600; font-size: clamp(0.9rem, 2vw, 1rem); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; text-decoration: none; white-space: nowrap; will-change: transform; }
+  .btn-primary, .btn-secondary { padding: 0.875rem 1.75rem; border-radius: 12px; font-weight: 600; font-size: clamp(0.9rem, 2vw, 1rem); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; white-space: nowrap; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
   .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: #ffffff; border: none; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
   .btn-secondary { background: transparent; color: #667eea; border: 2px solid #667eea; }
   .social-links { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; }
-  .social-link { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #667eea; font-size: 1.3rem; text-decoration: none; transition: all 0.3s ease; border: 2px solid; will-change: transform; }
+  .social-link { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #667eea; font-size: 1.3rem; text-decoration: none; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
   .social-link.dark { background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.2); }
   .social-link.light { background: rgba(102, 126, 234, 0.05); border-color: rgba(102, 126, 234, 0.15); }
   .image-container { position: relative; display: flex; align-items: center; justify-content: center; order: -1; padding: 2rem; }
-  .image-wrapper { position: relative; width: 100%; max-width: min(450px, 85vw); aspect-ratio: 1 / 1; will-change: transform; }
-  .blob-background { position: absolute; inset: -30px; background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); filter: blur(40px); opacity: 0.3; z-index: 1; border-radius: 50%; will-change: transform; }
+  .image-wrapper { position: relative; width: 100%; max-width: min(450px, 85vw); aspect-ratio: 1 / 1; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
+  .blob-background { position: absolute; inset: -30px; background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); filter: blur(40px); opacity: 0.3; z-index: 1; border-radius: 50%; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
   .floating-rings { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-  .floating-ring { position: absolute; border-radius: 50%; border: 2px solid rgba(102, 126, 234, 0.15); will-change: transform; }
+  .floating-ring { position: absolute; border-radius: 50%; border: 2px solid rgba(102, 126, 234, 0.15); will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
   .ring-1 { width: 115%; height: 115%; top: -7.5%; left: -7.5%; }
   .ring-2 { width: 130%; height: 130%; top: -15%; left: -15%; }
-  .image-frame { position: relative; width: 100%; height: 100%; overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); z-index: 2; will-change: border-radius; }
+  .image-frame { position: relative; width: 100%; height: 100%; overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); z-index: 2; will-change: border-radius; transform: translateZ(0); backface-visibility: hidden; }
   .image-frame.dark { background: #1e293b; border: 3px solid rgba(102, 126, 234, 0.3); }
   .image-frame.light { background: #ffffff; border: 3px solid rgba(102, 126, 234, 0.2); }
   .profile-image { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -111,48 +111,69 @@ const STYLES = `
   }
 `;
 
+// --- Optimized Animation Variants (Reusable) ---
+const fadeInUp = {
+  initial: { opacity: 0, y: 50 },
+  animate: { opacity: 1, y: 0 }
+};
+
+const fadeIn = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 }
+};
+
 // --- Sub-components for Rendering Optimization ---
 
-// 1. Isolated Typewriter Component
-// Logic moved here to prevent the main Home component (and particles) from re-rendering every 100ms
+// 1. Isolated Typewriter Component with RAF optimization
 const Typewriter = memo(({ isDark }) => {
   const [text, setText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const [index, setIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
+  const rafRef = useRef(null);
+  const lastUpdateRef = useRef(0);
 
   useEffect(() => {
-    let timer;
     const currentFullText = TYPEWRITER_TEXTS[index];
-
-    if (isTyping) {
-      if (charIndex < currentFullText.length) {
-        timer = setTimeout(() => {
-          setText(prev => prev + currentFullText.charAt(charIndex));
-          setCharIndex(prev => prev + 1);
-        }, 100);
-      } else {
-        timer = setTimeout(() => setIsTyping(false), 1500);
+    const typingSpeed = isTyping ? 100 : 50;
+    
+    const animate = (timestamp) => {
+      if (timestamp - lastUpdateRef.current >= typingSpeed) {
+        lastUpdateRef.current = timestamp;
+        
+        if (isTyping) {
+          if (charIndex < currentFullText.length) {
+            setText(prev => prev + currentFullText.charAt(charIndex));
+            setCharIndex(prev => prev + 1);
+          } else {
+            setTimeout(() => setIsTyping(false), 1500);
+            return;
+          }
+        } else {
+          if (charIndex > 0) {
+            setText(prev => prev.slice(0, -1));
+            setCharIndex(prev => prev - 1);
+          } else {
+            setIsTyping(true);
+            setIndex(prev => (prev + 1) % TYPEWRITER_TEXTS.length);
+            return;
+          }
+        }
       }
-    } else {
-      if (charIndex > 0) {
-        timer = setTimeout(() => {
-          setText(prev => prev.slice(0, -1));
-          setCharIndex(prev => prev - 1);
-        }, 50);
-      } else {
-        setIsTyping(true);
-        setIndex(prev => (prev + 1) % TYPEWRITER_TEXTS.length);
-      }
-    }
-    return () => clearTimeout(timer);
+      
+      rafRef.current = requestAnimationFrame(animate);
+    };
+    
+    rafRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, [charIndex, isTyping, index]);
 
   return (
     <motion.p
       className={`home-typewriter ${isDark ? 'dark' : 'light'}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      {...fadeIn}
       transition={{ delay: 0.5 }}
     >
       {text}
@@ -166,110 +187,238 @@ const Typewriter = memo(({ isDark }) => {
   );
 });
 
-// 2. Isolated Background Component
-// Wrapped in memo so it doesn't re-render while typing occurs
-const BackgroundElements = memo(({ isDark }) => (
-  <div className="home-background">
-    <motion.div 
-      className="animated-background"
-      animate={{
-        background: isDark 
-          ? ['radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%)', 'radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.15) 0%, transparent 50%)', 'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%)']
-          : ['radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%)', 'radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.08) 0%, transparent 50%)', 'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%)']
-      }}
-      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-    />
-    
-    <motion.div 
-      className={`grid-pattern ${isDark ? 'dark' : 'light'}`}
-      animate={{ backgroundPosition: ['0px 0px', '60px 60px'] }}
-      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-    />
+Typewriter.displayName = 'Typewriter';
 
-    {PARTICLES.map((particle) => (
-      <motion.div
-        key={particle.id}
-        className={`particle ${isDark ? 'dark' : 'light'}`}
-        style={{ left: `${particle.x}%`, top: `${particle.y}%`, width: `${particle.size}px`, height: `${particle.size}px` }}
-        animate={{ y: ['0vh', '-100vh'], x: [0, Math.random() * 50 - 25], opacity: [0, 0.8, 0], scale: [0.5, 1, 0.5] }}
-        transition={{ duration: particle.duration, repeat: Infinity, delay: particle.delay, ease: "linear" }}
+// 2. Isolated Background Component with memoized animations
+const BackgroundElements = memo(({ isDark, prefersReducedMotion }) => {
+  const backgroundAnimationDark = useMemo(() => [
+    'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%)',
+    'radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.15) 0%, transparent 50%)',
+    'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%)'
+  ], []);
+
+  const backgroundAnimationLight = useMemo(() => [
+    'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%)',
+    'radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.08) 0%, transparent 50%)',
+    'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%)'
+  ], []);
+
+  if (prefersReducedMotion) {
+    return (
+      <div className="home-background">
+        <div className="animated-background" style={{ background: isDark ? backgroundAnimationDark[0] : backgroundAnimationLight[0] }} />
+        <div className={`grid-pattern ${isDark ? 'dark' : 'light'}`} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="home-background">
+      <motion.div 
+        className="animated-background"
+        animate={{ background: isDark ? backgroundAnimationDark : backgroundAnimationLight }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
-    ))}
+      
+      <motion.div 
+        className={`grid-pattern ${isDark ? 'dark' : 'light'}`}
+        animate={{ backgroundPosition: ['0px 0px', '60px 60px'] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      />
 
-    <motion.div className="shape shape-1"
-      animate={{ x: [0, 50, 0], y: [0, -30, 0], scale: [1, 1.2, 1] }}
-      transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-    />
-    <motion.div className="shape shape-2"
-      animate={{ x: [0, -30, 0], y: [0, 40, 0], scale: [1, 0.9, 1] }}
-      transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </div>
-));
+      {PARTICLES.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className={`particle ${isDark ? 'dark' : 'light'}`}
+          style={{ left: `${particle.x}%`, top: `${particle.y}%`, width: `${particle.size}px`, height: `${particle.size}px` }}
+          animate={{ y: ['0vh', '-100vh'], x: [0, Math.random() * 50 - 25], opacity: [0, 0.8, 0], scale: [0.5, 1, 0.5] }}
+          transition={{ duration: particle.duration, repeat: Infinity, delay: particle.delay, ease: "linear" }}
+        />
+      ))}
+
+      <motion.div className="shape shape-1"
+        animate={{ x: [0, 50, 0], y: [0, -30, 0], scale: [1, 1.2, 1] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div className="shape shape-2"
+        animate={{ x: [0, -30, 0], y: [0, 40, 0], scale: [1, 0.9, 1] }}
+        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </div>
+  );
+});
+
+BackgroundElements.displayName = 'BackgroundElements';
 
 // 3. Isolated Image Component
-// Isolate complex frame animations
-const ProfileImage = memo(({ isDark }) => (
-  <motion.div
-    className="image-container"
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.8, delay: 0.2 }}
-  >
-    <motion.div
-      className="image-wrapper"
-      animate={{ y: [0, -20, 0] }}
-      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-    >
-      <motion.div 
-        className="blob-background"
-        animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <div className="floating-rings">
-        <motion.div className="floating-ring ring-1"
-          animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
-          transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
-        />
-        <motion.div className="floating-ring ring-2"
-          animate={{ rotate: [360, 0], scale: [1, 1.05, 1] }}
-          transition={{ rotate: { duration: 30, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
-        />
+const ProfileImage = memo(({ isDark, prefersReducedMotion }) => {
+  if (prefersReducedMotion) {
+    return (
+      <div className="image-container" style={{ opacity: 1, transform: 'scale(1)' }}>
+        <div className="image-wrapper">
+          <div className="blob-background" />
+          <div className="floating-rings">
+            <div className="floating-ring ring-1" />
+            <div className="floating-ring ring-2" />
+          </div>
+          <div className={`image-frame ${isDark ? 'dark' : 'light'}`} style={{ borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%' }}>
+            <img className="profile-image" src={profileImage} alt="Sai Sri Harsha" loading="eager" width="450" height="450" />
+          </div>
+        </div>
       </div>
-      <motion.div 
-        className={`image-frame ${isDark ? 'dark' : 'light'}`}
-        animate={{ borderRadius: ['30% 70% 70% 30% / 30% 30% 70% 70%', '60% 40% 30% 70% / 60% 70% 30% 40%', '40% 60% 60% 40% / 50% 40% 60% 50%', '30% 70% 70% 30% / 30% 30% 70% 70%'] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+    );
+  }
+
+  return (
+    <motion.div
+      className="image-container"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8, delay: 0.2 }}
+    >
+      <motion.div
+        className="image-wrapper"
+        animate={{ y: [0, -20, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       >
-        <img className="profile-image" src={profileImage} alt="Sai Sri Harsha" loading="eager" width="450" height="450" />
+        <motion.div 
+          className="blob-background"
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="floating-rings">
+          <motion.div className="floating-ring ring-1"
+            animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
+            transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
+          />
+          <motion.div className="floating-ring ring-2"
+            animate={{ rotate: [360, 0], scale: [1, 1.05, 1] }}
+            transition={{ rotate: { duration: 30, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
+          />
+        </div>
+        <motion.div 
+          className={`image-frame ${isDark ? 'dark' : 'light'}`}
+          animate={{ borderRadius: ['30% 70% 70% 30% / 30% 30% 70% 70%', '60% 40% 30% 70% / 60% 70% 30% 40%', '40% 60% 60% 40% / 50% 40% 60% 50%', '30% 70% 70% 30% / 30% 30% 70% 70%'] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <img className="profile-image" src={profileImage} alt="Sai Sri Harsha" loading="eager" width="450" height="450" />
+        </motion.div>
       </motion.div>
     </motion.div>
-  </motion.div>
-));
+  );
+});
+
+ProfileImage.displayName = 'ProfileImage';
+
+// 4. Memoized Skill Badges
+const SkillBadges = memo(({ isDark }) => {
+  const badges = useMemo(() => SKILLS.map((skill, i) => (
+    <motion.div
+      key={i}
+      className={`skill-badge ${isDark ? 'dark' : 'light'}`}
+      style={{ borderColor: `${skill.color}15` }}
+      whileHover={{ scale: 1.1, y: -5, boxShadow: `0 8px 25px ${skill.color}40` }}
+    >
+      <span className="skill-icon" style={{ color: skill.color }}>{skill.icon}</span>
+      <span>{skill.text}</span>
+    </motion.div>
+  )), [isDark]);
+
+  return (
+    <motion.div className="skills-badges" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
+      {badges}
+    </motion.div>
+  );
+});
+
+SkillBadges.displayName = 'SkillBadges';
+
+// 5. Memoized Social Links
+const SocialLinks = memo(({ isDark }) => {
+  const links = useMemo(() => SOCIAL_LINKS.map((link, i) => (
+    <motion.a
+      key={i} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.label}
+      className={`social-link ${isDark ? 'dark' : 'light'}`}
+      whileHover={{ scale: 1.1, y: -5, background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#ffffff', borderColor: 'transparent' }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {link.icon}
+    </motion.a>
+  )), [isDark]);
+
+  return (
+    <motion.div className="social-links" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}>
+      {links}
+    </motion.div>
+  );
+});
+
+SocialLinks.displayName = 'SocialLinks';
+
+// 6. Memoized Bio Section
+const BioSection = memo(({ isDark }) => {
+  const paragraphs = useMemo(() => BIO_PARAGRAPHS.map((paragraph, index) => (
+    <motion.p
+      key={index}
+      className={`bio-paragraph ${isDark ? 'dark' : 'light'}`}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ delay: index * 0.1 }}
+    >
+      {paragraph}
+    </motion.p>
+  )), [isDark]);
+
+  return (
+    <motion.div className="bio-section" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}>
+      <motion.div className="divider" initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.8 }} />
+      <div className="bio-content">
+        <motion.h3 className={`bio-title ${isDark ? 'dark' : 'light'}`} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
+          About <span className="gradient-text">Me</span>
+        </motion.h3>
+        {paragraphs}
+      </div>
+    </motion.div>
+  );
+});
+
+BioSection.displayName = 'BioSection';
 
 const Home = () => {
   const [isDark, setIsDark] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
+  // Optimized theme observer with debouncing
   useEffect(() => {
     const checkTheme = () => setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
     checkTheme();
     
-    const observer = new MutationObserver(checkTheme);
+    let timeoutId;
+    const debouncedCheck = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkTheme, 16); // ~1 frame
+    };
+    
+    const observer = new MutationObserver(debouncedCheck);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => observer.disconnect();
+    
+    return () => {
+      clearTimeout(timeoutId);
+      observer.disconnect();
+    };
   }, []);
 
   return (
     <div className="home-container">
-      <BackgroundElements isDark={isDark} />
+      <BackgroundElements isDark={isDark} prefersReducedMotion={prefersReducedMotion} />
 
       <div className="home-content-wrapper">
-        <ProfileImage isDark={isDark} />
+        <ProfileImage isDark={isDark} prefersReducedMotion={prefersReducedMotion} />
 
         <motion.div
           className="home-content"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          {...fadeInUp}
           transition={{ duration: 0.8 }}
         >
           <motion.p className="home-greeting" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
@@ -282,19 +431,7 @@ const Home = () => {
 
           <Typewriter isDark={isDark} />
 
-          <motion.div className="skills-badges" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
-            {SKILLS.map((skill, i) => (
-              <motion.div
-                key={i}
-                className={`skill-badge ${isDark ? 'dark' : 'light'}`}
-                style={{ borderColor: `${skill.color}15` }}
-                whileHover={{ scale: 1.1, y: -5, boxShadow: `0 8px 25px ${skill.color}40` }}
-              >
-                <span className="skill-icon" style={{ color: skill.color }}>{skill.icon}</span>
-                <span>{skill.text}</span>
-              </motion.div>
-            ))}
-          </motion.div>
+          <SkillBadges isDark={isDark} />
 
           <motion.div className="cta-buttons" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
             <Link to="/portfolio">
@@ -309,41 +446,11 @@ const Home = () => {
             </Link>
           </motion.div>
 
-          <motion.div className="social-links" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}>
-            {SOCIAL_LINKS.map((link, i) => (
-              <motion.a
-                key={i} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.label}
-                className={`social-link ${isDark ? 'dark' : 'light'}`}
-                whileHover={{ scale: 1.1, y: -5, background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#ffffff', borderColor: 'transparent' }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {link.icon}
-              </motion.a>
-            ))}
-          </motion.div>
+          <SocialLinks isDark={isDark} />
         </motion.div>
       </div>
 
-      <motion.div className="bio-section" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}>
-        <motion.div className="divider" initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true }} transition={{ duration: 0.8 }} />
-        <div className="bio-content">
-          <motion.h3 className={`bio-title ${isDark ? 'dark' : 'light'}`} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            About <span className="gradient-text">Me</span>
-          </motion.h3>
-          {BIO_PARAGRAPHS.map((paragraph, index) => (
-            <motion.p
-              key={index}
-              className={`bio-paragraph ${isDark ? 'dark' : 'light'}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
-              {paragraph}
-            </motion.p>
-          ))}
-        </div>
-      </motion.div>
+      <BioSection isDark={isDark} />
       <style>{STYLES}</style>
     </div>
   );
