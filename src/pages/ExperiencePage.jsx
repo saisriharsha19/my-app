@@ -1,5 +1,4 @@
 // src/pages/ExperiencePage.jsx
-import React from "react";
 import { motion } from "framer-motion";
 import { FiBriefcase, FiHome, FiFileText, FiMapPin, FiCalendar } from "react-icons/fi";
 import { Link } from "react-router-dom";

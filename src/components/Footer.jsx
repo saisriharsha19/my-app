@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiTwitter, FiLinkedin, FiGithub, FiPhone, FiMapPin, FiArrowUpRight } from "react-icons/fi";
+import { FiTwitter, FiLinkedin, FiGithub, FiPhone, FiMapPin } from "react-icons/fi";
 import { HiOutlineChevronDoubleUp } from "react-icons/hi";
 
 const Footer = () => {

@@ -144,11 +144,6 @@ const ExpertiseCarousel = () => {
     setActiveIndex((prev) => (prev + 1) % expertiseItems.length);
   };
 
-  const prevSlide = () => {
-    setDirection(-1);
-    setActiveIndex((prev) => (prev - 1 + expertiseItems.length) % expertiseItems.length);
-  };
-
   useEffect(() => {
     const timer = setInterval(nextSlide, 5000);
     return () => clearInterval(timer);

@@ -1,7 +1,7 @@
 // src/pages/Portfolio.jsx
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiExternalLink, FiGithub, FiZap, FiCode } from 'react-icons/fi';
+import { FiExternalLink, FiGithub } from 'react-icons/fi';
 
 const Portfolio = () => {
   const [items, setItems] = useState([]);

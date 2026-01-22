@@ -44,10 +44,20 @@ const Navbar = () => {
         >
           <div
             className={`navbar-dock mx-auto transition-all duration-300 items-center justify-between flex ${isScrolled
-              ? 'glass-panel rounded-full px-6 py-3 shadow-lg'
+              ? 'px-6 py-3 rounded-full'
               : 'px-6 py-4 bg-transparent'
               }`}
-            style={{ maxWidth: isScrolled ? '1000px' : '1200px', pointerEvents: 'auto' }}
+            style={{
+              maxWidth: isScrolled ? '1000px' : '1200px',
+              pointerEvents: 'auto',
+              ...(isScrolled ? {
+                background: 'rgba(var(--bg-secondary-rgb), 0.6)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)'
+              } : {})
+            }}
           >
             <Link to="/" className="flex items-center">
               <span className="font-bold text-xl">
@@ -60,14 +70,21 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className="relative px-4 py-2 text-sm font-medium text-secondary hover:text-primary transition-colors rounded-full"
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-full ${location.pathname === link.path ? 'text-primary' : 'text-secondary hover:text-primary'
+                    }`}
                 >
-                  {link.name}
+                  <span className="relative z-10">{link.name}</span>
                   {location.pathname === link.path && (
                     <motion.div
                       layoutId="activeNav"
-                      className="nav-active-indicator"
+                      className="absolute inset-0 rounded-full -z-10"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%)',
+                        border: '1px solid rgba(99, 102, 241, 0.3)',
+                        boxShadow: '0 0 15px rgba(99, 102, 241, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(4px)'
+                      }}
                     />
                   )}
                 </Link>
