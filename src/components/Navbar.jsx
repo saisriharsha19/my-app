@@ -1,7 +1,7 @@
 // src/components/Navbar.jsx
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import ThemeToggle from './ThemeToggle';
 
@@ -9,6 +9,55 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+
+  // Blob Animation State
+  const navRefs = useRef({});
+  const [blobStyle, setBlobStyle] = useState({ left: 0, width: 0, opacity: 0 });
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Projects', path: '/portfolio' },
+    { name: 'Experience', path: '/experience' },
+    { name: 'Resume', path: '/resume' },
+    { name: 'Blog', path: '/blog' },
+    { name: 'Contact', path: '/contact' },
+  ];
+
+  // Recalculate blob position on location change or resize
+  useEffect(() => {
+    const activeLink = navRefs.current[location.pathname];
+    if (activeLink) {
+      setBlobStyle({
+        left: activeLink.offsetLeft,
+        width: activeLink.offsetWidth,
+        opacity: 1,
+      });
+    } else {
+      // If no active link found (e.g. 404), maybe hide it or default to something
+      // For now, let's keep it visible if it was visible, or hide it.
+      // But typically we want it to move to the valid link. 
+      // If current path isn't in navLinks, maybe set opacity 0?
+      // Let's assume there's always a valid link or we hide it.
+      const found = navLinks.find(l => l.path === location.pathname);
+      if (!found) setBlobStyle(prev => ({ ...prev, opacity: 0 }));
+    }
+  }, [location.pathname]);
+
+  // Handle Resize to readjust blob
+  useEffect(() => {
+    const handleResize = () => {
+      const activeLink = navRefs.current[location.pathname];
+      if (activeLink) {
+        setBlobStyle({
+          left: activeLink.offsetLeft,
+          width: activeLink.offsetWidth,
+          opacity: 1,
+        });
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -22,18 +71,10 @@ const Navbar = () => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
   }, [isOpen]);
 
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Projects', path: '/portfolio' },
-    { name: 'Experience', path: '/experience' },
-    { name: 'Resume', path: '/resume' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'Contact', path: '/contact' },
-  ];
-
   return (
     <>
-      {/* Main Navbar - Hidden when mobile menu is open */}
+
+      {/* Main Navbar */}
       {!isOpen && (
         <motion.nav
           initial={{ y: -100 }}
@@ -43,20 +84,9 @@ const Navbar = () => {
           style={{ pointerEvents: 'none' }}
         >
           <div
-            className={`navbar-dock mx-auto transition-all duration-300 items-center justify-between flex ${isScrolled
-              ? 'px-6 py-3 rounded-full'
-              : 'px-6 py-4 bg-transparent'
-              }`}
+            className={`navbar-dock ${isScrolled ? 'scrolled' : ''}`}
             style={{
-              maxWidth: isScrolled ? '1000px' : '1200px',
               pointerEvents: 'auto',
-              ...(isScrolled ? {
-                background: 'rgba(var(--bg-secondary-rgb), 0.6)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)'
-              } : {})
             }}
           >
             <Link to="/" className="flex items-center">
@@ -65,30 +95,60 @@ const Navbar = () => {
               </span>
             </Link>
 
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-full ${location.pathname === link.path ? 'text-primary' : 'text-secondary hover:text-primary'
-                    }`}
-                >
-                  <span className="relative z-10">{link.name}</span>
-                  {location.pathname === link.path && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute inset-0 rounded-full -z-10"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            {/* Nav Links with Sliding Blob - Manual Calculation */}
+            <div className="hidden md:flex items-center gap-2 relative">
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    ref={(el) => (navRefs.current[link.path] = el)}
+                    className="relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-100"
+                    style={{
+                      color: isActive ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                    }}
+                  >
+                    <span
+                      className="relative z-10 block"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%)',
-                        border: '1px solid rgba(99, 102, 241, 0.3)',
-                        boxShadow: '0 0 15px rgba(99, 102, 241, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.1)',
-                        backdropFilter: 'blur(4px)'
+                        transform: isActive ? 'scale(1.25)' : 'scale(1)',
+                        transition: 'transform 0.2s ease',
                       }}
-                    />
-                  )}
-                </Link>
-              ))}
+                    >
+                      {link.name}
+                    </span>
+                  </Link>
+                );
+              })}
+
+              {/* The Blob */}
+              <motion.div
+                className="absolute top-0 bottom-0 rounded-full pointer-events-none"
+                initial={false}
+                animate={{
+                  left: blobStyle.left,
+                  width: blobStyle.width,
+                  opacity: blobStyle.opacity,
+                }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 400,
+                  damping: 30,
+                }}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.05) 100%)',
+                  backdropFilter: 'blur(5px)',
+                  filter: 'url(#glass-warp)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  boxShadow: `
+                    0 4px 12px rgba(99, 102, 241, 0.2),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 4px rgba(0, 0, 0, 0.05)
+                  `,
+                  height: '100%',
+                }}
+              />
             </div>
 
             <div className="flex items-center gap-3">
@@ -106,7 +166,7 @@ const Navbar = () => {
         </motion.nav>
       )}
 
-      {/* Mobile Menu - Minimal Full Screen */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -122,7 +182,6 @@ const Navbar = () => {
               flexDirection: 'column'
             }}
           >
-            {/* Close Button - Top Right */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '24px' }}>
               <button
                 onClick={() => setIsOpen(false)}
@@ -144,7 +203,6 @@ const Navbar = () => {
               </button>
             </div>
 
-            {/* Links - Centered, Large Typography */}
             <nav style={{
               flex: 1,
               display: 'flex',
