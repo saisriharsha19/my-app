@@ -67,34 +67,6 @@ const Resume = () => {
           </Worker>
         </div>
       </motion.div>
-
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        {[
-          { icon: <FiMail />, text: 'Email Me', href: 'mailto:saisriharshaguddati1@gmail.com' },
-          { icon: <FiPhone />, text: 'Call Me', href: 'tel:+13526658709' },
-          { icon: <FiLinkedin />, text: 'LinkedIn', href: 'https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/' }
-        ].map((item, index) => (
-          <motion.a
-            key={index}
-            href={item.href}
-            target={item.href.startsWith('http') ? '_blank' : undefined}
-            rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            className="glass-panel p-6 rounded-2xl flex items-center gap-4 hover:-translate-y-1 transition-transform group"
-            whileHover={{ y: -5 }}
-          >
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xl shadow-lg shrink-0 group-hover:scale-110 transition-transform"
-              style={{ background: 'var(--gradient-primary)' }}>
-              {item.icon}
-            </div>
-            <span className="font-semibold group-hover:text-primary transition-colors">{item.text}</span>
-          </motion.a>
-        ))}
-      </motion.div>
     </div>
   );
 };
