@@ -1,411 +1,276 @@
 // src/pages/Contact.jsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMail, FiPhone, FiSend, FiCheck, FiMapPin, FiMessageCircle } from 'react-icons/fi';
+import { FiMail, FiSend, FiCheck, FiMapPin, FiGithub, FiLinkedin } from 'react-icons/fi';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
-  const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const theme = document.documentElement.getAttribute('data-theme');
-    setIsDark(theme === 'dark');
-    
-    const observer = new MutationObserver(() => {
-      const newTheme = document.documentElement.getAttribute('data-theme');
-      setIsDark(newTheme === 'dark');
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-    return () => observer.disconnect();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
     try {
       const response = await fetch('https://backend-482511937770.europe-west1.run.app/contact/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-      
       if (response.ok) {
         setSubmitted(true);
         setIsLoading(false);
-        setTimeout(() => {
-          navigate('/thank-you');
-        }, 2000);
+        setTimeout(() => navigate('/thank-you'), 2000);
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Error:', error);
       setIsLoading(false);
     }
   };
 
-  const styles = {
-    container: {
-      padding: '2rem 1rem',
-      maxWidth: '1200px',
-      margin: '0 auto'
-    },
-    header: {
-      textAlign: 'center',
-      marginBottom: '3rem'
-    },
-    title: {
-      fontSize: 'clamp(2rem, 5vw, 3rem)',
-      fontWeight: 800,
-      marginBottom: '1rem',
-      color: isDark ? '#f1f5f9' : '#1a1a1a'
-    },
-    gradientText: {
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text'
-    },
-    subtitle: {
-      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-      color: isDark ? '#94a3b8' : '#6b7280',
-      marginTop: '1rem'
-    },
-    content: {
-      display: 'grid',
-      gridTemplateColumns: '1fr',
-      gap: '2rem'
-    },
-    form: {
-      background: isDark ? '#1e293b' : '#ffffff',
-      padding: '2rem',
-      borderRadius: '24px',
-      boxShadow: isDark 
-        ? '0 20px 60px rgba(0, 0, 0, 0.3)' 
-        : '0 20px 60px rgba(0, 0, 0, 0.08)',
-      border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
-    },
-    formGroup: {
-      marginBottom: '1.5rem'
-    },
-    label: {
-      display: 'block',
-      marginBottom: '0.5rem',
-      fontWeight: 600,
-      color: isDark ? '#f1f5f9' : '#1a1a1a',
-      fontSize: '0.95rem'
-    },
-    input: (isFocused) => ({
-      width: '100%',
-      padding: '1rem',
-      border: `2px solid ${isFocused ? '#667eea' : (isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)')}`,
-      borderRadius: '12px',
-      background: isDark ? '#0f172a' : '#ffffff',
-      color: isDark ? '#f1f5f9' : '#1a1a1a',
-      fontSize: '1rem',
-      transition: 'all 0.3s ease',
-      outline: 'none',
-      boxShadow: isFocused ? `0 0 0 4px ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)'}` : 'none',
-      boxSizing: 'border-box'
-    }),
-    textarea: (isFocused) => ({
-      width: '100%',
-      padding: '1rem',
-      border: `2px solid ${isFocused ? '#667eea' : (isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)')}`,
-      borderRadius: '12px',
-      background: isDark ? '#0f172a' : '#ffffff',
-      color: isDark ? '#f1f5f9' : '#1a1a1a',
-      fontSize: '1rem',
-      transition: 'all 0.3s ease',
-      outline: 'none',
-      resize: 'vertical',
-      minHeight: '150px',
-      fontFamily: 'inherit',
-      boxShadow: isFocused ? `0 0 0 4px ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)'}` : 'none',
-      boxSizing: 'border-box'
-    }),
-    submitButton: {
-      width: '100%',
-      padding: '1rem 2rem',
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      color: 'white',
-      border: 'none',
-      borderRadius: '12px',
-      fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
-      fontWeight: 600,
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '0.5rem',
-      transition: 'all 0.3s ease'
-    },
-    sidebar: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1rem'
-    },
-    infoCard: {
-      background: isDark ? '#1e293b' : '#ffffff',
-      padding: '1.5rem',
-      borderRadius: '16px',
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: '1rem',
-      boxShadow: isDark 
-        ? '0 10px 30px rgba(0, 0, 0, 0.3)' 
-        : '0 10px 30px rgba(0, 0, 0, 0.08)',
-      transition: 'all 0.3s ease',
-      border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
-    },
-    infoIcon: {
-      width: '45px',
-      height: '45px',
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      borderRadius: '12px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: '1.2rem',
-      color: 'white',
-      flexShrink: 0
-    },
-    infoContent: {
-      flex: 1,
-      minWidth: 0
-    },
-    infoTitle: {
-      fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
-      fontWeight: 600,
-      marginBottom: '0.5rem',
-      color: isDark ? '#f1f5f9' : '#1a1a1a'
-    },
-    infoText: {
-      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
-      color: isDark ? '#cbd5e1' : '#6b7280',
-      wordBreak: 'break-word',
-      textDecoration: 'none'
-    },
-    successMessage: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '4rem 2rem',
-      textAlign: 'center'
-    },
-    successIcon: {
-      fontSize: 'clamp(3rem, 10vw, 5rem)',
-      color: '#10b981',
-      marginBottom: '1.5rem'
-    },
-    successTitle: {
-      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
-      fontWeight: 700,
-      color: isDark ? '#f1f5f9' : '#1a1a1a',
-      marginBottom: '1rem'
-    },
-    successText: {
-      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
-      color: isDark ? '#94a3b8' : '#6b7280'
-    }
-  };
+  const getInputStyle = (field) => ({
+    width: '100%',
+    padding: '18px 20px',
+    borderRadius: '12px',
+    background: 'var(--bg-secondary)',
+    border: focusedField === field ? '2px solid var(--accent-primary)' : '2px solid var(--bg-secondary)',
+    color: 'var(--text-primary)',
+    fontSize: '16px',
+    outline: 'none',
+    transition: 'border-color 0.2s ease',
+    boxSizing: 'border-box'
+  });
 
   return (
-    <div style={styles.container}>
-      <motion.div
-        style={styles.header}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h1 style={styles.title}>
-          Let's <span style={styles.gradientText}>Connect</span>
-        </h1>
-        <p style={styles.subtitle}>Have a project in mind? Let's chat!</p>
-      </motion.div>
-
+    <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
       <AnimatePresence mode="wait">
         {submitted ? (
           <motion.div
             key="success"
-            style={styles.successMessage}
-            initial={{ scale: 0, opacity: 0 }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              padding: '80px 24px'
+            }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
           >
-            <motion.div
-              style={styles.successIcon}
-              animate={{ 
-                scale: [1, 1.2, 1],
-                rotate: [0, 360, 360]
-              }}
-              transition={{ duration: 0.6 }}
-            >
+            <div style={{
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #10b981, #059669)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '24px',
+              color: 'white',
+              fontSize: '36px'
+            }}>
               <FiCheck />
-            </motion.div>
-            <h2 style={styles.successTitle}>Message Sent!</h2>
-            <p style={styles.successText}>Redirecting you to thank you page...</p>
+            </div>
+            <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '8px' }}>
+              Message Sent!
+            </h2>
+            <p style={{ color: 'var(--text-secondary)' }}>Redirecting...</p>
           </motion.div>
         ) : (
           <motion.div
-            key="form"
-            style={styles.content}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ maxWidth: '700px', margin: '0 auto' }}
           >
-            <motion.form
-              style={styles.form}
-              onSubmit={handleSubmit}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Name</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  onFocus={() => setFocusedField('name')}
-                  onBlur={() => setFocusedField(null)}
-                  required
-                  placeholder="Your name"
-                  style={styles.input(focusedField === 'name')}
-                />
-              </div>
+            {/* Header */}
+            <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+              <h1 style={{
+                fontSize: 'clamp(2rem, 5vw, 3rem)',
+                fontWeight: '700',
+                color: 'var(--text-primary)',
+                marginBottom: '12px',
+                letterSpacing: '-0.02em'
+              }}>
+                Get in <span className="text-gradient">Touch</span>
+              </h1>
+              <p style={{ fontSize: '17px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                Have a project in mind? Let's make something great together.
+              </p>
+            </div>
 
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Email</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  onFocus={() => setFocusedField('email')}
-                  onBlur={() => setFocusedField(null)}
-                  required
-                  placeholder="your@email.com"
-                  style={styles.input(focusedField === 'email')}
-                />
-              </div>
-
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Message</label>
-                <textarea
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  onFocus={() => setFocusedField('message')}
-                  onBlur={() => setFocusedField(null)}
-                  required
-                  placeholder="Tell me about your project..."
-                  style={styles.textarea(focusedField === 'message')}
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                disabled={isLoading}
-                style={styles.submitButton}
-                whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)' }}
-                whileTap={{ scale: 0.98 }}
+            {/* Quick Links */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '16px',
+              marginBottom: '40px',
+              flexWrap: 'wrap'
+            }}>
+              <a
+                href="mailto:saisriharshaguddati1@gmail.com"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 20px',
+                  borderRadius: '10px',
+                  background: 'var(--bg-secondary)',
+                  color: 'var(--text-primary)',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  transition: 'all 0.2s'
+                }}
               >
-                {isLoading ? (
-                  <>
-                    <motion.span
-                      animate={{ rotate: 360 }}
-                      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                    >
-                      ⟳
-                    </motion.span>
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <FiSend /> Send Message
-                  </>
-                )}
-              </motion.button>
-            </motion.form>
+                <FiMail size={16} style={{ color: 'var(--accent-primary)' }} />
+                Email Me
+              </a>
+              <a
+                href="https://github.com/saisriharsha19"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 20px',
+                  borderRadius: '10px',
+                  background: 'var(--bg-secondary)',
+                  color: 'var(--text-primary)',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
+                <FiGithub size={16} style={{ color: 'var(--accent-primary)' }} />
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 20px',
+                  borderRadius: '10px',
+                  background: 'var(--bg-secondary)',
+                  color: 'var(--text-primary)',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
+                <FiLinkedin size={16} style={{ color: 'var(--accent-primary)' }} />
+                LinkedIn
+              </a>
+            </div>
 
-            <motion.div
-              style={styles.sidebar}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              {[
-                { icon: <FiMail />, title: 'Email', text: 'saisriharshaguddati1@gmail.com', href: 'mailto:saisriharshaguddati1@gmail.com' },
-                { icon: <FiPhone />, title: 'Phone', text: '+1 352 665 8709', href: 'tel:+13526658709' },
-                { icon: <FiMapPin />, title: 'Location', text: 'Gainesville, FL', href: null },
-                { icon: <FiMessageCircle />, title: 'Response Time', text: 'Usually within 24 hours', href: null }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  style={styles.infoCard}
-                  whileHover={{ y: -5, boxShadow: isDark ? '0 15px 40px rgba(0, 0, 0, 0.4)' : '0 15px 40px rgba(0, 0, 0, 0.12)' }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
+            {/* Form */}
+            <div className="glass-panel" style={{ padding: '40px', borderRadius: '20px' }}>
+              <form onSubmit={handleSubmit}>
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    marginBottom: '8px',
+                    color: 'var(--text-primary)'
+                  }}>
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Your name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onFocus={() => setFocusedField('name')}
+                    onBlur={() => setFocusedField(null)}
+                    style={getInputStyle('name')}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    marginBottom: '8px',
+                    color: 'var(--text-primary)'
+                  }}>
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="you@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onFocus={() => setFocusedField('email')}
+                    onBlur={() => setFocusedField(null)}
+                    style={getInputStyle('email')}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '32px' }}>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    marginBottom: '8px',
+                    color: 'var(--text-primary)'
+                  }}>
+                    Message
+                  </label>
+                  <textarea
+                    required
+                    rows="5"
+                    placeholder="Tell me about your project..."
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    onFocus={() => setFocusedField('message')}
+                    onBlur={() => setFocusedField(null)}
+                    style={{
+                      ...getInputStyle('message'),
+                      resize: 'vertical',
+                      minHeight: '140px'
+                    }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn-primary w-full justify-center"
+                  style={{ padding: '18px', fontSize: '16px' }}
                 >
-                  <motion.div
-                    style={styles.infoIcon}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                  >
-                    {item.icon}
-                  </motion.div>
-                  <div style={styles.infoContent}>
-                    <h3 style={styles.infoTitle}>{item.title}</h3>
-                    {item.href ? (
-                      <a 
-                        href={item.href} 
-                        style={{...styles.infoText, color: '#667eea'}}
-                        onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
-                        onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
-                      >
-                        {item.text}
-                      </a>
-                    ) : (
-                      <p style={{...styles.infoText, margin: 0}}>{item.text}</p>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+                  {isLoading ? 'Sending...' : <>Send Message <FiSend size={18} /></>}
+                </button>
+              </form>
+            </div>
+
+            {/* Location footer */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              marginTop: '32px',
+              color: 'var(--text-secondary)',
+              fontSize: '14px'
+            }}>
+              <FiMapPin size={14} />
+              <span>Based in Gainesville, FL • Available worldwide</span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <style>{`
-        @media (min-width: 768px) {
-          .contact-content { 
-            grid-template-columns: 1.5fr 1fr !important; 
-            gap: 3rem !important;
-          }
-          .contact-form {
-            padding: 3rem !important;
-          }
-          .contact-sidebar {
-            gap: 1.5rem !important;
-          }
-          .info-card {
-            padding: 2rem !important;
-            gap: 1.5rem !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

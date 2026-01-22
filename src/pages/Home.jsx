@@ -1,457 +1,528 @@
 // src/pages/Home.jsx
-import React, { useEffect, useState, memo, useMemo, useRef } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { FiCode, FiCpu, FiZap, FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { FiArrowRight, FiGithub, FiLinkedin, FiMail, FiCpu, FiLayout, FiCloud, FiDatabase, FiLayers } from 'react-icons/fi';
+import { SiReact, SiPython, SiTypescript, SiAmazon, SiDocker, SiPostgresql, SiNodedotjs, SiTensorflow, SiRedis, SiNextdotjs, SiKubernetes, SiMongodb, SiFastapi, SiGraphql, SiTailwindcss, SiGit } from 'react-icons/si';
 import { Link } from 'react-router-dom';
+import MagneticButton from '../components/MagneticButton';
+import RevealingText from '../components/RevealingText';
 import profileImage from '../images/IMG_6153.webp';
 
-// --- Static Data (Moved outside to prevent re-initialization) ---
-const TYPEWRITER_TEXTS = [
-  "I'm a Software Development/AIML Engineer!!",
-  "I build creative solutions. ✨",
-  "I love coding innovative projects!!!"
-];
-
-const SKILLS = [
-  { icon: <FiCode />, text: "Full-Stack Dev", color: '#667eea' },
-  { icon: <FiCpu />, text: "AI/ML Engineering", color: '#10b981' },
-  { icon: <FiZap />, text: "Cloud Solutions", color: '#f59e0b' }
-];
-
-const SOCIAL_LINKS = [
-  { icon: <FiGithub />, url: 'https://github.com/saisriharsha19', label: 'GitHub' },
-  { icon: <FiLinkedin />, url: 'https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/', label: 'LinkedIn' },
-  { icon: <FiMail />, url: 'mailto:saisriharshaguddati1@gmail.com', label: 'Email' }
-];
-
-const BIO_PARAGRAPHS = [
-  "I'm a software engineer and AI enthusiast, currently pursuing my Master's in Computer Science at the University of Florida. My work lies at the intersection of backend systems, AI infrastructure, and real-world problem-solving—turning cutting-edge ideas into scalable, production-grade tools.",
-  "At UF Information Technology, I work as an AI Engineer Intern, developing intelligent assistants powered by LLMs, integrating NeMo Guardrails, Redis, FastAPI, and PostgreSQL. Previously, at Tata Consultancy Services, I led the development of cloud-based AI platforms using Python, Flask, and Azure.",
-  "My projects span across areas like prompt optimization systems, RAG pipelines, browser privacy extensions, web scrapers, and even sentiment-aware social platforms. I'm passionate about building with purpose—whether it's deploying secure AI workflows, visualizing real-time data, or engineering privacy-first tools using OCR, LLMs, and DOM parsing.",
-  "Outside of work, I enjoy shipping side projects, experimenting with streaming LLM APIs, and refining AI evaluation systems. I'm a strong believer in thoughtful design, clean code, and pushing the limits of what tech can do—always with a human-first mindset.",
-  "Thanks for stopping by! If you're building something meaningful—or just want to jam on ideas—I'd love to connect."
-];
-
-// Pre-calculate particles once
-const PARTICLES = Array.from({ length: 8 }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: Math.random() * 3 + 2,
-  duration: Math.random() * 8 + 12,
-  delay: Math.random() * 5
-}));
-
-const STYLES = `
-  /* Performance optimized with CSS classes + GPU acceleration */
-  .home-container { min-height: 100vh; padding: 2rem 1rem; position: relative; overflow: hidden; }
-  .home-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
-  .animated-background { position: absolute; inset: 0; will-change: background; transform: translateZ(0); backface-visibility: hidden; }
-  .grid-pattern { position: absolute; inset: 0; background-size: 60px 60px; opacity: 0.4; will-change: background-position; transform: translateZ(0); backface-visibility: hidden; }
-  .grid-pattern.dark { background-image: linear-gradient(rgba(102, 126, 234, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.05) 1px, transparent 1px); }
-  .grid-pattern.light { background-image: linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px); }
-  .particle { position: absolute; border-radius: 50%; will-change: transform, opacity; transform: translateZ(0); backface-visibility: hidden; }
-  .particle.dark { background: rgba(102, 126, 234, 0.6); box-shadow: 0 0 15px rgba(102, 126, 234, 0.8); }
-  .particle.light { background: rgba(102, 126, 234, 0.4); box-shadow: 0 0 15px rgba(102, 126, 234, 0.8); }
-  .shape { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
-  .shape-1 { width: clamp(250px, 45vw, 500px); height: clamp(250px, 45vw, 500px); background: linear-gradient(135deg, #667eea, #764ba2); top: 5%; left: 5%; }
-  .shape-2 { width: clamp(200px, 35vw, 400px); height: clamp(200px, 35vw, 400px); background: linear-gradient(135deg, #f093fb, #f5576c); bottom: 10%; right: 10%; }
-  .home-content-wrapper { position: relative; z-index: 10; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; min-height: 80vh; }
-  .home-content { padding: 1rem 0; text-align: center; }
-  .home-greeting { font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: #667eea; margin-bottom: 0.5rem; font-weight: 600; }
-  .home-name { font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; }
-  .home-name.dark { color: #f1f5f9; }
-  .home-name.light { color: #1a1a1a; }
-  .gradient-text { background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .home-typewriter { font-size: clamp(1.1rem, 3vw, 1.5rem); min-height: 2.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
-  .home-typewriter.dark { color: #cbd5e1; }
-  .home-typewriter.light { color: #6b7280; }
-  .cursor { display: inline-block; margin-left: 2px; }
-  .skills-badges { display: flex; gap: 1rem; flex-wrap: wrap; margin: 2rem 0; justify-content: center; }
-  .skill-badge { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border-radius: 50px; font-weight: 600; font-size: clamp(0.8rem, 1.5vw, 0.9rem); border: 2px solid; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
-  .skill-badge.dark { background: rgba(102, 126, 234, 0.1); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); color: #f1f5f9; }
-  .skill-badge.light { background: #ffffff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); color: #1a1a1a; }
-  .skill-icon { font-size: clamp(1rem, 2vw, 1.2rem); flex-shrink: 0; }
-  .cta-buttons { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap; }
-  .btn-primary, .btn-secondary { padding: 0.875rem 1.75rem; border-radius: 12px; font-weight: 600; font-size: clamp(0.9rem, 2vw, 1rem); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; white-space: nowrap; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
-  .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: #ffffff; border: none; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
-  .btn-secondary { background: transparent; color: #667eea; border: 2px solid #667eea; }
-  .social-links { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; }
-  .social-link { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #667eea; font-size: 1.3rem; text-decoration: none; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
-  .social-link.dark { background: rgba(102, 126, 234, 0.1); border-color: rgba(102, 126, 234, 0.2); }
-  .social-link.light { background: rgba(102, 126, 234, 0.05); border-color: rgba(102, 126, 234, 0.15); }
-  .image-container { position: relative; display: flex; align-items: center; justify-content: center; order: -1; padding: 2rem; }
-  .image-wrapper { position: relative; width: 100%; max-width: min(450px, 85vw); aspect-ratio: 1 / 1; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
-  .blob-background { position: absolute; inset: -30px; background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); filter: blur(40px); opacity: 0.3; z-index: 1; border-radius: 50%; will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
-  .floating-rings { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-  .floating-ring { position: absolute; border-radius: 50%; border: 2px solid rgba(102, 126, 234, 0.15); will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
-  .ring-1 { width: 115%; height: 115%; top: -7.5%; left: -7.5%; }
-  .ring-2 { width: 130%; height: 130%; top: -15%; left: -15%; }
-  .image-frame { position: relative; width: 100%; height: 100%; overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); z-index: 2; will-change: border-radius; transform: translateZ(0); backface-visibility: hidden; }
-  .image-frame.dark { background: #1e293b; border: 3px solid rgba(102, 126, 234, 0.3); }
-  .image-frame.light { background: #ffffff; border: 3px solid rgba(102, 126, 234, 0.2); }
-  .profile-image { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .bio-section { max-width: 900px; margin: 4rem auto 3rem; padding: 0 1rem; position: relative; z-index: 10; }
-  .divider { height: 3px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin-bottom: 2rem; }
-  .bio-content { line-height: 1.8; }
-  .bio-title { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: 1.5rem; text-align: center; }
-  .bio-title.dark { color: #f1f5f9; }
-  .bio-title.light { color: #1a1a1a; }
-  .bio-paragraph { margin-bottom: 1.5rem; font-size: clamp(0.95rem, 2vw, 1.1rem); text-align: left; }
-  .bio-paragraph.dark { color: #cbd5e1; }
-  .bio-paragraph.light { color: #6b7280; }
-  @media (min-width: 768px) {
-    .home-content-wrapper { grid-template-columns: 1.2fr 1fr !important; }
-    .home-content, .home-greeting { text-align: left !important; }
-    .home-typewriter, .skills-badges, .cta-buttons, .social-links { justify-content: flex-start !important; }
-    .image-container { order: 0 !important; }
+// --- Carousel Data ---
+const expertiseItems = [
+  {
+    icon: <FiCpu />,
+    title: "AI/ML Engineering",
+    description: "Building intelligent systems with LLMs, RAG pipelines, and LangChain for production-ready AI applications.",
+    tags: ["Python", "LangChain", "OpenAI", "Vector DBs"]
+  },
+  {
+    icon: <FiCloud />,
+    title: "Cloud Architecture",
+    description: "Designing scalable cloud solutions on AWS and GCP with containerized microservices and CI/CD pipelines.",
+    tags: ["AWS", "GCP", "Docker", "Kubernetes"]
+  },
+  {
+    icon: <FiLayout />,
+    title: "Frontend Development",
+    description: "Crafting responsive, accessible interfaces with React, TypeScript, and modern CSS frameworks.",
+    tags: ["React", "TypeScript", "Framer Motion", "CSS"]
+  },
+  {
+    icon: <FiDatabase />,
+    title: "Backend Systems",
+    description: "Building robust APIs and data pipelines with FastAPI, Node.js, and efficient database architectures.",
+    tags: ["FastAPI", "Node.js", "PostgreSQL", "Redis"]
+  },
+  {
+    icon: <FiLayers />,
+    title: "Full-Stack Integration",
+    description: "End-to-end development connecting beautiful frontends with powerful backend services.",
+    tags: ["REST APIs", "GraphQL", "WebSockets", "OAuth"]
   }
-  @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  }
-`;
+];
 
-// --- Optimized Animation Variants (Reusable) ---
-const fadeInUp = {
-  initial: { opacity: 0, y: 50 },
-  animate: { opacity: 1, y: 0 }
-};
+// --- Tech Stack Data ---
+const techStack = [
+  { icon: <SiReact />, name: "React" },
+  { icon: <SiTypescript />, name: "TypeScript" },
+  { icon: <SiPython />, name: "Python" },
+  { icon: <SiNodedotjs />, name: "Node.js" },
+  { icon: <SiAmazon />, name: "AWS" },
+  { icon: <SiDocker />, name: "Docker" },
+  { icon: <SiPostgresql />, name: "PostgreSQL" },
+  { icon: <SiTensorflow />, name: "TensorFlow" },
+  { icon: <SiRedis />, name: "Redis" },
+  { icon: <SiNextdotjs />, name: "Next.js" },
+  { icon: <SiKubernetes />, name: "Kubernetes" },
+  { icon: <SiMongodb />, name: "MongoDB" },
+  { icon: <SiFastapi />, name: "FastAPI" },
+  { icon: <SiGraphql />, name: "GraphQL" },
+  { icon: <SiTailwindcss />, name: "Tailwind" },
+  { icon: <SiGit />, name: "Git" }
+];
 
-const fadeIn = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 }
-};
 
-// --- Sub-components for Rendering Optimization ---
+// --- Components ---
 
-// 1. Isolated Typewriter Component with RAF optimization
-const Typewriter = memo(({ isDark }) => {
-  const [text, setText] = useState("");
-  const [isTyping, setIsTyping] = useState(true);
-  const [index, setIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const rafRef = useRef(null);
-  const lastUpdateRef = useRef(0);
-
-  useEffect(() => {
-    const currentFullText = TYPEWRITER_TEXTS[index];
-    const typingSpeed = isTyping ? 100 : 50;
-    
-    const animate = (timestamp) => {
-      if (timestamp - lastUpdateRef.current >= typingSpeed) {
-        lastUpdateRef.current = timestamp;
-        
-        if (isTyping) {
-          if (charIndex < currentFullText.length) {
-            setText(prev => prev + currentFullText.charAt(charIndex));
-            setCharIndex(prev => prev + 1);
-          } else {
-            setTimeout(() => setIsTyping(false), 1500);
-            return;
-          }
-        } else {
-          if (charIndex > 0) {
-            setText(prev => prev.slice(0, -1));
-            setCharIndex(prev => prev - 1);
-          } else {
-            setIsTyping(true);
-            setIndex(prev => (prev + 1) % TYPEWRITER_TEXTS.length);
-            return;
-          }
-        }
-      }
-      
-      rafRef.current = requestAnimationFrame(animate);
-    };
-    
-    rafRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [charIndex, isTyping, index]);
+const HeroSection = () => {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 500], [0, 150]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <motion.p
-      className={`home-typewriter ${isDark ? 'dark' : 'light'}`}
-      {...fadeIn}
-      transition={{ delay: 0.5 }}
-    >
-      {text}
-      <motion.span
-        className="cursor"
-        animate={{ opacity: [1, 0, 1] }}
-        transition={{ repeat: Infinity, duration: 0.8 }}
-      >|
-      </motion.span>
-    </motion.p>
-  );
-});
-
-Typewriter.displayName = 'Typewriter';
-
-// 2. Isolated Background Component with memoized animations
-const BackgroundElements = memo(({ isDark, prefersReducedMotion }) => {
-  const backgroundAnimationDark = useMemo(() => [
-    'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%)',
-    'radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.15) 0%, transparent 50%)',
-    'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%)'
-  ], []);
-
-  const backgroundAnimationLight = useMemo(() => [
-    'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%)',
-    'radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.08) 0%, transparent 50%)',
-    'radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%)'
-  ], []);
-
-  if (prefersReducedMotion) {
-    return (
-      <div className="home-background">
-        <div className="animated-background" style={{ background: isDark ? backgroundAnimationDark[0] : backgroundAnimationLight[0] }} />
-        <div className={`grid-pattern ${isDark ? 'dark' : 'light'}`} />
+    <section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden px-6 pt-40 pb-20">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="hero-bg-blob blob-1" />
+        <div className="hero-bg-blob blob-2" />
       </div>
-    );
-  }
 
-  return (
-    <div className="home-background">
-      <motion.div 
-        className="animated-background"
-        animate={{ background: isDark ? backgroundAnimationDark : backgroundAnimationLight }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-      
-      <motion.div 
-        className={`grid-pattern ${isDark ? 'dark' : 'light'}`}
-        animate={{ backgroundPosition: ['0px 0px', '60px 60px'] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      />
-
-      {PARTICLES.map((particle) => (
-        <motion.div
-          key={particle.id}
-          className={`particle ${isDark ? 'dark' : 'light'}`}
-          style={{ left: `${particle.x}%`, top: `${particle.y}%`, width: `${particle.size}px`, height: `${particle.size}px` }}
-          animate={{ y: ['0vh', '-100vh'], x: [0, Math.random() * 50 - 25], opacity: [0, 0.8, 0], scale: [0.5, 1, 0.5] }}
-          transition={{ duration: particle.duration, repeat: Infinity, delay: particle.delay, ease: "linear" }}
-        />
-      ))}
-
-      <motion.div className="shape shape-1"
-        animate={{ x: [0, 50, 0], y: [0, -30, 0], scale: [1, 1.2, 1] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div className="shape shape-2"
-        animate={{ x: [0, -30, 0], y: [0, 40, 0], scale: [1, 0.9, 1] }}
-        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </div>
-  );
-});
-
-BackgroundElements.displayName = 'BackgroundElements';
-
-// 3. Isolated Image Component
-const ProfileImage = memo(({ isDark, prefersReducedMotion }) => {
-  if (prefersReducedMotion) {
-    return (
-      <div className="image-container" style={{ opacity: 1, transform: 'scale(1)' }}>
-        <div className="image-wrapper">
-          <div className="blob-background" />
-          <div className="floating-rings">
-            <div className="floating-ring ring-1" />
-            <div className="floating-ring ring-2" />
-          </div>
-          <div className={`image-frame ${isDark ? 'dark' : 'light'}`} style={{ borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%' }}>
-            <img className="profile-image" src={profileImage} alt="Sai Sri Harsha" loading="eager" width="450" height="450" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <motion.div
-      className="image-container"
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
-    >
       <motion.div
-        className="image-wrapper"
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        style={{ y, opacity }}
+        className="relative z-10 w-full text-center flex flex-col items-center gap-8 container"
       >
-        <motion.div 
-          className="blob-background"
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <div className="floating-rings">
-          <motion.div className="floating-ring ring-1"
-            animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
-            transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
-          />
-          <motion.div className="floating-ring ring-2"
-            animate={{ rotate: [360, 0], scale: [1, 1.05, 1] }}
-            transition={{ rotate: { duration: 30, repeat: Infinity, ease: "linear" }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
-          />
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-sm font-medium text-secondary mb-4">
+          <span className="rounded-full bg-green-500 w-2 h-2 inline-block animate-pulse" />
+          Available for new projects
         </div>
-        <motion.div 
-          className={`image-frame ${isDark ? 'dark' : 'light'}`}
-          animate={{ borderRadius: ['30% 70% 70% 30% / 30% 30% 70% 70%', '60% 40% 30% 70% / 60% 70% 30% 40%', '40% 60% 60% 40% / 50% 40% 60% 50%', '30% 70% 70% 30% / 30% 30% 70% 70%'] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+
+        <div className="font-bold tracking-tighter" style={{ lineHeight: 1.15 }}>
+          <div className="text-4xl md:text-6xl lg:text-7xl mb-2">
+            <RevealingText text="Building the future" delay={0.1} className="justify-center" />
+          </div>
+          <div className="text-4xl md:text-6xl lg:text-7xl">
+            <RevealingText
+              text="with meaningful code."
+              delay={0.3}
+              className="justify-center"
+              childClassName="text-gradient"
+            />
+          </div>
+        </div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="text-lg md:text-xl text-secondary text-center max-w-2xl mx-auto py-4"
+          style={{ lineHeight: 1.6 }}
         >
-          <img className="profile-image" src={profileImage} alt="Sai Sri Harsha" loading="eager" width="450" height="450" />
+          I'm Sai Sri Harsha, a multidisciplinary engineer bridging the gap between
+          <span className="text-primary font-semibold"> advanced AI systems</span> and
+          <span className="text-primary font-semibold"> exceptional user experiences</span>.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+          className="flex flex-col md:flex-row gap-4 mt-8"
+        >
+          <Link to="/portfolio">
+            <MagneticButton className="btn-primary">
+              View Work <FiArrowRight />
+            </MagneticButton>
+          </Link>
+          <Link to="/contact">
+            <MagneticButton className="btn-secondary glass-panel hover:bg-white/10">
+              Contact Me
+            </MagneticButton>
+          </Link>
         </motion.div>
       </motion.div>
-    </motion.div>
+    </section>
   );
-});
+};
 
-ProfileImage.displayName = 'ProfileImage';
+// Professional Expertise Carousel
+const ExpertiseCarousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
-// 4. Memoized Skill Badges
-const SkillBadges = memo(({ isDark }) => {
-  const badges = useMemo(() => SKILLS.map((skill, i) => (
-    <motion.div
-      key={i}
-      className={`skill-badge ${isDark ? 'dark' : 'light'}`}
-      style={{ borderColor: `${skill.color}15` }}
-      whileHover={{ scale: 1.1, y: -5, boxShadow: `0 8px 25px ${skill.color}40` }}
-    >
-      <span className="skill-icon" style={{ color: skill.color }}>{skill.icon}</span>
-      <span>{skill.text}</span>
-    </motion.div>
-  )), [isDark]);
+  const nextSlide = () => {
+    setDirection(1);
+    setActiveIndex((prev) => (prev + 1) % expertiseItems.length);
+  };
 
-  return (
-    <motion.div className="skills-badges" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
-      {badges}
-    </motion.div>
-  );
-});
+  const prevSlide = () => {
+    setDirection(-1);
+    setActiveIndex((prev) => (prev - 1 + expertiseItems.length) % expertiseItems.length);
+  };
 
-SkillBadges.displayName = 'SkillBadges';
-
-// 5. Memoized Social Links
-const SocialLinks = memo(({ isDark }) => {
-  const links = useMemo(() => SOCIAL_LINKS.map((link, i) => (
-    <motion.a
-      key={i} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.label}
-      className={`social-link ${isDark ? 'dark' : 'light'}`}
-      whileHover={{ scale: 1.1, y: -5, background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#ffffff', borderColor: 'transparent' }}
-      whileTap={{ scale: 0.95 }}
-    >
-      {link.icon}
-    </motion.a>
-  )), [isDark]);
-
-  return (
-    <motion.div className="social-links" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}>
-      {links}
-    </motion.div>
-  );
-});
-
-SocialLinks.displayName = 'SocialLinks';
-
-// 6. Memoized Bio Section
-const BioSection = memo(({ isDark }) => {
-  const paragraphs = useMemo(() => BIO_PARAGRAPHS.map((paragraph, index) => (
-    <motion.p
-      key={index}
-      className={`bio-paragraph ${isDark ? 'dark' : 'light'}`}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: index * 0.1 }}
-    >
-      {paragraph}
-    </motion.p>
-  )), [isDark]);
-
-  return (
-    <motion.div className="bio-section" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}>
-      <motion.div className="divider" initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.8 }} />
-      <div className="bio-content">
-        <motion.h3 className={`bio-title ${isDark ? 'dark' : 'light'}`} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
-          About <span className="gradient-text">Me</span>
-        </motion.h3>
-        {paragraphs}
-      </div>
-    </motion.div>
-  );
-});
-
-BioSection.displayName = 'BioSection';
-
-const Home = () => {
-  const [isDark, setIsDark] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
-
-  // Optimized theme observer with debouncing
   useEffect(() => {
-    const checkTheme = () => setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
-    checkTheme();
-    
-    let timeoutId;
-    const debouncedCheck = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(checkTheme, 16); // ~1 frame
-    };
-    
-    const observer = new MutationObserver(debouncedCheck);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    
-    return () => {
-      clearTimeout(timeoutId);
-      observer.disconnect();
-    };
+    const timer = setInterval(nextSlide, 5000);
+    return () => clearInterval(timer);
   }, []);
 
+  const variants = {
+    enter: (direction) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (direction) => ({ x: direction < 0 ? 300 : -300, opacity: 0 })
+  };
+
   return (
-    <div className="home-container">
-      <BackgroundElements isDark={isDark} prefersReducedMotion={prefersReducedMotion} />
-
-      <div className="home-content-wrapper">
-        <ProfileImage isDark={isDark} prefersReducedMotion={prefersReducedMotion} />
-
+    <section style={{ padding: '80px 0' }} className="px-6">
+      <div className="container">
         <motion.div
-          className="home-content"
-          {...fadeInUp}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{ textAlign: 'center', marginBottom: '48px' }}
         >
-          <motion.p className="home-greeting" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            👋 Hey, I'm
-          </motion.p>
-
-          <motion.h1 className={`home-name ${isDark ? 'dark' : 'light'}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <span className="gradient-text">Sai Sri Harsha</span><br />Guddati
-          </motion.h1>
-
-          <Typewriter isDark={isDark} />
-
-          <SkillBadges isDark={isDark} />
-
-          <motion.div className="cta-buttons" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
-            <Link to="/portfolio">
-              <motion.button className="btn-primary" whileHover={{ scale: 1.05, boxShadow: '0 15px 40px rgba(102, 126, 234, 0.5)' }} whileTap={{ scale: 0.95 }}>
-                View My Work <FiArrowRight />
-              </motion.button>
-            </Link>
-            <Link to="/contact">
-              <motion.button className="btn-secondary" whileHover={{ scale: 1.05, background: 'rgba(102, 126, 234, 0.1)' }} whileTap={{ scale: 0.95 }}>
-                Get In Touch
-              </motion.button>
-            </Link>
-          </motion.div>
-
-          <SocialLinks isDark={isDark} />
+          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '12px' }}>
+            Areas of <span className="text-gradient">Expertise</span>
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '500px', margin: '0 auto' }}>
+            Specialized skills honed through real-world projects and continuous learning
+          </p>
         </motion.div>
-      </div>
 
-      <BioSection isDark={isDark} />
-      <style>{STYLES}</style>
+        <div style={{ position: 'relative', maxWidth: '700px', margin: '0 auto' }}>
+          <div style={{ overflow: 'hidden', borderRadius: '24px' }}>
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={activeIndex}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                className="glass-panel"
+                style={{ padding: '48px', borderRadius: '24px', textAlign: 'center' }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '20px',
+                  background: 'var(--gradient-primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 24px',
+                  fontSize: '32px',
+                  color: 'white'
+                }}>
+                  {expertiseItems[activeIndex].icon}
+                </div>
+
+                <h3 style={{ fontSize: '28px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px' }}>
+                  {expertiseItems[activeIndex].title}
+                </h3>
+
+                <p style={{ fontSize: '16px', color: 'var(--text-secondary)', lineHeight: '1.7', maxWidth: '500px', margin: '0 auto 24px' }}>
+                  {expertiseItems[activeIndex].description}
+                </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
+                  {expertiseItems[activeIndex].tags.map((tag) => (
+                    <span
+                      key={tag}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '999px',
+                        background: 'var(--bg-secondary)',
+                        border: '1px solid var(--accent-primary)',
+                        fontSize: '13px',
+                        fontWeight: '500',
+                        color: 'var(--accent-primary)'
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Dots Indicator */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '24px' }}>
+            {expertiseItems.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setDirection(index > activeIndex ? 1 : -1);
+                  setActiveIndex(index);
+                }}
+                style={{
+                  width: activeIndex === index ? '32px' : '10px',
+                  height: '10px',
+                  borderRadius: '999px',
+                  background: activeIndex === index ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  opacity: activeIndex === index ? 1 : 0.4
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Tech Stack Section - Replaces redundant skill cards
+const TechStackSection = () => {
+  const [hoveredTech, setHoveredTech] = useState(null);
+
+  return (
+    <section style={{ padding: '60px 0' }} className="px-6">
+      <div className="container">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{ textAlign: 'center', marginBottom: '40px' }}
+        >
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '8px' }}>
+            Tech Stack
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
+            Tools and technologies I work with daily
+          </p>
+        </motion.div>
+
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '16px',
+          maxWidth: '800px',
+          margin: '0 auto'
+        }}>
+          {techStack.map((tech, index) => (
+            <motion.div
+              key={tech.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
+              onMouseEnter={() => setHoveredTech(tech.name)}
+              onMouseLeave={() => setHoveredTech(null)}
+              className="glass-panel"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '14px 20px',
+                borderRadius: '12px',
+                cursor: 'default',
+                borderColor: hoveredTech === tech.name ? 'var(--accent-primary)' : undefined,
+                transform: hoveredTech === tech.name ? 'translateY(-4px)' : 'none',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <span style={{
+                fontSize: '24px',
+                color: hoveredTech === tech.name ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                transition: 'color 0.2s'
+              }}>
+                {tech.icon}
+              </span>
+              <span style={{
+                fontSize: '14px',
+                fontWeight: '600',
+                color: 'var(--text-primary)'
+              }}>
+                {tech.name}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const AboutSection = () => {
+  return (
+    <section style={{ marginTop: '60px', paddingTop: '80px', paddingBottom: '80px' }} className="px-6">
+      <div className="container">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <div className="flex flex-col gap-6 order-2 md:order-1">
+            <motion.h2
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="text-3xl md:text-5xl font-bold"
+            >
+              Engineering <span className="text-gradient">Integrity</span>
+            </motion.h2>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-lg text-secondary flex flex-col gap-6 leading-relaxed"
+            >
+              <p>
+                I'm currently mastering Computer Science at the University of Florida, but my passion extends far beyond the classroom. I operate at the intersection of <strong className="text-primary">backend architecture, AI infrastructure, and responsive design</strong>.
+              </p>
+              <p>
+                At UF Information Technology, I'm building the next generation of intelligent assistants. Using Large Language Models (LLMs) and vector databases, I'm creating tools that don't just answer questions—they understand context, nuance, and intent.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="flex gap-4 mt-2"
+            >
+              {[
+                { icon: <FiGithub />, href: "https://github.com/saisriharsha19" },
+                { icon: <FiLinkedin />, href: "https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/" },
+                { icon: <FiMail />, href: "mailto:saisriharshaguddati1@gmail.com" }
+              ].map((social, i) => (
+                <a
+                  key={i}
+                  href={social.href}
+                  className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-xl hover:text-white hover:bg-indigo-600 transition-all"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative flex justify-center order-1 md:order-2"
+          >
+            {/* Decorative Frame Container */}
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '380px'
+            }}>
+              {/* Gradient Border Frame */}
+              <div style={{
+                position: 'absolute',
+                inset: '-4px',
+                background: 'var(--gradient-primary)',
+                borderRadius: '32px',
+                zIndex: 0
+              }} />
+
+              {/* Image Container with Mask */}
+              <div style={{
+                position: 'relative',
+                borderRadius: '28px',
+                overflow: 'hidden',
+                background: 'var(--bg-primary)',
+                zIndex: 1
+              }}>
+                {/* Top Mask/Cutoff */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '60px',
+                  background: 'linear-gradient(to bottom, var(--bg-primary), transparent)',
+                  zIndex: 10
+                }} />
+
+                {/* Bottom Mask/Cutoff */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '80px',
+                  background: 'linear-gradient(to top, var(--bg-primary), transparent)',
+                  zIndex: 10
+                }} />
+
+                {/* Profile Image */}
+                <img
+                  src={profileImage}
+                  alt="Sai Sri Harsha"
+                  style={{
+                    width: '100%',
+                    aspectRatio: '3/4',
+                    objectFit: 'cover',
+                    objectPosition: 'center top',
+                    display: 'block'
+                  }}
+                />
+              </div>
+
+              {/* Floating Elements */}
+              <div style={{
+                position: 'absolute',
+                top: '-20px',
+                right: '-20px',
+                width: '60px',
+                height: '60px',
+                background: 'var(--gradient-primary)',
+                borderRadius: '16px',
+                transform: 'rotate(15deg)',
+                opacity: 0.8,
+                zIndex: 2
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '40px',
+                left: '-16px',
+                width: '40px',
+                height: '40px',
+                background: 'var(--accent-secondary)',
+                borderRadius: '10px',
+                transform: 'rotate(-10deg)',
+                opacity: 0.6,
+                zIndex: 2
+              }} />
+            </div>
+
+            {/* Background Blur Elements */}
+            <div style={{
+              position: 'absolute',
+              bottom: '-40px',
+              right: '-40px',
+              width: '150px',
+              height: '150px',
+              background: 'var(--accent-primary)',
+              borderRadius: '50%',
+              filter: 'blur(60px)',
+              opacity: 0.2,
+              zIndex: 0
+            }} />
+            <div style={{
+              position: 'absolute',
+              top: '-40px',
+              left: '-40px',
+              width: '120px',
+              height: '120px',
+              background: 'var(--accent-secondary)',
+              borderRadius: '50%',
+              filter: 'blur(50px)',
+              opacity: 0.15,
+              zIndex: 0
+            }} />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Home = () => {
+  return (
+    <div className="home-container min-h-screen">
+      <HeroSection />
+      <ExpertiseCarousel />
+      <TechStackSection />
+      <AboutSection />
     </div>
   );
 };

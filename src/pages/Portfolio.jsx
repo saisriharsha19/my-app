@@ -1,31 +1,14 @@
 // src/pages/Portfolio.jsx
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiExternalLink, FiGithub, FiCode, FiZap } from 'react-icons/fi';
+import { FiExternalLink, FiGithub, FiZap, FiCode } from 'react-icons/fi';
 
 const Portfolio = () => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [hoveredItem, setHoveredItem] = useState(null);
-  const [isDark, setIsDark] = useState(false);
   const itemsPerPage = 3;
-
-  useEffect(() => {
-    const theme = document.documentElement.getAttribute('data-theme');
-    setIsDark(theme === 'dark');
-    
-    const observer = new MutationObserver(() => {
-      const newTheme = document.documentElement.getAttribute('data-theme');
-      setIsDark(newTheme === 'dark');
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -58,343 +41,134 @@ const Portfolio = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
 
-  const projectColors = [
-    { from: '#667eea', to: '#764ba2' },
-    { from: '#3b82f6', to: '#06b6d4' },
-    { from: '#10b981', to: '#059669' },
-    { from: '#f59e0b', to: '#ef4444' },
-    { from: '#a855f7', to: '#ec4899' },
-    { from: '#14b8a6', to: '#06b6d4' }
-  ];
-
-  const styles = {
-    container: {
-      padding: '2rem 1rem',
-      maxWidth: '1400px',
-      margin: '0 auto'
-    },
-    header: {
-      textAlign: 'center',
-      marginBottom: '3rem'
-    },
-    headerIcon: {
-      fontSize: 'clamp(2rem, 6vw, 3rem)',
-      color: '#667eea',
-      marginBottom: '1rem',
-      display: 'inline-block'
-    },
-    title: {
-      fontSize: 'clamp(2rem, 5vw, 3rem)',
-      fontWeight: 800,
-      marginBottom: '1rem',
-      color: isDark ? '#f1f5f9' : '#1a1a1a'
-    },
-    gradientText: {
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text'
-    },
-    subtitle: {
-      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-      color: isDark ? '#94a3b8' : '#6b7280',
-      marginTop: '1rem'
-    },
-    grid: {
-      display: 'grid',
-      gap: '2rem',
-      marginBottom: '3rem'
-    },
-    card: (isHovered) => ({
-      position: 'relative',
-      background: isDark ? '#1e293b' : '#ffffff',
-      borderRadius: '24px',
-      padding: '2rem',
-      overflow: 'hidden',
-      boxShadow: isHovered 
-        ? '0 30px 60px rgba(102, 126, 234, 0.25)' 
-        : isDark 
-          ? '0 20px 60px rgba(0, 0, 0, 0.3)' 
-          : '0 20px 60px rgba(0, 0, 0, 0.1)',
-      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-      transform: isHovered ? 'translateY(-10px) scale(1.02)' : 'translateY(0) scale(1)',
-      border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
-    }),
-    topBar: (color) => ({
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: '5px',
-      background: `linear-gradient(90deg, ${color.from}, ${color.to})`
-    }),
-    projectNumber: {
-      position: 'absolute',
-      top: '1.5rem',
-      right: '1.5rem',
-      fontSize: 'clamp(2.5rem, 8vw, 4rem)',
-      fontWeight: 700,
-      opacity: 0.05,
-      color: isDark ? '#f1f5f9' : '#1a1a1a',
-      pointerEvents: 'none'
-    },
-    iconContainer: (color) => ({
-      width: 'clamp(50px, 12vw, 70px)',
-      height: 'clamp(50px, 12vw, 70px)',
-      background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
-      borderRadius: '16px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'white',
-      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
-      marginBottom: '1.5rem',
-      boxShadow: `0 10px 30px ${color.from}40`
-    }),
-    projectTitle: {
-      fontSize: 'clamp(1.25rem, 4vw, 2rem)',
-      fontWeight: 700,
-      marginBottom: '1rem',
-      color: isDark ? '#f1f5f9' : '#1a1a1a',
-      lineHeight: 1.3
-    },
-    description: {
-      fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
-      lineHeight: 1.7,
-      color: isDark ? '#cbd5e1' : '#6b7280',
-      marginBottom: '2rem'
-    },
-    footer: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginTop: '2rem',
-      paddingTop: '2rem',
-      borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-      gap: '1rem',
-      flexWrap: 'wrap'
-    },
-    link: (color) => ({
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      padding: '0.75rem 1.25rem',
-      background: `${color.from}15`,
-      color: color.from,
-      textDecoration: 'none',
-      borderRadius: '12px',
-      fontWeight: 600,
-      transition: 'all 0.3s ease',
-      border: `2px solid ${color.from}30`,
-      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
-      whiteSpace: 'nowrap'
-    }),
-    badge: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '0.25rem',
-      padding: '0.5rem 1rem',
-      background: 'rgba(102, 126, 234, 0.1)',
-      color: '#667eea',
-      borderRadius: '20px',
-      fontSize: 'clamp(0.8rem, 1.5vw, 0.85rem)',
-      fontWeight: 600
-    },
-    pagination: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: '0.5rem',
-      marginTop: '3rem',
-      flexWrap: 'wrap',
-      padding: '0 1rem'
-    },
-    pageButton: (isActive) => ({
-      width: '45px',
-      height: '45px',
-      borderRadius: '12px',
-      border: 'none',
-      background: isActive 
-        ? 'linear-gradient(135deg, #667eea, #764ba2)' 
-        : isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)',
-      color: isActive ? '#ffffff' : (isDark ? '#cbd5e1' : '#1a1a1a'),
-      cursor: 'pointer',
-      fontWeight: 700,
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      transition: 'all 0.3s ease',
-      boxShadow: isActive ? '0 4px 15px rgba(102, 126, 234, 0.4)' : 'none'
-    }),
-    skeleton: {
-      background: isDark 
-        ? 'linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%)'
-        : 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
-      backgroundSize: '200% 100%',
-      animation: 'shimmer 1.5s infinite',
-      borderRadius: '12px'
-    }
-  };
-
   if (error) {
     return (
-      <div style={styles.container}>
+      <div className="container min-h-screen flex flex-col items-center justify-center text-center p-6">
         <motion.div
-          style={{
-            minHeight: '60vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '2rem',
-            textAlign: 'center',
-            padding: '2rem'
-          }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          className="text-5xl mb-4"
+          animate={{ rotate: [0, 10, -10, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
         >
-          <motion.div
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}
-            animate={{ rotate: [0, 10, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            😕
-          </motion.div>
-          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 700, color: isDark ? '#f1f5f9' : '#1a1a1a' }}>
-            Oops! Something went wrong
-          </h2>
-          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.1rem)', color: isDark ? '#94a3b8' : '#6b7280' }}>
-            {error}
-          </p>
-          <motion.button
-            style={{
-              padding: '0.875rem 1.75rem',
-              background: 'linear-gradient(135deg, #667eea, #764ba2)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
-            onClick={() => window.location.reload()}
-            whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)' }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Try Again
-          </motion.button>
+          😕
         </motion.div>
+        <h2 className="text-2xl font-bold mb-2">Oops! Something went wrong</h2>
+        <p className="text-secondary mb-6">{error}</p>
+        <button
+          className="btn-primary"
+          onClick={() => window.location.reload()}
+        >
+          Try Again
+        </button>
       </div>
     );
   }
 
   return (
-    <div style={styles.container}>
+    <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
       <motion.div
-        style={styles.header}
+        className="text-center mb-16"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <motion.div
-          style={styles.headerIcon}
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            repeatDelay: 1
-          }}
-        >
-          <FiCode />
-        </motion.div>
-        <h1 style={styles.title}>
-          Featured <span style={styles.gradientText}>Projects</span>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Featured <span className="text-gradient">Projects</span>
         </h1>
-        <p style={styles.subtitle}>Innovative solutions I've crafted with passion</p>
+        <p className="text-lg text-secondary max-w-2xl mx-auto">
+          Innovative solutions crafted with passion, from AI benchmarks to scalable web systems.
+        </p>
       </motion.div>
 
       {isLoading ? (
-        <div style={styles.grid}>
+        <div className="grid grid-cols-1 gap-8">
           {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={i}
-              style={{...styles.card(false), padding: '2rem'}}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <div style={{...styles.skeleton, height: '60px', width: '60px', marginBottom: '2rem'}} />
-              <div style={{...styles.skeleton, height: '28px', width: '80%', marginBottom: '1rem'}} />
-              <div style={{...styles.skeleton, height: '18px', width: '100%', marginBottom: '0.5rem'}} />
-              <div style={{...styles.skeleton, height: '18px', width: '90%', marginBottom: '0.5rem'}} />
-              <div style={{...styles.skeleton, height: '18px', width: '70%'}} />
-            </motion.div>
+            <div key={i} className="glass-panel p-8 rounded-3xl animate-pulse">
+              <div className="h-48 bg-gray-200 dark:bg-slate-700 rounded-xl mb-6" />
+              <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mb-4" />
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full mb-2" />
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-2/3" />
+            </div>
           ))}
         </div>
       ) : (
         <>
           <motion.div
-            style={styles.grid}
+            className="grid grid-cols-1 gap-8"
             initial="hidden"
             animate="visible"
-            variants={{
-              visible: { transition: { staggerChildren: 0.2 } }
-            }}
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
           >
             <AnimatePresence mode="wait">
               {currentItems.map((item, index) => {
-                const color = projectColors[index % projectColors.length];
                 const globalIndex = indexOfFirstItem + index;
-                
+
                 return (
                   <motion.div
                     key={item.id}
-                    style={styles.card(hoveredItem === item.id)}
+                    className="glass-panel p-6 md:p-8 rounded-3xl relative overflow-hidden group transition-all duration-300 hover:border-indigo-500/30"
                     variants={{
-                      hidden: { opacity: 0, y: 50 },
+                      hidden: { opacity: 0, y: 30 },
                       visible: { opacity: 1, y: 0 }
                     }}
-                    onHoverStart={() => setHoveredItem(item.id)}
-                    onHoverEnd={() => setHoveredItem(null)}
+                    whileHover={{ y: -5 }}
                   >
-                    <div style={styles.topBar(color)} />
-                    <div style={styles.projectNumber}>{String(globalIndex + 1).padStart(2, '0')}</div>
+                    <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'var(--gradient-primary)' }} />
 
-                    <motion.div
-                      style={styles.iconContainer(color)}
-                      animate={{
-                        rotate: hoveredItem === item.id ? 360 : 0,
-                        scale: hoveredItem === item.id ? 1.1 : 1
-                      }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <FiGithub />
-                    </motion.div>
-
-                    <h2 style={styles.projectTitle}>{item.title}</h2>
-                    <p style={styles.description}>{item.description}</p>
-
-                    <div style={styles.footer}>
-                      <div style={styles.badge}>
-                        <FiZap />
-                        <span>Active Project</span>
+                    <div className="flex flex-col md:flex-row gap-8 items-start">
+                      <div className="w-full md:w-1/3 shrink-0">
+                        <div className="aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-4xl text-indigo-500 font-bold relative group-hover:shadow-lg transition-all">
+                          {/* Placeholder for project image if available, or just index/icon */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5" />
+                          <span className="relative z-10">{String(globalIndex + 1).padStart(2, '0')}</span>
+                        </div>
                       </div>
 
-                      <motion.a
-                        href={item.project_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={styles.link(color)}
-                        whileHover={{
-                          scale: 1.05,
-                          background: `linear-gradient(135deg, ${color.from}, ${color.to})`,
-                          color: '#ffffff',
-                          borderColor: 'transparent'
-                        }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <span>View Project</span>
-                        <FiExternalLink />
-                      </motion.a>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
+                            Featured
+                          </span>
+                          <span className="text-secondary text-sm">
+                            {item.tech_stack || [
+                              "React • Node.js • MongoDB",
+                              "Python • TensorFlow • AWS",
+                              "Next.js • TypeScript • PostgreSQL",
+                              "FastAPI • Docker • Redis",
+                              "Vue.js • GraphQL • Firebase",
+                              "Django • Kubernetes • GCP"
+                            ][globalIndex % 6]}
+                          </span>
+                        </div>
+
+                        <h2 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                          {item.title}
+                        </h2>
+                        <p className="text-secondary leading-relaxed mb-6">
+                          {item.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-4 pt-4 border-t border-gray-200 dark:border-white/5">
+                          {item.project_url && (
+                            <a
+                              href={item.project_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-primary py-2 px-6 text-sm"
+                            >
+                              View Project <FiExternalLink />
+                            </a>
+                          )}
+                          {item.github_url && (
+                            <a
+                              href={item.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-secondary py-2 px-6 text-sm hover:bg-black/5 dark:hover:bg-white/5"
+                            >
+                              Source Code <FiGithub />
+                            </a>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
                 );
@@ -403,37 +177,24 @@ const Portfolio = () => {
           </motion.div>
 
           {items.length > itemsPerPage && (
-            <motion.div
-              style={styles.pagination}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
+            <div className="flex justify-center gap-2 mt-12">
               {Array.from({ length: Math.ceil(items.length / itemsPerPage) }, (_, i) => (
-                <motion.button
+                <button
                   key={i + 1}
-                  style={styles.pageButton(currentPage === i + 1)}
                   onClick={() => setCurrentPage(i + 1)}
-                  whileHover={{ 
-                    scale: 1.15,
-                    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)'
-                  }}
-                  whileTap={{ scale: 0.9 }}
+                  className={`w-10 h-10 rounded-xl font-bold transition-all ${currentPage === i + 1
+                    ? 'bg-indigo-600 text-white shadow-lg scale-110'
+                    : 'bg-gray-100 dark:bg-white/5 text-secondary hover:bg-gray-200 dark:hover:bg-white/10'
+                    }`}
+                  style={currentPage === i + 1 ? { background: 'var(--accent-primary)' } : {}}
                 >
                   {i + 1}
-                </motion.button>
+                </button>
               ))}
-            </motion.div>
+            </div>
           )}
         </>
       )}
-
-      <style>{`
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-      `}</style>
     </div>
   );
 };

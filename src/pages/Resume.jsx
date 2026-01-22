@@ -1,7 +1,7 @@
 // src/pages/Resume.jsx
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FiDownload, FiHome, FiMail, FiPhone, FiLinkedin } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import '@react-pdf-viewer/core/lib/styles/index.css';
@@ -9,43 +9,6 @@ import pdf from "../images/resume.pdf";
 
 const Resume = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isDark, setIsDark] = useState(false);
-  const lastOrientation = useRef(
-    window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape'
-  );
-
-  useEffect(() => {
-    const theme = document.documentElement.getAttribute('data-theme');
-    setIsDark(theme === 'dark');
-    
-    const observer = new MutationObserver(() => {
-      const newTheme = document.documentElement.getAttribute('data-theme');
-      setIsDark(newTheme === 'dark');
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const handleOrientationChange = () => {
-      const newOrientation = window.matchMedia("(orientation: portrait)").matches
-        ? 'portrait'
-        : 'landscape';
-      if (newOrientation !== lastOrientation.current) {
-        lastOrientation.current = newOrientation;
-        window.location.reload();
-      }
-    };
-    window.addEventListener('resize', handleOrientationChange);
-    window.addEventListener('orientationchange', handleOrientationChange);
-    return () => {
-      window.removeEventListener('resize', handleOrientationChange);
-      window.removeEventListener('orientationchange', handleOrientationChange);
-    };
-  }, []);
 
   const handleDownload = () => {
     const link = document.createElement('a');
@@ -56,187 +19,46 @@ const Resume = () => {
     document.body.removeChild(link);
   };
 
-  const styles = {
-    container: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem 1rem'
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: '2rem',
-      flexWrap: 'wrap',
-      gap: '1rem'
-    },
-    title: {
-      fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-      fontWeight: 700,
-      color: isDark ? '#f1f5f9' : '#1a1a1a',
-      margin: 0
-    },
-    gradientText: {
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text'
-    },
-    actions: {
-      display: 'flex',
-      gap: '0.75rem',
-      flexWrap: 'wrap'
-    },
-    button: (isPrimary) => ({
-      padding: '0.75rem 1.25rem',
-      borderRadius: '12px',
-      fontSize: 'clamp(0.85rem, 1.5vw, 1rem)',
-      fontWeight: 600,
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      textDecoration: 'none',
-      transition: 'all 0.3s ease',
-      background: isPrimary 
-        ? 'linear-gradient(135deg, #667eea, #764ba2)' 
-        : isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)',
-      color: isPrimary ? '#ffffff' : '#667eea',
-      border: isPrimary ? 'none' : '2px solid #667eea',
-      whiteSpace: 'nowrap'
-    }),
-    viewer: {
-      position: 'relative',
-      background: isDark ? '#1e293b' : '#ffffff',
-      borderRadius: '16px',
-      padding: '1rem',
-      boxShadow: isDark 
-        ? '0 20px 60px rgba(0, 0, 0, 0.3)' 
-        : '0 20px 60px rgba(0, 0, 0, 0.08)',
-      marginBottom: '2rem',
-      minHeight: '500px',
-      overflow: 'hidden'
-    },
-    loading: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      textAlign: 'center',
-      zIndex: 10
-    },
-    spinner: {
-      width: '40px',
-      height: '40px',
-      border: '4px solid rgba(102, 126, 234, 0.2)',
-      borderTopColor: '#667eea',
-      borderRadius: '50%',
-      margin: '0 auto 1rem',
-      animation: 'spin 0.8s linear infinite'
-    },
-    loadingText: {
-      color: isDark ? '#cbd5e1' : '#6b7280',
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      fontWeight: 600
-    },
-    pdfContainer: {
-      borderRadius: '12px',
-      overflow: 'hidden',
-      background: 'white'
-    },
-    contact: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
-      gap: '1rem',
-      padding: '0'
-    },
-    contactItem: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '1rem',
-      padding: '1.25rem',
-      background:isDark ? '#1e293b' : '#ffffff',
-      borderRadius: '12px',
-      textDecoration: 'none',
-      transition: 'all 0.3s ease',
-      cursor: 'pointer',
-      boxShadow: isDark 
-        ? '0 10px 30px rgba(0, 0, 0, 0.3)' 
-        : '0 10px 30px rgba(0, 0, 0, 0.08)',
-      border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
-    },
-    contactIcon: {
-      width: '40px',
-      height: '40px',
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      borderRadius: '10px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'white',
-      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-      flexShrink: 0
-    },
-    contactText: {
-      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
-      fontWeight: 600,
-      color: isDark ? '#f1f5f9' : '#1a1a1a',
-      wordBreak: 'break-word'
-    }
-  };
-
   return (
-    <div style={styles.container}>
+    <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
       <motion.div
-        style={styles.header}
+        className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 style={styles.title}>
-          My <span style={styles.gradientText}>Resume</span>
+        <h1 className="text-4xl md:text-5xl font-bold">
+          My <span className="text-gradient">Resume</span>
         </h1>
-        <div style={styles.actions}>
-          <motion.button
-            style={styles.button(true)}
+        <div className="flex gap-4">
+          <button
             onClick={handleDownload}
-            whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)' }}
-            whileTap={{ scale: 0.95 }}
+            className="btn-primary flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow"
           >
             <FiDownload /> Download PDF
-          </motion.button>
-          
+          </button>
+
           <Link to="/">
-            <motion.button
-              style={styles.button(false)}
-              whileHover={{ scale: 1.05, background: 'rgba(102, 126, 234, 0.15)' }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <button className="btn-secondary flex items-center gap-2 hover:bg-black/5 dark:hover:bg-white/5">
               <FiHome /> Home
-            </motion.button>
+            </button>
           </Link>
         </div>
       </motion.div>
 
       <motion.div
-        style={styles.viewer}
+        className="glass-panel p-4 md:p-8 rounded-3xl overflow-hidden relative min-h-[500px]"
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <AnimatePresence>
-          {isLoading && (
-            <motion.div
-              style={styles.loading}
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <div style={styles.spinner} />
-              <p style={styles.loadingText}>Loading Resume...</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        
-        <div style={styles.pdfContainer}>
+        {isLoading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-gray-50/50 dark:bg-slate-900/50 backdrop-blur-sm">
+            <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mb-4" />
+            <p className="font-semibold text-secondary">Loading Resume...</p>
+          </div>
+        )}
+
+        <div className="rounded-xl overflow-hidden shadow-sm bg-white border border-gray-200">
           <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js`}>
             <Viewer
               fileUrl={pdf}
@@ -247,7 +69,7 @@ const Resume = () => {
       </motion.div>
 
       <motion.div
-        style={styles.contact}
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
@@ -262,27 +84,17 @@ const Resume = () => {
             href={item.href}
             target={item.href.startsWith('http') ? '_blank' : undefined}
             rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            style={styles.contactItem}
-            whileHover={{ 
-              y: -5, 
-              boxShadow: isDark ? '0 15px 40px rgba(0, 0, 0, 0.4)' : '0 15px 40px rgba(0, 0, 0, 0.12)'
-            }}
-            whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 + index * 0.1 }}
+            className="glass-panel p-6 rounded-2xl flex items-center gap-4 hover:-translate-y-1 transition-transform group"
+            whileHover={{ y: -5 }}
           >
-            <div style={styles.contactIcon}>{item.icon}</div>
-            <span style={styles.contactText}>{item.text}</span>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xl shadow-lg shrink-0 group-hover:scale-110 transition-transform"
+              style={{ background: 'var(--gradient-primary)' }}>
+              {item.icon}
+            </div>
+            <span className="font-semibold group-hover:text-primary transition-colors">{item.text}</span>
           </motion.a>
         ))}
       </motion.div>
-
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 };

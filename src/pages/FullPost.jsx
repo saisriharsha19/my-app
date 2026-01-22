@@ -1,32 +1,28 @@
 // src/pages/FullPost.jsx
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { FiArrowLeft, FiClock, FiUser, FiBookOpen, FiShare2, FiHeart } from 'react-icons/fi';
+import { FiArrowLeft, FiUser, FiCalendar, FiShare2, FiHeart, FiBookOpen, FiArrowRight } from 'react-icons/fi';
 
 const FullPost = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
+  const [relatedPosts, setRelatedPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [liked, setLiked] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const theme = document.documentElement.getAttribute('data-theme');
-    setIsDark(theme === 'dark');
-    
-    const observer = new MutationObserver(() => {
-      const newTheme = document.documentElement.getAttribute('data-theme');
-      setIsDark(newTheme === 'dark');
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-    return () => observer.disconnect();
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -35,13 +31,16 @@ const FullPost = () => {
         setIsLoading(true);
         setError(null);
         const response = await fetch(`https://backend-482511937770.europe-west1.run.app/blog/${postId}`);
-        
-        if (!response.ok) {
-          throw new Error(`Failed to fetch post: ${response.status}`);
-        }
-        
+        if (!response.ok) throw new Error(`Failed to fetch post: ${response.status}`);
         const data = await response.json();
         setPost(data);
+
+        const allPostsRes = await fetch('https://backend-482511937770.europe-west1.run.app/blog');
+        if (allPostsRes.ok) {
+          const allPosts = await allPostsRes.json();
+          const filtered = allPosts.filter(p => p.id !== parseInt(postId)).slice(0, 3);
+          setRelatedPosts(filtered);
+        }
       } catch (error) {
         console.error('Error fetching full post:', error);
         setError('Failed to load the post. Please try again later.');
@@ -49,405 +48,230 @@ const FullPost = () => {
         setIsLoading(false);
       }
     };
-    if (postId) {
-      fetchPost();
-    }
+    if (postId) fetchPost();
   }, [postId]);
 
-  const handleGoBack = () => {
-    navigate('/blog');
-  };
+  const handleGoBack = () => navigate('/blog');
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: post.title,
-          text: post.content?.substring(0, 100),
-          url: window.location.href
-        });
-      } catch (err) {
-        console.log('Share cancelled');
-      }
+        await navigator.share({ title: post.title, text: post.content?.substring(0, 100), url: window.location.href });
+      } catch (err) { console.log('Share cancelled'); }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
     }
   };
 
-  const styles = {
-    container: {
-      maxWidth: '900px',
-      margin: '0 auto',
-      padding: '2rem 1rem'
-    },
-    backButton: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      padding: '0.75rem 1.25rem',
-      background: 'transparent',
-      color: '#667eea',
-      border: '2px solid #667eea',
-      borderRadius: '12px',
-      fontSize: 'clamp(0.85rem, 2vw, 1rem)',
-      fontWeight: 600,
-      cursor: 'pointer',
-      marginBottom: '2rem',
-      transition: 'all 0.3s ease'
-    },
-    header: {
-      marginBottom: '2rem'
-    },
-    title: {
-      fontSize: 'clamp(1.75rem, 5vw, 3rem)',
-      fontWeight: 800,
-      lineHeight: 1.3,
-      margin: '1rem 0',
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text'
-    },
-    meta: {
-      display: 'flex',
-      gap: '1rem',
-      flexWrap: 'wrap',
-      marginTop: '1.5rem',
-      padding: '1.25rem',
-      background: isDark ? '#1e293b' : '#ffffff',
-      borderRadius: '12px',
-      boxShadow: isDark 
-        ? '0 4px 15px rgba(0, 0, 0, 0.3)' 
-        : '0 4px 15px rgba(0, 0, 0, 0.05)',
-      border: `1px solid ${isDark ? 'rgba(102, 126, 234, 0.1)' : 'transparent'}`
-    },
-    metaItem: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      color: isDark ? '#94a3b8' : '#6b7280',
-      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)'
-    },
-    metaIcon: {
-      color: '#667eea',
-      flexShrink: 0
-    },
-    content: {
-      margin: '2rem 0'
-    },
-    contentWrapper: {
-      lineHeight: 1.8,
-      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
-      color: isDark ? '#cbd5e1' : '#374151'
-    },
-    actions: {
-      display: 'flex',
-      gap: '1rem',
-      marginTop: '2rem',
-      paddingTop: '2rem',
-      borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-      flexWrap: 'wrap'
-    },
-    actionButton: (isActive) => ({
-      padding: '0.75rem 1.25rem',
-      borderRadius: '12px',
-      fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
-      fontWeight: 600,
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      transition: 'all 0.3s ease',
-      background: isActive 
-        ? 'linear-gradient(135deg, #667eea, #764ba2)' 
-        : isDark ? 'rgba(102, 126, 234, 0.1)' : 'rgba(102, 126, 234, 0.05)',
-      color: isActive ? '#ffffff' : '#667eea',
-      border: isActive ? 'none' : `2px solid ${isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)'}`,
-      whiteSpace: 'nowrap'
-    }),
-    footer: {
-      marginTop: '3rem',
-      paddingTop: '2rem',
-            borderTop: `2px solid ${isDark ? 'rgba(102, 126, 234, 0.2)' : 'rgba(102, 126, 234, 0.15)'}`,
-      textAlign: 'center'
-    },
-    footerButton: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      padding: '0.875rem 1.75rem',
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      color: 'white',
-      textDecoration: 'none',
-      border: 'none',
-      borderRadius: '12px',
-      fontWeight: 600,
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)'
-    },
-    skeleton: {
-      background: isDark 
-        ? 'linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%)'
-        : 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
-      backgroundSize: '200% 100%',
-      animation: 'shimmer 1.5s infinite',
-      borderRadius: '8px'
-    },
-    error: {
-      minHeight: '60vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '2rem',
-      textAlign: 'center',
-      padding: '2rem'
-    }
-  };
+  const readTime = post?.content ? Math.ceil(post.content.length / 1000) : 5;
 
   if (error) {
     return (
-      <div style={styles.container}>
-        <motion.div
-          style={styles.error}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-        >
-          <motion.div
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}
-            animate={{ y: [0, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            😕
-          </motion.div>
-          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 700, color: isDark ? '#f1f5f9' : '#1a1a1a' }}>
-            Oops!
-          </h2>
-          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.1rem)', color: isDark ? '#94a3b8' : '#6b7280' }}>
-            {error}
-          </p>
-          <motion.button
-            style={styles.footerButton}
-            onClick={handleGoBack}
-            whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)' }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FiArrowLeft /> Go Back to Blog
-          </motion.button>
-        </motion.div>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', textAlign: 'center' }}>
+        <motion.div style={{ fontSize: '64px', marginBottom: '16px' }} animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 2 }}>😕</motion.div>
+        <h2 style={{ fontSize: '30px', fontWeight: '700', marginBottom: '8px', color: 'var(--text-primary)' }}>Oops!</h2>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>{error}</p>
+        <button onClick={handleGoBack} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <FiArrowLeft /> Go Back to Blog
+        </button>
       </div>
     );
   }
 
   if (isLoading) {
     return (
-      <div style={styles.container}>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <div style={{...styles.skeleton, height: '50px', width: '80%', marginBottom: '2rem'}} />
-          <div style={{...styles.skeleton, height: '20px', width: '40%', marginBottom: '3rem'}} />
+      <div className="container" style={{ maxWidth: '800px', margin: '0 auto', paddingTop: '128px', paddingBottom: '64px' }}>
+        <div className="animate-pulse">
+          <div style={{ height: '48px', background: 'var(--bg-secondary)', borderRadius: '12px', width: '75%', marginBottom: '32px' }} />
+          <div style={{ height: '24px', background: 'var(--bg-secondary)', borderRadius: '8px', width: '33%', marginBottom: '48px' }} />
           {[...Array(8)].map((_, i) => (
-            <div key={i} style={{...styles.skeleton, height: '18px', width: `${90 - i * 5}%`, marginBottom: '1rem'}} />
+            <div key={i} style={{ height: '16px', background: 'var(--bg-secondary)', borderRadius: '4px', width: `${90 - (i % 3) * 10}%`, marginBottom: '16px' }} />
           ))}
-        </motion.div>
+        </div>
       </div>
     );
   }
 
-  if (!post) {
-    return (
-      <div style={styles.container}>
-        <motion.div
-          style={styles.error}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.1rem)', color: isDark ? '#94a3b8' : '#6b7280' }}>
-            Post not found
-          </p>
-          <motion.button
-            style={styles.footerButton}
-            onClick={handleGoBack}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FiArrowLeft /> Go Back to Blog
-          </motion.button>
-        </motion.div>
-      </div>
-    );
-  }
+  if (!post) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      style={styles.container}
-    >
-      <motion.button
-        style={styles.backButton}
-        onClick={handleGoBack}
-        whileHover={{ scale: 1.05, x: -5, background: 'rgba(102, 126, 234, 0.1)' }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <FiArrowLeft />
-        <span>Back to Articles</span>
-      </motion.button>
+    <>
+      {/* Reading Progress Bar */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        height: '3px',
+        width: `${scrollProgress}%`,
+        background: 'var(--accent-primary)',
+        zIndex: 100
+      }} />
 
-      <motion.div
-        style={styles.header}
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
+      <motion.article
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="container"
+        style={{ maxWidth: '800px', margin: '0 auto', paddingTop: '120px', paddingBottom: '64px' }}
       >
-        <motion.h1
-          style={styles.title}
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
+        {/* Back Button */}
+        <motion.button
+          onClick={handleGoBack}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="glass-panel"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 18px',
+            borderRadius: '12px',
+            color: 'var(--accent-primary)',
+            fontWeight: '600',
+            fontSize: '14px',
+            marginBottom: '40px',
+            cursor: 'pointer'
+          }}
         >
-          {post.title}
-        </motion.h1>
+          <FiArrowLeft size={16} />
+          <span>Back to Articles</span>
+        </motion.button>
 
+        {/* Article Header */}
+        <motion.header initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
+          <h1 className="text-gradient" style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: '800', lineHeight: '1.2', marginBottom: '24px' }}>
+            {post.title}
+          </h1>
+
+          {/* Meta Info */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', marginBottom: '48px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+              <FiCalendar style={{ color: 'var(--accent-primary)' }} />
+              <time>{new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+              <FiUser style={{ color: 'var(--accent-primary)' }} />
+              <span>{post.author || 'Sai Sri Harsha Guddati'}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+              <FiBookOpen style={{ color: 'var(--accent-primary)' }} />
+              <span>{readTime} min read</span>
+            </div>
+          </div>
+        </motion.header>
+
+        {/* Article Content */}
         <motion.div
-          style={styles.meta}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.2 }}
+          style={{ fontSize: '18px', lineHeight: '1.8', color: 'var(--text-secondary)' }}
         >
-          <div style={styles.metaItem}>
-            <FiClock style={styles.metaIcon} />
-            <time>{new Date(post.created_at).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}</time>
-          </div>
-          <div style={styles.metaItem}>
-            <FiUser style={styles.metaIcon} />
-            <span>{post.author || 'Anonymous'}</span>
-          </div>
-          <div style={styles.metaItem}>
-            <FiBookOpen style={styles.metaIcon} />
-            <span>{Math.ceil(post.content?.length / 1000) || 5} min read</span>
-          </div>
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        style={styles.content}
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
-        <div style={styles.contentWrapper}>
           <ReactMarkdown
             components={{
-              h1: ({ children }) => (
-                <h1 style={{ 
-                  fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
-                  fontWeight: 700, 
-                  margin: '2rem 0 1rem',
-                  color: isDark ? '#f1f5f9' : '#1a1a1a'
-                }}>
+              h1: ({ children }) => <h1 style={{ fontSize: '30px', fontWeight: '700', marginTop: '48px', marginBottom: '24px', color: 'var(--text-primary)' }}>{children}</h1>,
+              h2: ({ children }) => <h2 style={{ fontSize: '24px', fontWeight: '700', marginTop: '40px', marginBottom: '20px', color: 'var(--text-primary)', paddingBottom: '12px', borderBottom: '2px solid var(--accent-primary)' }}>{children}</h2>,
+              h3: ({ children }) => <h3 style={{ fontSize: '20px', fontWeight: '700', marginTop: '32px', marginBottom: '16px', color: 'var(--text-primary)' }}>{children}</h3>,
+              p: ({ children }) => <p style={{ marginBottom: '24px', lineHeight: '1.8' }}>{children}</p>,
+              ul: ({ children }) => <ul style={{ listStyleType: 'disc', paddingLeft: '24px', marginBottom: '24px' }}>{children}</ul>,
+              ol: ({ children }) => <ol style={{ listStyleType: 'decimal', paddingLeft: '24px', marginBottom: '24px' }}>{children}</ol>,
+              li: ({ children }) => <li style={{ paddingLeft: '8px', marginBottom: '8px' }}>{children}</li>,
+              blockquote: ({ children }) => (
+                <blockquote className="glass-panel" style={{ borderLeft: '4px solid var(--accent-primary)', paddingLeft: '20px', margin: '32px 0', fontStyle: 'italic', padding: '20px 20px 20px 24px', borderRadius: '0 12px 12px 0' }}>
                   {children}
-                </h1>
-              ),
-              h2: ({ children }) => (
-                <h2 style={{ 
-                  fontSize: 'clamp(1.25rem, 3vw, 1.5rem)', 
-                  fontWeight: 700, 
-                  margin: '1.5rem 0 1rem',
-                  color: isDark ? '#f1f5f9' : '#1a1a1a'
-                }}>
-                  {children}
-                </h2>
-              ),
-              p: ({ children }) => (
-                <p style={{ 
-                  marginBottom: '1.5rem',
-                  color: isDark ? '#cbd5e1' : '#374151'
-                }}>
-                  {children}
-                </p>
+                </blockquote>
               ),
               code: ({ inline, children }) =>
                 inline ? (
-                  <code style={{ 
-                    background: isDark ? '#0f172a' : '#f3f4f6',
-                    padding: '0.2rem 0.5rem',
-                    borderRadius: '4px',
-                    fontSize: '0.9em',
-                    color: '#667eea'
-                  }}>
-                    {children}
-                  </code>
+                  <code style={{ background: 'var(--bg-secondary)', padding: '2px 8px', borderRadius: '6px', color: 'var(--accent-primary)', fontFamily: 'monospace', fontSize: '14px' }}>{children}</code>
                 ) : (
-                  <pre style={{ 
-                    background: isDark ? '#0f172a' : '#f3f4f6',
-                    padding: '1.5rem',
-                    borderRadius: '12px',
-                    overflow: 'auto',
-                    margin: '1.5rem 0'
-                  }}>
-                    <code>{children}</code>
-                  </pre>
-                )
+                  <div style={{ margin: '32px 0', padding: '24px', background: '#1e293b', borderRadius: '16px', border: '1px solid #334155', overflowX: 'auto' }}>
+                    <code style={{ fontFamily: 'monospace', fontSize: '14px', color: '#e2e8f0' }}>{children}</code>
+                  </div>
+                ),
+              strong: ({ children }) => <strong style={{ color: 'var(--text-primary)', fontWeight: '600' }}>{children}</strong>,
+              a: ({ href, children }) => (
+                <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}>{children}</a>
+              )
             }}
           >
             {post.content}
           </ReactMarkdown>
-        </div>
+        </motion.div>
 
-        <div style={styles.actions}>
-          <motion.button
-            style={styles.actionButton(liked)}
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          style={{ display: 'flex', gap: '16px', marginTop: '48px', paddingTop: '32px', borderTop: '1px solid var(--text-secondary)' }}
+        >
+          <button
             onClick={() => setLiked(!liked)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="glass-panel"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '12px 20px',
+              borderRadius: '12px',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              color: liked ? '#ef4444' : 'var(--text-secondary)',
+              borderColor: liked ? '#ef4444' : undefined
+            }}
           >
-            <FiHeart style={{ fill: liked ? 'currentColor' : 'none' }} />
-            <span>{liked ? 'Liked!' : 'Like'}</span>
-          </motion.button>
+            <FiHeart style={{ fill: liked ? '#ef4444' : 'none' }} />
+            <span>{liked ? 'Liked!' : 'Like this article'}</span>
+          </button>
 
-          <motion.button
-            style={styles.actionButton(false)}
-            onClick={handleShare}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <button onClick={handleShare} className="glass-panel" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', borderRadius: '12px', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}>
             <FiShare2 />
             <span>Share</span>
-          </motion.button>
-        </div>
-      </motion.div>
+          </button>
+        </motion.div>
+      </motion.article>
 
-      <motion.div
-        style={styles.footer}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
-      >
-        <motion.button
-          style={styles.footerButton}
-          onClick={handleGoBack}
-          whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)' }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <FiArrowLeft /> Back to all articles
-        </motion.button>
-      </motion.div>
+      {/* Related Articles - Simple & Clean */}
+      {relatedPosts.length > 0 && (
+        <section style={{ padding: '60px 0 80px', borderTop: '1px solid var(--text-secondary)' }}>
+          <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '32px' }}>
+              More Articles
+            </h2>
 
-      <style>{`
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-      `}</style>
-    </motion.div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {relatedPosts.map((article) => (
+                <Link key={article.id} to={`/blog/${article.id}`} style={{ textDecoration: 'none' }}>
+                  <motion.div
+                    className="glass-panel"
+                    style={{ padding: '20px 24px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                    whileHover={{ x: 8, borderColor: 'var(--accent-primary)' }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '4px' }}>
+                        {article.title}
+                      </h3>
+                      <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                        {new Date(article.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <FiArrowRight style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+
+            <div style={{ marginTop: '32px' }}>
+              <Link to="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--accent-primary)', fontWeight: '600', fontSize: '14px', textDecoration: 'none' }}>
+                View all articles <FiArrowRight />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+    </>
   );
 };
 
