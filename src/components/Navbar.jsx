@@ -5,6 +5,15 @@ import { useRef, useState, useEffect } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import ThemeToggle from './ThemeToggle';
 
+const navLinks = [
+  { name: 'Home', path: '/' },
+  { name: 'Projects', path: '/portfolio' },
+  { name: 'Experience', path: '/experience' },
+  { name: 'Resume', path: '/resume' },
+  { name: 'Blog', path: '/blog' },
+  { name: 'Contact', path: '/contact' },
+];
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -13,15 +22,6 @@ const Navbar = () => {
   // Blob Animation State
   const navRefs = useRef({});
   const [blobStyle, setBlobStyle] = useState({ left: 0, width: 0, opacity: 0 });
-
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Projects', path: '/portfolio' },
-    { name: 'Experience', path: '/experience' },
-    { name: 'Resume', path: '/resume' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'Contact', path: '/contact' },
-  ];
 
   // Recalculate blob position on location change or resize
   useEffect(() => {
