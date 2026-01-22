@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { motion } from 'framer-motion';
-import { FiDownload, FiHome, FiMail, FiPhone, FiLinkedin } from 'react-icons/fi';
+import { FiDownload, FiHome } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import pdf from "../images/resume.pdf";
