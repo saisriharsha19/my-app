@@ -14,7 +14,6 @@ import ExperiencePage from './pages/ExperiencePage';
 import Resume from './pages/Resume';
 import { ThemeProvider } from './ThemeContext';
 import './App.css';
-import { logEvent } from './analytics';
 
 // PageTracker: Pushes a pageview event to GTM on route changes
 function PageTracker() {
