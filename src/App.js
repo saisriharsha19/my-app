@@ -1,7 +1,6 @@
 // src/App.js
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import TagManager from 'react-gtm-module';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -14,8 +13,9 @@ import ExperiencePage from './pages/ExperiencePage';
 import Resume from './pages/Resume';
 import { ThemeProvider } from './ThemeContext';
 import './App.css';
+import { initGA, logPageView } from './analytics';
 
-// PageTracker: Pushes a pageview event to GTM on route changes
+// PageTracker: Logs pageviews to GA on route changes
 function PageTracker() {
   const location = useLocation();
 
@@ -23,18 +23,9 @@ function PageTracker() {
     // Scroll to top on route change
     window.scrollTo(0, 0);
 
-    // Ensure window.dataLayer exists
-    window.dataLayer = window.dataLayer || [];
+    // Log pageview for Google Analytics
+    logPageView();
 
-    // Push the pageview event to GTM
-    TagManager.dataLayer({
-      dataLayer: {
-        event: 'pageview',
-        page: location.pathname + location.search,
-      },
-    });
-
-    console.log('GTM pageview event pushed:', location.pathname + location.search);
   }, [location]);
 
   return null;
@@ -48,11 +39,8 @@ function AppContent() {
     if (analyticsInitialized.current) return;
     analyticsInitialized.current = true;
 
-    // Initialize Google Tag Manager
-    const tagManagerArgs = {
-      gtmId: 'GTM-K5B486R5',
-    };
-    TagManager.initialize(tagManagerArgs);
+    // Initialize Google Analytics
+    initGA();
   }, []);
 
   return (

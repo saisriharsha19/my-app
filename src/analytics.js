@@ -1,32 +1,39 @@
-import TagManager from 'react-gtm-module';
+import ReactGA from 'react-ga4';
 
 const config = {
+  measurementId: 'G-SBFHT4D8YE',
   debug: process.env.NODE_ENV === 'development'
 };
 
-// No initialization needed here as GTM is initialized in App.js
+export const initGA = () => {
+  if (ReactGA.isInitialized) return;
+  ReactGA.initialize(config.measurementId);
 
-// Page views are tracked via the PageTracker component in App.js,
-// so explicit logPageView is likely redundant unless you have specific needs.
-// We'll keep a dataLayer push version just in case, or you can remove it.
-export const logPageView = (location) => {
-  // Passively allow manual logging if needed, but App.js handles it.
   if (config.debug) {
-    console.log('GTM Pageview (optional manual trigger):', location);
+    console.log('GA initialized:', config.measurementId);
+  }
+};
+
+export const logPageView = () => {
+  ReactGA.send({
+    hitType: 'pageview',
+    page_path: window.location.pathname,
+    page_title: document.title
+  });
+
+  if (config.debug) {
+    console.log('GA Pageview logged:', window.location.pathname);
   }
 };
 
 export const logEvent = (category, action, label) => {
-  TagManager.dataLayer({
-    dataLayer: {
-      event: 'custom_event', // Generic event name for GTM triggers
-      eventCategory: category,
-      eventAction: action,
-      eventLabel: label
-    }
+  ReactGA.event({
+    category,
+    action,
+    label
   });
 
   if (config.debug) {
-    console.log('GTM Event logged:', { category, action, label });
+    console.log('GA Event logged:', { category, action, label });
   }
 };
