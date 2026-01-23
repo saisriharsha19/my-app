@@ -1,54 +1,32 @@
-// analytics.js
-import ReactGA from 'react-ga4';
+import TagManager from 'react-gtm-module';
 
 const config = {
-  measurementId: 'G-SBFHT4D8YE',
-  streamId: '10246799672',
   debug: process.env.NODE_ENV === 'development'
 };
 
-export const initGA = () => {
-  ReactGA.initialize(config.measurementId, {
-    gaOptions: {
-      debug: config.debug
+// No initialization needed here as GTM is initialized in App.js
+
+// Page views are tracked via the PageTracker component in App.js,
+// so explicit logPageView is likely redundant unless you have specific needs.
+// We'll keep a dataLayer push version just in case, or you can remove it.
+export const logPageView = (location) => {
+  // Passively allow manual logging if needed, but App.js handles it.
+  if (config.debug) {
+    console.log('GTM Pageview (optional manual trigger):', location);
+  }
+};
+
+export const logEvent = (category, action, label) => {
+  TagManager.dataLayer({
+    dataLayer: {
+      event: 'custom_event', // Generic event name for GTM triggers
+      eventCategory: category,
+      eventAction: action,
+      eventLabel: label
     }
   });
-  
-  // Log initialization in development
-  if (config.debug) {
-    console.log('GA initialized for stream:', config.streamId);
-  }
-};
 
-export const logPageView = () => {
-  const page = window.location.pathname;
-  ReactGA.send({
-    hitType: "pageview",
-    page,
-    title: document.title,
-    location: window.location.href
-  });
-  
-  // Log pageview in development
   if (config.debug) {
-    console.log('Pageview logged:', {
-      page,
-      title: document.title,
-      location: window.location.href
-    });
-  }
-};
-
-// Optional: Custom event tracking function
-export const logEvent = (category, action, label) => {
-  ReactGA.event({
-    category,
-    action,
-    label
-  });
-  
-  // Log event in development
-  if (config.debug) {
-    console.log('Event logged:', { category, action, label });
+    console.log('GTM Event logged:', { category, action, label });
   }
 };

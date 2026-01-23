@@ -12,13 +12,13 @@ const ThemeToggle = () => {
       position: 'relative',
       width: 'clamp(48px, 10vw, 56px)',
       height: 'clamp(26px, 6vw, 30px)',
-      background: isDarkMode 
-        ? 'linear-gradient(135deg, #1e3a8a, #0f172a)' 
+      background: isDarkMode
+        ? 'linear-gradient(135deg, #1e3a8a, #0f172a)'
         : 'linear-gradient(135deg, #fbbf24, #f59e0b)',
       borderRadius: 'clamp(13px, 3vw, 15px)',
       border: 'none',
       cursor: 'pointer',
-      boxShadow: isDarkMode 
+      boxShadow: isDarkMode
         ? '0 2px 8px rgba(30, 58, 138, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.2)'
         : '0 2px 8px rgba(251, 191, 36, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.1)',
       transition: 'all 0.3s ease',
@@ -64,25 +64,29 @@ const ThemeToggle = () => {
     >
       <AnimatePresence mode="wait">
         {isDarkMode && (
-          <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+          >
             <motion.span
-              style={{...styles.stars, top: 'clamp(4px, 1.5vw, 6px)', left: 'clamp(6px, 2vw, 8px)'}}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-            >
-              ✦
-            </motion.span>
-            <motion.span
-              style={{...styles.stars, bottom: 'clamp(4px, 1.5vw, 6px)', left: 'clamp(10px, 3vw, 14px)'}}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
+              style={{ ...styles.stars, top: 'clamp(4px, 1.5vw, 6px)', left: 'clamp(6px, 2vw, 8px)' }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
               transition={{ delay: 0.1 }}
             >
               ✦
             </motion.span>
-          </>
+            <motion.span
+              style={{ ...styles.stars, bottom: 'clamp(4px, 1.5vw, 6px)', left: 'clamp(10px, 3vw, 14px)' }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              ✦
+            </motion.span>
+          </motion.div>
         )}
       </AnimatePresence>
 

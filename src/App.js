@@ -14,7 +14,7 @@ import ExperiencePage from './pages/ExperiencePage';
 import Resume from './pages/Resume';
 import { ThemeProvider } from './ThemeContext';
 import './App.css';
-import { initGA, logPageView } from './analytics';
+import { logEvent } from './analytics';
 
 // PageTracker: Pushes a pageview event to GTM on route changes
 function PageTracker() {
@@ -35,19 +35,19 @@ function PageTracker() {
       },
     });
 
-    // Log pageview for Google Analytics
-    logPageView();
-
     console.log('GTM pageview event pushed:', location.pathname + location.search);
   }, [location]);
 
   return null;
 }
 
+
+const analyticsInitialized = { current: false };
+
 function AppContent() {
   useEffect(() => {
-    // Initialize Google Analytics
-    initGA();
+    if (analyticsInitialized.current) return;
+    analyticsInitialized.current = true;
 
     // Initialize Google Tag Manager
     const tagManagerArgs = {

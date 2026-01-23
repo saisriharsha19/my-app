@@ -98,81 +98,85 @@ const Portfolio = () => {
             variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
           >
             <AnimatePresence mode="wait">
-              {currentItems.map((item, index) => {
-                const globalIndex = indexOfFirstItem + index;
+              <motion.div
+                key={currentPage}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-1 gap-8"
+              >
+                {currentItems.map((item, index) => {
+                  const globalIndex = indexOfFirstItem + index;
 
-                return (
-                  <motion.div
-                    key={item.id}
-                    className="glass-panel p-6 md:p-8 rounded-3xl relative overflow-hidden group transition-all duration-300 hover:border-indigo-500/30"
-                    variants={{
-                      hidden: { opacity: 0, y: 30 },
-                      visible: { opacity: 1, y: 0 }
-                    }}
-                    whileHover={{ y: -5 }}
-                  >
-                    <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'var(--gradient-primary)' }} />
+                  return (
+                    <div
+                      key={item.id}
+                      className="glass-panel p-6 md:p-8 rounded-3xl relative overflow-hidden group transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-1"
+                    >
+                      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'var(--gradient-primary)' }} />
 
-                    <div className="flex flex-col md:flex-row gap-8 items-start">
-                      <div className="w-full md:w-1/3 shrink-0">
-                        <div className="aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-4xl text-indigo-500 font-bold relative group-hover:shadow-lg transition-all">
-                          {/* Placeholder for project image if available, or just index/icon */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5" />
-                          <span className="relative z-10">{String(globalIndex + 1).padStart(2, '0')}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
-                            Featured
-                          </span>
-                          <span className="text-secondary text-sm">
-                            {item.tech_stack || [
-                              "React • Node.js • MongoDB",
-                              "Python • TensorFlow • AWS",
-                              "Next.js • TypeScript • PostgreSQL",
-                              "FastAPI • Docker • Redis",
-                              "Vue.js • GraphQL • Firebase",
-                              "Django • Kubernetes • GCP"
-                            ][globalIndex % 6]}
-                          </span>
+                      <div className="flex flex-col md:flex-row gap-8 items-start">
+                        <div className="w-full md:w-1/3 shrink-0">
+                          <div className="aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-4xl text-indigo-500 font-bold relative group-hover:shadow-lg transition-all">
+                            {/* Placeholder for project image if available, or just index/icon */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5" />
+                            <span className="relative z-10">{String(globalIndex + 1).padStart(2, '0')}</span>
+                          </div>
                         </div>
 
-                        <h2 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                          {item.title}
-                        </h2>
-                        <p className="text-secondary leading-relaxed mb-6">
-                          {item.description}
-                        </p>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-3">
+                            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
+                              Featured
+                            </span>
+                            <span className="text-secondary text-sm">
+                              {item.tech_stack || [
+                                "React • Node.js • MongoDB",
+                                "Python • TensorFlow • AWS",
+                                "Next.js • TypeScript • PostgreSQL",
+                                "FastAPI • Docker • Redis",
+                                "Vue.js • GraphQL • Firebase",
+                                "Django • Kubernetes • GCP"
+                              ][globalIndex % 6]}
+                            </span>
+                          </div>
 
-                        <div className="flex flex-wrap gap-4 pt-4 border-t border-gray-200 dark:border-white/5">
-                          {item.project_url && (
-                            <a
-                              href={item.project_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="btn-primary py-2 px-6 text-sm"
-                            >
-                              View Project <FiExternalLink />
-                            </a>
-                          )}
-                          {item.github_url && (
-                            <a
-                              href={item.github_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="btn-secondary py-2 px-6 text-sm hover:bg-black/5 dark:hover:bg-white/5"
-                            >
-                              Source Code <FiGithub />
-                            </a>
-                          )}
+                          <h2 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                            {item.title}
+                          </h2>
+                          <p className="text-secondary leading-relaxed mb-6">
+                            {item.description}
+                          </p>
+
+                          <div className="flex flex-wrap gap-4 pt-4 border-t border-gray-200 dark:border-white/5">
+                            {item.project_url && (
+                              <a
+                                href={item.project_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-primary py-2 px-6 text-sm"
+                              >
+                                View Project <FiExternalLink />
+                              </a>
+                            )}
+                            {item.github_url && (
+                              <a
+                                href={item.github_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-secondary py-2 px-6 text-sm hover:bg-black/5 dark:hover:bg-white/5"
+                              >
+                                Source Code <FiGithub />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </motion.div>
-                );
-              })}
+                  );
+                })}
+              </motion.div>
             </AnimatePresence>
           </motion.div>
 

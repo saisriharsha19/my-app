@@ -19,9 +19,9 @@ export const RevealingText = ({ text, className = "", childClassName = "", delay
             y: 0,
             filter: "blur(0px)",
             transition: {
-                type: "spring",
-                damping: 12,
-                stiffness: 100,
+                y: { type: "spring", damping: 12, stiffness: 100 },
+                opacity: { duration: 0.4 },
+                filter: { type: "tween", duration: 0.3 },
             },
         },
         hidden: {

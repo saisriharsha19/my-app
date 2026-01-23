@@ -24,6 +24,7 @@ async function generateSitemap() {
     { url: "/blog", changefreq: "weekly", priority: 0.8 },
     { url: "/portfolio", changefreq: "weekly", priority: 0.8 },
     { url: "/contact", changefreq: "monthly", priority: 0.7 },
+    { url: "/resume", changefreq: "monthly", priority: 0.7 },
   ];
 
   const blogPosts = await fetchBlogPosts();
@@ -38,4 +39,4 @@ async function generateSitemap() {
   createWriteStream("./public/sitemap.xml").write(sitemap);
 }
 
-generateSitemap().then(() => console.log("✅ Sitemap updated!"));
+generateSitemap().then(() => console.log("Sitemap updated!"));
