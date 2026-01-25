@@ -81,12 +81,11 @@ const HeroSection = () => {
         style={{ y, opacity }}
         className="relative z-10 w-full text-center flex flex-col items-center gap-8 container"
       >
-        <div className="flex items-center justify-center flex-wrap gap-2 px-4 py-2 rounded-full glass-panel text-sm font-medium text-secondary mb-4 h-auto text-center">
-          <span className="rounded-full bg-green-500 w-2 h-2 inline-block animate-pulse shrink-0" />
-          Available for new projects
-        </div>
-
         <div className="font-bold tracking-tighter" style={{ lineHeight: 1.15 }}>
+          <div className="flex items-center justify-center flex-wrap gap-2 px-4 py-2 rounded-full glass-panel text-sm font-medium text-secondary mb-4 h-auto text-center w-fit mx-auto">
+            <span className="rounded-full bg-green-500 w-2 h-2 inline-block animate-pulse shrink-0" />
+            Available for new projects
+          </div>
           <div className="text-4xl md:text-6xl lg:text-7xl mb-2">
             <RevealingText text="Building the future" delay={0.1} className="justify-center" />
           </div>
