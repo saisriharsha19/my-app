@@ -19,6 +19,8 @@
   /* Dimensions */
   --max-width: 1200px;
   --navbar-height: 80px;
+  --footer-height: 580px;
+  /* Mobile footer estimate */
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -35,6 +37,20 @@
   --text-secondary: #94A3B8;
   --accent-primary: #818CF8;
   --accent-secondary: #A78BFA;
+}
+
+/* Tablet Footer Height */
+@media (min-width: 768px) {
+  :root {
+    --footer-height: 420px;
+  }
+}
+
+/* Desktop Footer Height */
+@media (min-width: 1024px) {
+  :root {
+    --footer-height: 320px;
+  }
 }
 
 /* ============================================
