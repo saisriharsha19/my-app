@@ -53,7 +53,7 @@ const CatLoader = ({ isWakingUp }) => {
           height: 30px;
           background: var(--text-primary);
           clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-          transition: background 0.5s ease;
+          transition: background 0.6s ease;
           z-index: 1;
         }
         
@@ -79,7 +79,7 @@ const CatLoader = ({ isWakingUp }) => {
           height: 100px;
           background: var(--text-primary);
           border-radius: 50%;
-          transition: background 0.5s ease, transform 0.5s ease;
+          transition: background 0.6s ease, transform 0.5s ease, box-shadow 0.6s ease;
           box-shadow: 0 8px 24px rgba(0,0,0,0.15);
           z-index: 2;
         }
@@ -119,7 +119,7 @@ const CatLoader = ({ isWakingUp }) => {
           border-top-color: transparent;
           border-left-color: transparent;
           transform: rotate(50deg);
-          transition: border-color 0.5s ease;
+          transition: border-color 0.6s ease;
           z-index: 1;
         }
 

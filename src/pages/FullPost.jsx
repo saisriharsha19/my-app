@@ -216,18 +216,30 @@ const FullPost = () => {
           transition={{ delay: 0.3 }}
           className="flex flex-wrap gap-4 mt-12"
         >
-          <button
+          <motion.button
             onClick={() => setLiked(!liked)}
             className="btn-secondary glass-panel hover:bg-white/10"
             style={{
-              color: liked ? '#ef4444' : undefined,
+              color: liked ? '#ef4444' : 'var(--text-primary)',
               borderColor: liked ? '#ef4444' : undefined,
-              backgroundColor: liked ? 'rgba(239, 68, 68, 0.1)' : undefined
+              backgroundColor: liked ? 'rgba(239, 68, 68, 0.1)' : undefined,
+              transition: 'all 0.3s ease'
             }}
+            whileTap={{ scale: 0.95 }}
+            animate={{ scale: liked ? [1, 1.1, 1] : 1 }}
+            transition={{ duration: 0.3 }}
           >
-            <FiHeart style={{ fill: liked ? '#ef4444' : 'none' }} />
+            <motion.div
+              animate={{
+                scale: liked ? [1, 1.3, 1] : 1,
+                rotate: liked ? [0, -10, 10, -10, 0] : 0
+              }}
+              transition={{ duration: 0.5 }}
+            >
+              <FiHeart style={{ fill: liked ? '#ef4444' : 'none', transition: 'fill 0.3s ease' }} />
+            </motion.div>
             {liked ? 'Liked!' : 'Like this article'}
-          </button>
+          </motion.button>
 
           <button
             onClick={handleShare}
