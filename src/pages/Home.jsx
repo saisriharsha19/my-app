@@ -81,8 +81,8 @@ const HeroSection = () => {
         style={{ y, opacity }}
         className="relative z-10 w-full text-center flex flex-col items-center gap-8 container"
       >
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-sm font-medium text-secondary mb-4">
-          <span className="rounded-full bg-green-500 w-2 h-2 inline-block animate-pulse" />
+        <div className="flex items-center justify-center flex-wrap gap-2 px-4 py-2 rounded-full glass-panel text-sm font-medium text-secondary mb-4 h-auto text-center">
+          <span className="rounded-full bg-green-500 w-2 h-2 inline-block animate-pulse shrink-0" />
           Available for new projects
         </div>
 

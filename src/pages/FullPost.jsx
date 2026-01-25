@@ -35,7 +35,7 @@ const FullPost = () => {
         const data = await response.json();
         setPost(data);
 
-        const allPostsRes = await fetch('https://backend-482511937770.europe-west1.run.app/blog');
+        const allPostsRes = await fetch('https://backend-482511937770.europe-west1.run.app/blog/');
         if (allPostsRes.ok) {
           const allPosts = await allPostsRes.json();
           const filtered = allPosts.filter(p => p.id !== parseInt(postId)).slice(0, 3);

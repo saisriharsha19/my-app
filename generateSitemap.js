@@ -4,7 +4,7 @@ const { createWriteStream } = require("fs");
 async function fetchBlogPosts() {
   try {
     const fetch = (await import("node-fetch")).default; // Dynamic import for Node.js <18
-    const response = await fetch("https://personalwebsitebackend-gthafrgadzc2argc.eastus2-01.azurewebsites.net/blog/");
+    const response = await fetch("https://backend-482511937770.europe-west1.run.app/blog/");
 
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 

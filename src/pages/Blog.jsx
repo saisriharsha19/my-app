@@ -122,7 +122,8 @@ const Blog = () => {
                 border: '1px solid var(--border-color, #e5e7eb)',
                 background: 'var(--bg-primary)',
                 outline: 'none',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: 'var(--text-primary)'
               }}
             />
           </div>
