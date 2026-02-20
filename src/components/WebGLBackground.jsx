@@ -4,16 +4,11 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ThemeContext } from '../ThemeContext';
 
-// Vertex Shader: Displaces vertices using multiple sine waves to simulate clashing water
+// 2. Vertex Shader (Position & Point Size)
 const vertexShader = `
 uniform float uTime;
 varying vec2 vUv;
 varying float vElevation;
-
-// Simple pseudo-random noise
-float random(vec2 st) {
-    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
-}
 
 void main() {
     vUv = uv;
@@ -25,7 +20,7 @@ void main() {
     // Wave 2: Crossing swell
     float wave2 = sin(pos.y * 0.8 + uTime * 0.3 + pos.x * 0.2) * 0.3;
     
-    // Wave 3: Choppy interference (clashing)
+    // Wave 3: Choppy interference
     float wave3 = sin(pos.x * 2.0 + pos.y * 1.5 + uTime * 1.2) * 0.15;
 
     // Combine waves
@@ -36,11 +31,15 @@ void main() {
 
     vElevation = elevation;
 
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
+    
+    // Particle Size Attenuation
+    gl_PointSize = 4.0 * (10.0 / -mvPosition.z);
 }
 `;
 
-// Fragment Shader: Colors based on elevation (peaks = bright/foam, valleys = deep)
+// 3. Fragment Shader (Circular Particles)
 const fragmentShader = `
 uniform vec3 uColorDeep;
 uniform vec3 uColorSurface;
@@ -48,75 +47,89 @@ uniform vec3 uColorCrest;
 varying float vElevation;
 
 void main() {
-    // Normalize elevation somewhat (approx range -1.0 to 1.0)
-    // Adjust mix strength to be less aggressive
+    // Make it a circle
+    float dist = length(gl_PointCoord - vec2(0.5));
+    if (dist > 0.5) discard;
     
-    // Base gradient: Deep -> Surface
-    vec3 color = mix(uColorDeep, uColorSurface, smoothstep(-0.8, 0.2, vElevation));
-    
-    // Crest/Crash highlight at peaks: Surface -> Crest
-    vec3 finalColor = mix(color, uColorCrest, smoothstep(0.2, 0.9, vElevation));
+    // Soft edge
+    float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
 
-    gl_FragColor = vec4(finalColor, 0.6); // 0.6 opacity for glass effect
+    // Color mixing
+    vec3 color = mix(uColorDeep, uColorSurface, smoothstep(-0.8, 0.2, vElevation));
+    vec3 finalColor = mix(color, uColorCrest, smoothstep(0.2, 0.9, vElevation));
+    
+    gl_FragColor = vec4(finalColor, alpha * 0.8);
 }
 `;
 
 const Waves = ({ isDark }) => {
     const meshRef = useRef();
+    const materialRef = useRef();
 
     // Define theme colors
     const colors = useMemo(() => {
         if (isDark) {
+            // Dark Mode: Rich, Vibrant, Deep Ocean
             return {
-                deep: new THREE.Color('#1e1b4b'),    // Indigo 950
-                surface: new THREE.Color('#6366f1'), // Indigo 500
-                crest: new THREE.Color('#e0e7ff')    // Indigo 100
+                deep: new THREE.Color('#172554'),    // Blue-950 (Deep Ocean)
+                surface: new THREE.Color('#4338ca'), // Indigo-700 (Vibrant Swell)
+                crest: new THREE.Color('#818cf8')    // Indigo-400 (Glowing Peaks)
             };
         } else {
+            // Light Mode: Sophisticated Cool Slate & Teal (Crystal Clear)
             return {
-                deep: new THREE.Color('#f8fafc'),    // Slate 50 (or White)
-                surface: new THREE.Color('#38bdf8'), // Sky 400
-                crest: new THREE.Color('#0284c7')    // Sky 600
+                deep: new THREE.Color('#f8fafc'),    // Slate-50 (Clean White/Grey base)
+                surface: new THREE.Color('#cbd5e1'), // Slate-300 (Subtle depth)
+                crest: new THREE.Color('#0f766e')    // Teal-700 (Sharp, deep contrast for peaks)
             };
         }
     }, [isDark]);
 
-    const uniforms = useMemo(() => ({
-        uTime: { value: 0 },
-        uColorDeep: { value: colors.deep },
-        uColorSurface: { value: colors.surface },
-        uColorCrest: { value: colors.crest }
-    }), []); // Initial uniforms
+    const uniforms = useMemo(
+        () => ({
+            uTime: { value: 0 },
+            uColorDeep: { value: new THREE.Color('#000000') },
+            uColorSurface: { value: new THREE.Color('#000000') },
+            uColorCrest: { value: new THREE.Color('#000000') },
+        }),
+        []
+    );
 
     // Update uniforms when theme changes
     useEffect(() => {
-        if (meshRef.current) {
-            meshRef.current.material.uniforms.uColorDeep.value.lerp(colors.deep, 1);
-            meshRef.current.material.uniforms.uColorSurface.value.lerp(colors.surface, 1);
-            meshRef.current.material.uniforms.uColorCrest.value.lerp(colors.crest, 1);
+        if (materialRef.current) {
+            materialRef.current.uniforms.uColorDeep.value.copy(colors.deep);
+            materialRef.current.uniforms.uColorSurface.value.copy(colors.surface);
+            materialRef.current.uniforms.uColorCrest.value.copy(colors.crest);
         }
     }, [colors]);
 
     useFrame((state) => {
         const { clock } = state;
-        if (meshRef.current) {
-            meshRef.current.material.uniforms.uTime.value = clock.getElapsedTime();
+        if (materialRef.current) {
+            materialRef.current.uniforms.uTime.value = clock.getElapsedTime() * 0.5; // Faster, more dynamic
+
+            // Smoothly interpolate
+            materialRef.current.uniforms.uColorDeep.value.lerp(colors.deep, 0.05);
+            materialRef.current.uniforms.uColorSurface.value.lerp(colors.surface, 0.05);
+            materialRef.current.uniforms.uColorCrest.value.lerp(colors.crest, 0.05);
         }
     });
 
     return (
-        <mesh ref={meshRef} rotation={[-Math.PI / 2.5, 0, 0]} position={[0, 0, -2]}>
-            {/* High segment plane for smooth waves */}
-            <planeGeometry args={[20, 10, 128, 64]} />
+        <points ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, -2]}>
+            {/* Wider Span [30, 16] to cover edges, High Density */}
+            <planeGeometry args={[30, 16, 256, 128]} />
             <shaderMaterial
+                ref={materialRef}
                 vertexShader={vertexShader}
                 fragmentShader={fragmentShader}
                 uniforms={uniforms}
                 transparent={true}
-                wireframe={true} // Wireframe looks techy and "efficient"
-                side={THREE.DoubleSide}
+                depthWrite={false}
+                blending={THREE.NormalBlending}
             />
-        </mesh>
+        </points>
     );
 };
 
