@@ -1,19 +1,22 @@
 // src/App.js
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Blog from './pages/Blog';
-import Portfolio from './pages/Portfolio';
-import Contact from './pages/Contact';
-import ThankYouPage from './pages/ThankYouPage';
-import FullPost from './pages/FullPost';
-import ExperiencePage from './pages/ExperiencePage';
-import Resume from './pages/Resume';
+import Home from './pages/Home'; // eager — it's the landing page
 import { ThemeProvider } from './ThemeContext';
 import './App.css';
 import { initGA, logPageView } from './analytics';
+
+// Route-level code splitting: non-home pages are lazy-loaded so their JS
+// is not parsed on the initial landing-page visit, saving ~200-400ms parse time.
+const Blog = lazy(() => import('./pages/Blog'));
+const Portfolio = lazy(() => import('./pages/Portfolio'));
+const Contact = lazy(() => import('./pages/Contact'));
+const ThankYouPage = lazy(() => import('./pages/ThankYouPage'));
+const FullPost = lazy(() => import('./pages/FullPost'));
+const ExperiencePage = lazy(() => import('./pages/ExperiencePage'));
+const Resume = lazy(() => import('./pages/Resume'));
 
 // PageTracker: Logs pageviews to GA on route changes
 function PageTracker() {
@@ -49,16 +52,19 @@ function AppContent() {
       <div className="App">
         <Navbar />
         <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/thank-you" element={<ThankYouPage />} />
-            <Route path="/blog/:postId" element={<FullPost />} />
-            <Route path="/experience" element={<ExperiencePage />} />
-            <Route path="/resume" element={<Resume />} />
-          </Routes>
+          {/* Suspense fallback is null — pages handle their own loading states */}
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/thank-you" element={<ThankYouPage />} />
+              <Route path="/blog/:postId" element={<FullPost />} />
+              <Route path="/experience" element={<ExperiencePage />} />
+              <Route path="/resume" element={<Resume />} />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
       </div>

@@ -977,3 +977,46 @@ textarea:focus {
 [data-theme="dark"] .dark\:hover\:bg-white\/5:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
+
+/* ============================================
+   ABOUT SECTION — Floating decorative elements
+   Pure CSS animations run on the compositor thread
+   (no JS overhead, unlike framer-motion infinite loops)
+   ============================================ */
+@keyframes about-float-up {
+  0% {
+    transform: translate(0, 0) rotate(15deg);
+  }
+
+  50% {
+    transform: translate(0, -10px) rotate(12deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(15deg);
+  }
+}
+
+@keyframes about-float-down {
+  0% {
+    transform: translate(0, 0) rotate(-10deg);
+  }
+
+  50% {
+    transform: translate(0, 10px) rotate(-13deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(-10deg);
+  }
+}
+
+.about-float-1 {
+  animation: about-float-up 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.about-float-2 {
+  animation: about-float-down 5s ease-in-out 1s infinite;
+  will-change: transform;
+}

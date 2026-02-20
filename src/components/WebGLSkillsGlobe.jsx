@@ -49,6 +49,11 @@ const WebGLSkillsGlobe = () => {
     const [hovered, setHovered] = useState(null);
     const [tooltip, setTooltip] = useState({ x: 0, y: 0 });
     const pausedRef = useRef(false);
+    // Cache the NodeList of label spans so we never call querySelectorAll in the hot loop.
+    const spansRef = useRef(null);
+    // IntersectionObserver flag — pause RAF when section is off-screen.
+    const visibleRef = useRef(true);
+    const sectionRef = useRef(null);
 
     // Responsive sizing
     const [windowW, setWindowW] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
@@ -72,6 +77,12 @@ const WebGLSkillsGlobe = () => {
     const dimColor = isDarkMode ? 'rgba(148,163,184,0.35)' : 'rgba(71,85,105,0.3)';
 
     const animate = useCallback(() => {
+        if (!visibleRef.current) {
+            // Section is off-screen — reschedule without doing any work.
+            rafRef.current = requestAnimationFrame(animate);
+            return;
+        }
+
         if (!pausedRef.current) {
             angleRef.current.y += 0.003;
             angleRef.current.x += 0.001;
@@ -80,7 +91,12 @@ const WebGLSkillsGlobe = () => {
         const wrap = wrapRef.current;
         if (!wrap) { rafRef.current = requestAnimationFrame(animate); return; }
 
-        const spans = wrap.querySelectorAll('[data-gi]');
+        // Build the span cache once then reuse — avoids querySelectorAll every frame.
+        if (!spansRef.current || spansRef.current.length === 0) {
+            spansRef.current = Array.from(wrap.querySelectorAll('[data-gi]'));
+        }
+        const spans = spansRef.current;
+
         const cosY = Math.cos(angleRef.current.y);
         const sinY = Math.sin(angleRef.current.y);
         const cosX = Math.cos(angleRef.current.x);
@@ -113,7 +129,22 @@ const WebGLSkillsGlobe = () => {
         rafRef.current = requestAnimationFrame(animate);
     }, [points, R]);
 
+    // IntersectionObserver: stop doing layout work when globe is off-screen.
     useEffect(() => {
+        const section = sectionRef.current;
+        if (!section || typeof IntersectionObserver === 'undefined') return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => { visibleRef.current = entry.isIntersecting; },
+            { threshold: 0 }
+        );
+        observer.observe(section);
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        // Reset the span cache whenever points change (e.g. resize)
+        spansRef.current = null;
         rafRef.current = requestAnimationFrame(animate);
         return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
     }, [animate]);
@@ -139,7 +170,7 @@ const WebGLSkillsGlobe = () => {
 
 
     return (
-        <section style={{ padding: '60px 0' }} className="px-6">
+        <section ref={sectionRef} style={{ padding: '60px 0' }} className="px-6">
             <div className="container">
                 <div style={{ textAlign: 'center', marginBottom: '28px' }}>
                     <h2 style={{

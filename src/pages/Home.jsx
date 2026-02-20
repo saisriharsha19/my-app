@@ -1,13 +1,16 @@
 // src/pages/Home.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiGithub, FiLinkedin, FiMail, FiCpu, FiLayout, FiCloud, FiDatabase, FiLayers } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import MagneticButton from '../components/MagneticButton';
 import RevealingText from '../components/RevealingText';
 import WebGLBackground from '../components/WebGLBackground';
-import WebGLSkillsGlobe from '../components/WebGLSkillsGlobe';
 import profileImage from '../images/IMG_6153.webp';
+
+// Lazy-load the globe — it's below the fold and heavy.
+// It will only be fetched + parsed after the hero has painted.
+const WebGLSkillsGlobe = lazy(() => import('../components/WebGLSkillsGlobe'));
 
 // --- Carousel Data ---
 const expertiseItems = [
@@ -47,11 +50,9 @@ const expertiseItems = [
 
 // --- Components ---
 
-const HeroSection = () => {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-
+// HeroSection receives scroll transforms from the parent Home so there is
+// only one useScroll() listener for the entire home page.
+const HeroSection = ({ y, opacity }) => {
   return (
     <section className="min-h-screen flex flex-col justify-start items-center relative overflow-hidden px-6 pb-20" style={{ paddingTop: 'calc(var(--navbar-height) + 3rem)' }}>
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -381,10 +382,12 @@ const AboutSection = () => {
                   zIndex: 10
                 }} />
 
-                {/* Profile Image */}
+                {/* Profile Image — lazy loaded, decoded async off main thread */}
                 <img
                   src={profileImage}
                   alt="Sai Sri Harsha"
+                  loading="lazy"
+                  decoding="async"
                   style={{
                     width: '100%',
                     aspectRatio: '3/4',
@@ -395,10 +398,10 @@ const AboutSection = () => {
                 />
               </div>
 
-              {/* Floating Elements */}
-              <motion.div
-                animate={{ y: [0, -10, 0], rotate: [15, 12, 15] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              {/* Floating Elements — CSS animations run on the compositor thread,
+                  not the JS main thread, so they don't compete with React rendering. */}
+              <div
+                className="about-float-1"
                 style={{
                   position: 'absolute',
                   top: '-20px',
@@ -412,9 +415,8 @@ const AboutSection = () => {
                   boxShadow: '0 10px 20px rgba(0,0,0,0.15)'
                 }}
               />
-              <motion.div
-                animate={{ y: [0, 10, 0], rotate: [-10, -13, -10] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              <div
+                className="about-float-2"
                 style={{
                   position: 'absolute',
                   bottom: '40px',
@@ -462,28 +464,36 @@ const AboutSection = () => {
 };
 
 const Home = () => {
-  // Lift Background State to Home
+  // Single scroll listener for the whole home page.
+  // HeroSection receives the derived transforms as props
+  // instead of creating its own useScroll() inside.
   const { scrollY } = useScroll();
-  const opacity = useTransform(scrollY, [0, 1500], [1, 0]); // Global BG Fade
+  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const bgOpacity = useTransform(scrollY, [0, 1500], [1, 0]);
 
   return (
     <div className="home-container min-h-screen relative">
       {/* GLOBAL BACKGROUND - Fixed Position for Seamless Mix */}
-      <motion.div style={{ opacity }} className="fixed inset-0 z-0 pointer-events-none">
+      <motion.div style={{ opacity: bgOpacity }} className="fixed inset-0 z-0 pointer-events-none">
         <WebGLBackground />
       </motion.div>
 
-      <HeroSection />
+      <HeroSection y={heroY} opacity={heroOpacity} />
 
       <ExpertiseCarousel />
 
+      {/* WebGLSkillsGlobe is lazy — only fetched after hero paints.
+          No visible fallback needed; the section has its own heading. */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8 }}
       >
-        <WebGLSkillsGlobe />
+        <Suspense fallback={null}>
+          <WebGLSkillsGlobe />
+        </Suspense>
       </motion.div>
 
       <AboutSection />

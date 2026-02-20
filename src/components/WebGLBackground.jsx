@@ -74,25 +74,27 @@ void main() {
 }
 `;
 
+// Target ~30 fps for the background — imperceptible vs 60fps but halves GPU work.
+const TARGET_INTERVAL = 1 / 30;
+
 const Waves = ({ isDark }) => {
     const meshRef = useRef();
     const materialRef = useRef();
+    const elapsedRef = useRef(0); // accumulate time between frame advances
 
     // Define theme colors
     const colors = useMemo(() => {
         if (isDark) {
-            // Dark Mode: Rich, Vibrant, Deep Ocean
             return {
-                deep: new THREE.Color('#172554'),    // Blue-950 (Deep Ocean)
-                surface: new THREE.Color('#4338ca'), // Indigo-700 (Vibrant Swell)
-                crest: new THREE.Color('#818cf8')    // Indigo-400 (Glowing Peaks)
+                deep: new THREE.Color('#172554'),
+                surface: new THREE.Color('#4338ca'),
+                crest: new THREE.Color('#818cf8')
             };
         } else {
-            // Light Mode: Sophisticated Cool Slate & Teal (Crystal Clear)
             return {
-                deep: new THREE.Color('#f8fafc'),    // Slate-50 (Clean White/Grey base)
-                surface: new THREE.Color('#cbd5e1'), // Slate-300 (Subtle depth)
-                crest: new THREE.Color('#0f766e')    // Teal-700 (Sharp, deep contrast for peaks)
+                deep: new THREE.Color('#f8fafc'),
+                surface: new THREE.Color('#cbd5e1'),
+                crest: new THREE.Color('#0f766e')
             };
         }
     }, [isDark]);
@@ -116,25 +118,23 @@ const Waves = ({ isDark }) => {
         }
     }, [colors]);
 
-    useFrame((state) => {
-        const { clock } = state;
-        if (materialRef.current) {
-            materialRef.current.uniforms.uTime.value = clock.getElapsedTime() * 0.5; // Faster, more dynamic
+    useFrame((state, delta) => {
+        // Throttle updates to ~30fps. Skip shader work on frames that arrive before interval.
+        elapsedRef.current += delta;
+        if (elapsedRef.current < TARGET_INTERVAL) return;
+        elapsedRef.current = 0;
 
-            // Smoothly interpolate
+        if (materialRef.current) {
+            materialRef.current.uniforms.uTime.value = state.clock.getElapsedTime() * 0.5;
             materialRef.current.uniforms.uColorDeep.value.lerp(colors.deep, 0.05);
             materialRef.current.uniforms.uColorSurface.value.lerp(colors.surface, 0.05);
             materialRef.current.uniforms.uColorCrest.value.lerp(colors.crest, 0.05);
         }
     });
 
-    // Reduce geometry density on mobile for performance
-    const isMobile = window.innerWidth < 768;
-    const [segW, segH] = isMobile ? [256, 128] : [256, 128];
-
     return (
         <points ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, -2]}>
-            <planeGeometry args={[30, 16, segW, segH]} />
+            <planeGeometry args={[30, 16, 256, 128]} />
             <shaderMaterial
                 ref={materialRef}
                 vertexShader={vertexShader}
@@ -148,6 +148,10 @@ const Waves = ({ isDark }) => {
     );
 };
 
+// Use device pixel ratio caps based on device capability.
+// Mobile GPUs are taxed by high DPR; desktop can afford 1.5.
+const IS_TOUCH = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0;
+
 const WebGLBackground = () => {
     const { isDarkMode } = useContext(ThemeContext);
 
@@ -155,7 +159,7 @@ const WebGLBackground = () => {
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
             <Canvas
                 camera={{ position: [0, 2, 6], fov: 50 }}
-                dpr={[1, 1.2]} // Cap DPR lower for mobile
+                dpr={IS_TOUCH ? [1, 1] : [1, 1.5]}
                 gl={{
                     antialias: false,
                     powerPreference: "high-performance",
@@ -165,8 +169,7 @@ const WebGLBackground = () => {
                 }}
                 style={{ background: 'transparent' }}
                 onCreated={({ gl }) => {
-                    // 'pan-y' allows vertical scroll to work on mobile
-                    // while still passing horizontal drags to the canvas
+                    // pan-y allows native vertical scroll on mobile
                     gl.domElement.style.touchAction = 'pan-y';
                 }}
             >
