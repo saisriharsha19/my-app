@@ -1011,6 +1011,39 @@ textarea:focus {
   }
 }
 
+/* ============================================
+   HERO BIO TEXT — local wave fade
+   Uses mask-image for the radial fade shape so
+   only background-color transitions on theme
+   switch — no jarring gradient flash.
+   ============================================ */
+.hero-bio-text {
+  position: relative;
+  z-index: 1;
+  color: var(--text-primary);
+}
+
+.hero-bio-text::before {
+  content: '';
+  position: absolute;
+  inset: -32px -80px;
+  /* Solid colour — CSS can interpolate this smoothly */
+  background-color: var(--bg-primary);
+  /* Shape: radial fade, transparent at edges — never changes between themes */
+  -webkit-mask-image: radial-gradient(ellipse 80% 75% at 50% 50%,
+      black 0%,
+      black 25%,
+      transparent 70%);
+  mask-image: radial-gradient(ellipse 80% 75% at 50% 50%,
+      black 0%,
+      black 25%,
+      transparent 70%);
+  opacity: 0.82;
+  z-index: -1;
+  pointer-events: none;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
 .about-float-1 {
   animation: about-float-up 4s ease-in-out infinite;
   will-change: transform;

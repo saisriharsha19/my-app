@@ -94,7 +94,7 @@ const HeroSection = ({ y, opacity }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="text-lg md:text-xl text-secondary text-center max-w-4xl mx-auto px-8 py-6 rounded-2xl backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/50 shadow-sm font-medium leading-relaxed drop-shadow-sm mt-8"
+          className="hero-bio-text text-lg md:text-xl text-center max-w-2xl mx-auto font-semibold leading-relaxed mt-4"
         >
           I'm Sai Sri Harsha, a multidisciplinary engineer
           <br className="block" />
