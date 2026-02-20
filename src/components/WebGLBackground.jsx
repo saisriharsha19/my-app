@@ -39,26 +39,38 @@ void main() {
 }
 `;
 
-// 3. Fragment Shader (Circular Particles)
+// 3. Fragment Shader (Glowing Pulse Orbs)
 const fragmentShader = `
 uniform vec3 uColorDeep;
 uniform vec3 uColorSurface;
 uniform vec3 uColorCrest;
+uniform float uTime;
 varying float vElevation;
+varying vec2 vUv;
+
+// Pseudo-random for twinkle
+float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+}
 
 void main() {
-    // Make it a circle
+    // 1. Shape: Soft Glowing Orb (Cleanest for high density)
     float dist = length(gl_PointCoord - vec2(0.5));
     if (dist > 0.5) discard;
     
-    // Soft edge
-    float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
+    // Soft edge for glow
+    float alphaShape = 1.0 - smoothstep(0.1, 0.5, dist);
 
-    // Color mixing
+    // 2. Twinkle Effect: Random pulse based on position + time
+    float twinkle = sin(uTime * 2.0 + random(vUv) * 10.0) * 0.5 + 0.5;
+    // Modulate alpha brightness
+    float shimmer = 0.5 + 0.5 * twinkle; 
+
+    // 3. Color Mixing
     vec3 color = mix(uColorDeep, uColorSurface, smoothstep(-0.8, 0.2, vElevation));
     vec3 finalColor = mix(color, uColorCrest, smoothstep(0.2, 0.9, vElevation));
     
-    gl_FragColor = vec4(finalColor, alpha * 0.8);
+    gl_FragColor = vec4(finalColor, alphaShape * shimmer * 0.8);
 }
 `;
 
