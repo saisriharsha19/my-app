@@ -128,10 +128,13 @@ const Waves = ({ isDark }) => {
         }
     });
 
+    // Reduce geometry density on mobile for performance
+    const isMobile = window.innerWidth < 768;
+    const [segW, segH] = isMobile ? [256, 128] : [256, 128];
+
     return (
         <points ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, -2]}>
-            {/* Wider Span [30, 16] to cover edges, High Density */}
-            <planeGeometry args={[30, 16, 256, 128]} />
+            <planeGeometry args={[30, 16, segW, segH]} />
             <shaderMaterial
                 ref={materialRef}
                 vertexShader={vertexShader}
@@ -152,17 +155,19 @@ const WebGLBackground = () => {
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
             <Canvas
                 camera={{ position: [0, 2, 6], fov: 50 }}
-                dpr={[1, 1.5]} // Cap DPR at 1.5 for performance
+                dpr={[1, 1.2]} // Cap DPR lower for mobile
                 gl={{
-                    antialias: false, // POST-PROCESSING later if needed, or false for raw speed
+                    antialias: false,
                     powerPreference: "high-performance",
                     alpha: true,
                     stencil: false,
-                    depth: false // Background doesn't need depth buffer if it's just a plane
+                    depth: false
                 }}
                 style={{ background: 'transparent' }}
                 onCreated={({ gl }) => {
-                    gl.domElement.style.touchAction = 'none'; // Improve scrolling perf on mobile
+                    // 'pan-y' allows vertical scroll to work on mobile
+                    // while still passing horizontal drags to the canvas
+                    gl.domElement.style.touchAction = 'pan-y';
                 }}
             >
                 <Waves isDark={isDarkMode} />
