@@ -58,10 +58,8 @@ const HeroSection = () => {
         <div className="hero-bg-blob blob-1" />
         <div className="hero-bg-blob blob-2" />
       </div>
-      {/* Background Dot Pattern (Fades on scroll) */}
-      <motion.div style={{ opacity }} className="absolute inset-0 z-0">
-        <WebGLBackground />
-      </motion.div>
+
+      {/* Background Moved to Global Home Component */}
 
       <motion.div
         style={{ y, opacity }}
@@ -464,8 +462,17 @@ const AboutSection = () => {
 };
 
 const Home = () => {
+  // Lift Background State to Home
+  const { scrollY } = useScroll();
+  const opacity = useTransform(scrollY, [0, 1500], [1, 0]); // Global BG Fade
+
   return (
-    <div className="home-container min-h-screen">
+    <div className="home-container min-h-screen relative">
+      {/* GLOBAL BACKGROUND - Fixed Position for Seamless Mix */}
+      <motion.div style={{ opacity }} className="fixed inset-0 z-0 pointer-events-none">
+        <WebGLBackground />
+      </motion.div>
+
       <HeroSection />
 
       <ExpertiseCarousel />
