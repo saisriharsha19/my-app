@@ -127,9 +127,18 @@ const WebGLBackground = () => {
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
             <Canvas
                 camera={{ position: [0, 2, 6], fov: 50 }}
-                dpr={[1, 2]} // Crisp on high DPI
-                gl={{ antialias: true, alpha: true }}
+                dpr={[1, 1.5]} // Cap DPR at 1.5 for performance
+                gl={{
+                    antialias: false, // POST-PROCESSING later if needed, or false for raw speed
+                    powerPreference: "high-performance",
+                    alpha: true,
+                    stencil: false,
+                    depth: false // Background doesn't need depth buffer if it's just a plane
+                }}
                 style={{ background: 'transparent' }}
+                onCreated={({ gl }) => {
+                    gl.domElement.style.touchAction = 'none'; // Improve scrolling perf on mobile
+                }}
             >
                 <Waves isDark={isDarkMode} />
             </Canvas>

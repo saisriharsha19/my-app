@@ -83,10 +83,15 @@ const WebGLOrb = () => {
             }}
         >
             <Canvas
-                camera={{ position: [0, 0, 5], fov: 45 }}
-                dpr={1}
-                gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
-                style={{ background: 'transparent', overflow: 'visible' }}
+                camera={{ position: [0, 0, 3], fov: 50 }}
+                dpr={[1, 1.5]}
+                gl={{
+                    antialias: true, // Keep AA for the orb as it's a focal point
+                    alpha: true,
+                    powerPreference: "high-performance",
+                    stencil: false
+                }}
+                style={{ background: 'transparent' }}
             >
                 <GlowRing isDark={isDarkMode} />
             </Canvas>
