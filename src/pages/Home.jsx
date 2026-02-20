@@ -2,10 +2,11 @@
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiGithub, FiLinkedin, FiMail, FiCpu, FiLayout, FiCloud, FiDatabase, FiLayers } from 'react-icons/fi';
-import { SiReact, SiPython, SiTypescript, SiAmazon, SiDocker, SiPostgresql, SiNodedotjs, SiTensorflow, SiRedis, SiNextdotjs, SiKubernetes, SiMongodb, SiFastapi, SiGraphql, SiTailwindcss, SiGit } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import MagneticButton from '../components/MagneticButton';
 import RevealingText from '../components/RevealingText';
+import WebGLBackground from '../components/WebGLBackground';
+import WebGLSkillsGlobe from '../components/WebGLSkillsGlobe';
 import profileImage from '../images/IMG_6153.webp';
 
 // --- Carousel Data ---
@@ -42,25 +43,6 @@ const expertiseItems = [
   }
 ];
 
-// --- Tech Stack Data ---
-const techStack = [
-  { icon: <SiReact />, name: "React" },
-  { icon: <SiTypescript />, name: "TypeScript" },
-  { icon: <SiPython />, name: "Python" },
-  { icon: <SiNodedotjs />, name: "Node.js" },
-  { icon: <SiAmazon />, name: "AWS" },
-  { icon: <SiDocker />, name: "Docker" },
-  { icon: <SiPostgresql />, name: "PostgreSQL" },
-  { icon: <SiTensorflow />, name: "TensorFlow" },
-  { icon: <SiRedis />, name: "Redis" },
-  { icon: <SiNextdotjs />, name: "Next.js" },
-  { icon: <SiKubernetes />, name: "Kubernetes" },
-  { icon: <SiMongodb />, name: "MongoDB" },
-  { icon: <SiFastapi />, name: "FastAPI" },
-  { icon: <SiGraphql />, name: "GraphQL" },
-  { icon: <SiTailwindcss />, name: "Tailwind" },
-  { icon: <SiGit />, name: "Git" }
-];
 
 
 // --- Components ---
@@ -76,17 +58,26 @@ const HeroSection = () => {
         <div className="hero-bg-blob blob-1" />
         <div className="hero-bg-blob blob-2" />
       </div>
+      {/* Background Dot Pattern (Fades on scroll) */}
+      <motion.div style={{ opacity }} className="absolute inset-0 z-0">
+        <WebGLBackground />
+      </motion.div>
 
       <motion.div
         style={{ y, opacity }}
         className="relative z-10 w-full text-center flex flex-col items-center gap-8 container"
       >
-        <div className="flex items-center justify-center flex-wrap gap-2 px-4 py-2 rounded-full glass-panel text-sm font-medium text-secondary mb-2 h-auto text-center w-fit">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex items-center justify-center flex-wrap gap-2 px-4 py-2 rounded-full glass-panel text-sm font-medium text-secondary mb-2 h-auto text-center w-fit shadow-lg backdrop-blur-md"
+        >
           <span className="rounded-full bg-green-500 w-2 h-2 inline-block animate-pulse shrink-0" />
           Available for new projects
-        </div>
+        </motion.div>
 
-        <div className="font-bold tracking-tighter" style={{ lineHeight: 1.15 }}>
+        <div className="font-bold tracking-tighter drop-shadow-lg" style={{ lineHeight: 1.15 }}>
           <div className="text-4xl md:text-6xl lg:text-7xl mb-2">
             <RevealingText text="Building the future" delay={0.1} className="justify-center" />
           </div>
@@ -95,7 +86,7 @@ const HeroSection = () => {
               text="with meaningful code."
               delay={0.3}
               className="justify-center"
-              childClassName="text-gradient"
+              childClassName="text-gradient drop-shadow-sm"
             />
           </div>
         </div>
@@ -104,7 +95,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="text-lg md:text-xl text-secondary text-center max-w-2xl mx-auto py-4"
+          className="text-lg md:text-xl text-secondary text-center max-w-2xl mx-auto py-4 drop-shadow-md font-medium"
           style={{ lineHeight: 1.6 }}
         >
           I'm Sai Sri Harsha, a multidisciplinary engineer bridging the gap between
@@ -119,12 +110,12 @@ const HeroSection = () => {
           className="flex flex-col md:flex-row gap-4 mt-8"
         >
           <Link to="/portfolio">
-            <MagneticButton className="btn-primary">
+            <MagneticButton className="btn-primary shadow-lg hover:shadow-xl transition-shadow">
               View Work <FiArrowRight />
             </MagneticButton>
           </Link>
           <Link to="/contact">
-            <MagneticButton className="btn-secondary glass-panel hover:bg-white/10">
+            <MagneticButton className="btn-secondary glass-panel hover:bg-black/5 dark:hover:bg-white/10 shadow-md">
               Contact Me
             </MagneticButton>
           </Link>
@@ -156,24 +147,31 @@ const ExpertiseCarousel = () => {
   };
 
   return (
-    <section style={{ padding: '80px 0' }} className="px-6">
+    <section style={{ padding: '80px 0' }} className="px-6 relative z-10">
       <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
           style={{ textAlign: 'center', marginBottom: '48px' }}
         >
-          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '12px' }}>
+          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '12px' }} className="drop-shadow-sm">
             Areas of <span className="text-gradient">Expertise</span>
           </h2>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '500px', margin: '0 auto' }}>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '500px', margin: '0 auto' }} className="font-medium drop-shadow-sm">
             Specialized skills honed through real-world projects and continuous learning
           </p>
         </motion.div>
 
-        <div style={{ position: 'relative', maxWidth: '700px', margin: '0 auto' }}>
-          <div style={{ overflow: 'hidden', borderRadius: '24px' }}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          style={{ position: 'relative', maxWidth: '700px', margin: '0 auto' }}
+        >
+          <div style={{ overflow: 'hidden', borderRadius: '24px' }} className="shadow-2xl">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={activeIndex}
@@ -195,7 +193,7 @@ const ExpertiseCarousel = () => {
                     setActiveIndex((prev) => (prev - 1 + expertiseItems.length) % expertiseItems.length);
                   }
                 }}
-                className="glass-panel"
+                className="glass-panel backdrop-blur-xl"
                 style={{ padding: '48px', borderRadius: '24px', textAlign: 'center', cursor: 'grab' }}
               >
                 <div style={{
@@ -208,7 +206,8 @@ const ExpertiseCarousel = () => {
                   justifyContent: 'center',
                   margin: '0 auto 24px',
                   fontSize: '32px',
-                  color: 'white'
+                  color: 'white',
+                  boxShadow: '0 10px 30px -10px var(--accent-primary)'
                 }}>
                   {expertiseItems[activeIndex].icon}
                 </div>
@@ -265,106 +264,36 @@ const ExpertiseCarousel = () => {
               />
             ))}
           </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Tech Stack Section - Replaces redundant skill cards
-const TechStackSection = () => {
-  const [hoveredTech, setHoveredTech] = useState(null);
-
-  return (
-    <section style={{ padding: '60px 0' }} className="px-6">
-      <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          style={{ textAlign: 'center', marginBottom: '40px' }}
-        >
-          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '8px' }}>
-            Tech Stack
-          </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>
-            Tools and technologies I work with daily
-          </p>
         </motion.div>
-
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: '16px',
-          maxWidth: '800px',
-          margin: '0 auto'
-        }}>
-          {techStack.map((tech, index) => (
-            <motion.div
-              key={tech.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
-              onMouseEnter={() => setHoveredTech(tech.name)}
-              onMouseLeave={() => setHoveredTech(null)}
-              className="glass-panel"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '14px 20px',
-                borderRadius: '12px',
-                cursor: 'default',
-                borderColor: hoveredTech === tech.name ? 'var(--accent-primary)' : undefined,
-                transform: hoveredTech === tech.name ? 'translateY(-4px)' : 'none',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <span style={{
-                fontSize: '24px',
-                color: hoveredTech === tech.name ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                transition: 'color 0.2s'
-              }}>
-                {tech.icon}
-              </span>
-              <span style={{
-                fontSize: '14px',
-                fontWeight: '600',
-                color: 'var(--text-primary)'
-              }}>
-                {tech.name}
-              </span>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
   );
 };
+
+
 
 const AboutSection = () => {
   return (
-    <section style={{ marginTop: '60px', paddingTop: '80px', paddingBottom: '80px' }} className="px-6">
+    <section style={{ marginTop: '0px', paddingTop: '80px', paddingBottom: '80px' }} className="px-6 relative z-10">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="flex flex-col gap-6 order-2 md:order-1">
             <motion.h2
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-bold"
+              transition={{ duration: 0.6 }}
+              className="text-3xl md:text-5xl font-bold drop-shadow-sm"
             >
               Engineering <span className="text-gradient">Integrity</span>
             </motion.h2>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-lg text-secondary flex flex-col gap-6 leading-relaxed"
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="text-lg text-secondary flex flex-col gap-6 leading-relaxed font-medium drop-shadow-sm"
             >
               <p>
                 I'm currently mastering Computer Science at the University of Florida, but my passion extends far beyond the classroom. I operate at the intersection of <strong className="text-primary">backend architecture, AI infrastructure, and responsive design</strong>.
@@ -375,9 +304,10 @@ const AboutSection = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.5 }}
               className="flex gap-4 mt-2"
             >
               {[
@@ -388,7 +318,7 @@ const AboutSection = () => {
                 <a
                   key={i}
                   href={social.href}
-                  className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-xl hover:text-white hover:bg-indigo-600 transition-all"
+                  className="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-xl hover:text-white hover:bg-indigo-600 transition-all shadow-md"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -399,10 +329,10 @@ const AboutSection = () => {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.9, x: 30 }}
+            whileInView={{ opacity: 1, scale: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
             className="relative flex justify-center order-1 md:order-2"
           >
             {/* Decorative Frame Container */}
@@ -417,7 +347,8 @@ const AboutSection = () => {
                 inset: '-4px',
                 background: 'var(--gradient-primary)',
                 borderRadius: '32px',
-                zIndex: 0
+                zIndex: 0,
+                filter: 'blur(2px)'
               }} />
 
               {/* Image Container with Mask */}
@@ -426,7 +357,8 @@ const AboutSection = () => {
                 borderRadius: '28px',
                 overflow: 'hidden',
                 background: 'var(--bg-primary)',
-                zIndex: 1
+                zIndex: 1,
+                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.3)'
               }}>
                 {/* Top Mask/Cutoff */}
                 <div style={{
@@ -465,30 +397,37 @@ const AboutSection = () => {
               </div>
 
               {/* Floating Elements */}
-              <div style={{
-                position: 'absolute',
-                top: '-20px',
-                right: '-20px',
-                width: '60px',
-                height: '60px',
-                background: 'var(--gradient-primary)',
-                borderRadius: '16px',
-                transform: 'rotate(15deg)',
-                opacity: 0.8,
-                zIndex: 2
-              }} />
-              <div style={{
-                position: 'absolute',
-                bottom: '40px',
-                left: '-16px',
-                width: '40px',
-                height: '40px',
-                background: 'var(--accent-secondary)',
-                borderRadius: '10px',
-                transform: 'rotate(-10deg)',
-                opacity: 0.6,
-                zIndex: 2
-              }} />
+              <motion.div
+                animate={{ y: [0, -10, 0], rotate: [15, 12, 15] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                style={{
+                  position: 'absolute',
+                  top: '-20px',
+                  right: '-20px',
+                  width: '60px',
+                  height: '60px',
+                  background: 'var(--gradient-primary)',
+                  borderRadius: '16px',
+                  opacity: 0.8,
+                  zIndex: 2,
+                  boxShadow: '0 10px 20px rgba(0,0,0,0.15)'
+                }}
+              />
+              <motion.div
+                animate={{ y: [0, 10, 0], rotate: [-10, -13, -10] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                style={{
+                  position: 'absolute',
+                  bottom: '40px',
+                  left: '-16px',
+                  width: '40px',
+                  height: '40px',
+                  background: 'var(--accent-secondary)',
+                  borderRadius: '10px',
+                  opacity: 0.6,
+                  zIndex: 2
+                }}
+              />
             </div>
 
             {/* Background Blur Elements */}
@@ -527,8 +466,18 @@ const Home = () => {
   return (
     <div className="home-container min-h-screen">
       <HeroSection />
+
       <ExpertiseCarousel />
-      <TechStackSection />
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <WebGLSkillsGlobe />
+      </motion.div>
+
       <AboutSection />
     </div>
   );

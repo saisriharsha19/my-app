@@ -619,16 +619,21 @@ textarea {
    ============================================ */
 
 /* Glass Panel */
+/* Glass Panel */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Use a dark border for light mode visibility */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 [data-theme="dark"] .glass-panel {
   background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+  /* Or keep subtle shadow */
 }
 
 /* Gradient Text */
@@ -673,11 +678,41 @@ textarea {
 }
 
 /* Inputs */
+.form-input {
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+  /* Default (Light Mode) */
+  background: #f1f5f9;
+  /* Slate-100 */
+  border: 2px solid #cbd5e1;
+  /* Slate-300 */
+}
+
+.form-input:focus {
+  background: #ffffff;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+[data-theme="dark"] .form-input {
+  background: rgba(15, 23, 42, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .form-input:focus {
+  background: rgba(15, 23, 42, 1);
+  border-color: var(--accent-primary);
+}
+
 input:focus,
 textarea:focus {
-  border-color: var(--accent-primary);
+  /* Legacy override if needed */
   outline: none;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
 /* Navbar Dock */

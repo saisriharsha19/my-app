@@ -59,7 +59,7 @@ const Resume = () => {
         )}
 
         <div className="rounded-xl overflow-hidden shadow-sm bg-white border border-gray-200">
-          <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js`}>
+          <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
             <Viewer
               fileUrl={pdf}
               onDocumentLoad={() => setIsLoading(false)}

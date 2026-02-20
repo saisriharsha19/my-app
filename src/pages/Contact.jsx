@@ -8,7 +8,6 @@ const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [focusedField, setFocusedField] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -30,19 +29,6 @@ const Contact = () => {
       setIsLoading(false);
     }
   };
-
-  const getInputStyle = (field) => ({
-    width: '100%',
-    padding: '18px 20px',
-    borderRadius: '12px',
-    background: 'var(--bg-secondary)',
-    border: focusedField === field ? '2px solid var(--accent-primary)' : '2px solid var(--bg-secondary)',
-    color: 'var(--text-primary)',
-    fontSize: '16px',
-    outline: 'none',
-    transition: 'border-color 0.2s ease',
-    boxSizing: 'border-box'
-  });
 
   return (
     <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
@@ -190,9 +176,7 @@ const Contact = () => {
                     placeholder="Your name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    onFocus={() => setFocusedField('name')}
-                    onBlur={() => setFocusedField(null)}
-                    style={getInputStyle('name')}
+                    className="form-input"
                   />
                 </div>
 
@@ -212,9 +196,7 @@ const Contact = () => {
                     placeholder="you@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    onFocus={() => setFocusedField('email')}
-                    onBlur={() => setFocusedField(null)}
-                    style={getInputStyle('email')}
+                    className="form-input"
                   />
                 </div>
 
@@ -234,12 +216,11 @@ const Contact = () => {
                     placeholder="Tell me about your project..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    onFocus={() => setFocusedField('message')}
-                    onBlur={() => setFocusedField(null)}
+                    className="form-input"
                     style={{
-                      ...getInputStyle('message'),
                       resize: 'vertical',
-                      minHeight: '140px'
+                      minHeight: '140px',
+                      fontFamily: 'inherit'
                     }}
                   />
                 </div>
