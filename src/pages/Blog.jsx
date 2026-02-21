@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiClock, FiUser, FiArrowRight, FiRefreshCw, FiSearch } from 'react-icons/fi';
+import { fetchWithCache } from '../utils/apiCache';
 
 const Blog = () => {
   const [posts, setPosts] = useState([]);
@@ -17,13 +18,10 @@ const Blog = () => {
     const fetchPosts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('https://backend-482511937770.europe-west1.run.app/blog/', {
-          signal: abortController.signal
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await fetchWithCache(
+          'https://backend-482511937770.europe-west1.run.app/blog/',
+          { signal: abortController.signal }
+        );
         setPosts(data);
         setError(null);
       } catch (error) {

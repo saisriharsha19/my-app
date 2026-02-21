@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiExternalLink, FiGithub } from 'react-icons/fi';
+import { fetchWithCache } from '../utils/apiCache';
 
 const Portfolio = () => {
   const [items, setItems] = useState([]);
@@ -15,13 +16,10 @@ const Portfolio = () => {
     const fetchItems = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('https://backend-482511937770.europe-west1.run.app/portfolio/', {
-          signal: abortController.signal
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await fetchWithCache(
+          'https://backend-482511937770.europe-west1.run.app/portfolio/',
+          { signal: abortController.signal }
+        );
         setItems(data);
         setError(null);
       } catch (error) {
