@@ -94,7 +94,6 @@ const ExperiencePage = () => {
             {/* Timeline Dot */}
             <div className="absolute left-6 md:left-1/2 w-4 h-4 rounded-full border-4 border-white dark:border-slate-900 bg-indigo-500 transform -translate-x-1/2 z-10 shadow-glow"
               style={{
-                left: window.innerWidth >= 768 ? '50%' : '24px', // Fallback logic if classes fail
                 background: 'var(--accent-primary)'
               }} />
 

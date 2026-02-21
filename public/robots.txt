@@ -1,4 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
-Sitemap: https://saisriharsha.me/sitemap.xml
+Sitemap: https://www.saisriharsha.com/sitemap.xml
