@@ -35,6 +35,19 @@ const Portfolio = () => {
     return () => abortController.abort();
   }, []);
 
+  // Preload all project images into the browser's HTTP/memory cache as soon as
+  // portfolio data arrives. GitHub raw image URLs are external, so this ensures
+  // they are warm before the user scrolls to them or revisits the page.
+  useEffect(() => {
+    if (items.length === 0) return;
+    items.forEach((item) => {
+      if (item.image_url) {
+        const img = new Image();
+        img.src = item.image_url;
+      }
+    });
+  }, [items]);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);

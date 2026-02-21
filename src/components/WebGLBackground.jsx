@@ -14,13 +14,8 @@ void main() {
     vUv = uv;
     vec3 pos = position;
 
-    // Wave 1: Large swell
     float wave1 = sin(pos.x * 0.5 + uTime * 0.5) * 0.5;
-    
-    // Wave 2: Crossing swell
     float wave2 = sin(pos.y * 0.8 + uTime * 0.3 + pos.x * 0.2) * 0.3;
-    
-    // Wave 3: Choppy interference
     float wave3 = sin(pos.x * 2.0 + pos.y * 1.5 + uTime * 1.2) * 0.15;
 
     float elevation = wave1 + wave2 + wave3;
@@ -29,13 +24,11 @@ void main() {
 
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mvPosition;
-    
-    // Particle Size Attenuation
     gl_PointSize = 4.0 * (10.0 / -mvPosition.z);
 }
 `;
 
-// Fragment Shader (Glowing Pulse Orbs)
+// Fragment Shader
 const fragmentShader = `
 uniform vec3 uColorDeep;
 uniform vec3 uColorSurface;
@@ -51,30 +44,23 @@ float random(vec2 st) {
 void main() {
     float dist = length(gl_PointCoord - vec2(0.5));
     if (dist > 0.5) discard;
-    
-    float alphaShape = 1.0 - smoothstep(0.1, 0.5, dist);
 
+    float alphaShape = 1.0 - smoothstep(0.1, 0.5, dist);
     float twinkle = sin(uTime * 2.0 + random(vUv) * 10.0) * 0.5 + 0.5;
     float shimmer = 0.5 + 0.5 * twinkle;
 
     vec3 color = mix(uColorDeep, uColorSurface, smoothstep(-0.8, 0.2, vElevation));
     vec3 finalColor = mix(color, uColorCrest, smoothstep(0.2, 0.9, vElevation));
-    
+
     gl_FragColor = vec4(finalColor, alphaShape * shimmer * 0.8);
 }
 `;
 
-// Target ~24 fps for the background — invisible difference vs 30fps, further reduces GPU load.
 const TARGET_INTERVAL = 1 / 24;
 
-// Detect touch/mobile — reduce geometry count on mobile
 const IS_TOUCH = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0;
 
-// Geometry segments:
-//   Desktop: 256×128 = 32,768 vertices (full original density)
-//   Mobile:  96×48  =  4,608 vertices (mobile GPUs are significantly weaker)
-// Context loss is prevented by the IntersectionObserver pause + recovery
-// handler + powerPreference change, NOT by reducing particles.
+// Full-density particle field — 256×128 on desktop, 96×48 on mobile
 const SEG_X = IS_TOUCH ? 96 : 256;
 const SEG_Y = IS_TOUCH ? 48 : 128;
 
@@ -118,7 +104,6 @@ const Waves = ({ isDark, visible }) => {
     }, [colors]);
 
     useFrame((state, delta) => {
-        // Skip all GPU work when the canvas is off-screen
         if (!visible) return;
 
         elapsedRef.current += delta;
@@ -153,10 +138,19 @@ const Waves = ({ isDark, visible }) => {
 const WebGLBackground = () => {
     const { isDarkMode } = useContext(ThemeContext);
     const containerRef = useRef(null);
-    // Track whether the canvas is in the viewport — pauses rendering when scrolled away
     const [isVisible, setIsVisible] = useState(true);
-    // Track whether the WebGL context is lost so we can unmount/remount the Canvas to recover
     const [contextLost, setContextLost] = useState(false);
+
+    // Mount guard — prevents state updates after the component has unmounted.
+    // Without this, the recovery setTimeout fires during navigation (Home → Experience)
+    // and calls setState on a dead component, causing the console "context lost" error.
+    const mountedRef = useRef(true);
+    useEffect(() => {
+        mountedRef.current = true;
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
 
     // IntersectionObserver: stop rendering when the hero section is off-screen
     useEffect(() => {
@@ -171,12 +165,31 @@ const WebGLBackground = () => {
         return () => observer.disconnect();
     }, []);
 
-    // Context-loss recovery: unmount the Canvas for 500 ms then remount it.
-    // The browser re-allocates a fresh WebGL context on the new <canvas> element.
+    // Context-loss recovery: only attempt recovery if the component is still mounted.
+    // Navigating away (Home → Experience) causes a normal context destruction that fires
+    // the webglcontextlost event — we must NOT attempt recovery in that case.
+    const recoveryTimerRef = useRef(null);
+
     const handleContextLost = () => {
+        // Clear any in-flight recovery timer
+        if (recoveryTimerRef.current) clearTimeout(recoveryTimerRef.current);
+
+        if (!mountedRef.current) return; // Component is unmounting — do nothing
+
         setContextLost(true);
-        setTimeout(() => setContextLost(false), 500);
+        recoveryTimerRef.current = setTimeout(() => {
+            if (mountedRef.current) {
+                setContextLost(false);
+            }
+        }, 500);
     };
+
+    // Clear the recovery timer when unmounting to prevent memory leaks
+    useEffect(() => {
+        return () => {
+            if (recoveryTimerRef.current) clearTimeout(recoveryTimerRef.current);
+        };
+    }, []);
 
     return (
         <div
@@ -189,23 +202,20 @@ const WebGLBackground = () => {
                     dpr={IS_TOUCH ? [1, 1] : [1, 1.5]}
                     gl={{
                         antialias: false,
-                        // Use default power preference — "high-performance" can starve other
-                        // contexts on the page and is a contributing factor to context loss.
                         powerPreference: 'default',
                         alpha: true,
                         stencil: false,
                         depth: false,
-                        // Fail silently if the context is lost rather than throwing
                         failIfMajorPerformanceCaveat: false,
                     }}
                     style={{ background: 'transparent' }}
                     onCreated={({ gl }) => {
                         gl.domElement.style.touchAction = 'pan-y';
-                        // Listen for context loss on the underlying canvas element
                         gl.domElement.addEventListener('webglcontextlost', (e) => {
-                            e.preventDefault(); // allow recovery
+                            // Allow recovery (tells the browser we intend to restore)
+                            e.preventDefault();
                             handleContextLost();
-                        }, { once: false });
+                        });
                     }}
                 >
                     <Waves isDark={isDarkMode} visible={isVisible} />
