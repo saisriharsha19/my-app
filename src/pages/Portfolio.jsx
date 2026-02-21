@@ -118,28 +118,58 @@ const Portfolio = () => {
 
                       <div className="flex flex-col md:flex-row gap-8 items-start">
                         <div className="w-full md:w-1/3 shrink-0">
-                          <div className="aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-4xl text-indigo-500 font-bold relative group-hover:shadow-lg transition-all">
-                            {/* Placeholder for project image if available, or just index/icon */}
+                          <div
+                            className="aspect-video rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-4xl text-indigo-500 font-bold relative transition-all duration-300 group-hover:ring-2 group-hover:ring-indigo-500/40 group-hover:shadow-xl group-hover:shadow-indigo-500/10"
+                          >
                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5" />
-                            <span className="relative z-10">{String(globalIndex + 1).padStart(2, '0')}</span>
+                            {item.image_url ? (
+                              <>
+                                <img
+                                  src={item.image_url}
+                                  alt={item.title}
+                                  className="absolute inset-0 w-full h-full object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105"
+                                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                />
+                                {/* shimmer overlay on hover */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                              </>
+                            ) : (
+                              <span className="relative z-10">{String(globalIndex + 1).padStart(2, '0')}</span>
+                            )}
                           </div>
                         </div>
 
                         <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
+                          <div className="flex flex-wrap items-center gap-2 mb-4">
                             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
                               Featured
                             </span>
-                            <span className="text-secondary text-sm">
-                              {item.tech_stack || [
-                                "React • Node.js • MongoDB",
-                                "Python • TensorFlow • AWS",
-                                "Next.js • TypeScript • PostgreSQL",
-                                "FastAPI • Docker • Redis",
-                                "Vue.js • GraphQL • Firebase",
-                                "Django • Kubernetes • GCP"
-                              ][globalIndex % 6]}
-                            </span>
+                            {(item.tech_stack || ({
+                              'AppTrack: High-Scale Analytics Engine': 'Python • ClickHouse • Redis • Docker',
+                              'WebLMS: Privacy-First AI Browser Copilot': 'TypeScript • WebExtensions API • OCR • Local LLMs',
+                              'RAG Agent: Autonomous Retrieval Intelligence': 'Python • LangChain • SentenceTransformers • FAISS',
+                              'Vision AI: Full-Stack RAG Chat System': 'TypeScript • Next.js • OpenAI API • Vector DB',
+                              'NavigatorPrompt: LLM Orchestration Engine': 'Python • FastAPI • PostgreSQL • Celery',
+                              'Realtime Incident Processor: Streaming Data Core': 'Python • Kafka • Pandas • Docker',
+                              'Incident Visualizer: Live Intelligence Dashboard': 'Python • Streamlit • Plotly • PostgreSQL',
+                              'FBI Data Pipeline: Automated Intelligence ETL': 'Python • Requests • Pandas • Airflow',
+                              'SOTA ATS Resume: AI Resume Optimizer': 'Python • NLP • Transformers • Streamlit',
+                              'ML Redaction Engine: Privacy-Aware NLP': 'Python • scikit-learn • spaCy • Regex',
+                              'Data Scraper: Automated Job Intelligence Bot': 'Python • BeautifulSoup • Selenium • Cron',
+                              'WebChat: Real-Time Messaging Framework': 'TypeScript • WebSockets • Node.js • Express',
+                              'Personal Website Backend: Production API Core': 'Python • FastAPI • Azure • PostgreSQL',
+                              'GeoGuard: Geospatial Security Framework': 'JavaScript • Leaflet • GeoJSON • Node.js',
+                              'CompilerCore: Systems-Level Compiler Engine': 'Java • ANTLR • Parsing Algorithms • AST',
+                            })[item.title] || 'See GitHub for details')
+                              .split(' • ')
+                              .map((tech) => (
+                                <span
+                                  key={tech}
+                                  className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10"
+                                >
+                                  {tech}
+                                </span>
+                              ))}
                           </div>
 
                           <h2 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
