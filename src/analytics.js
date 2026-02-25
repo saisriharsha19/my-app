@@ -10,6 +10,17 @@ export const initGA = () => {
 
   ReactGA.initialize(config.measurementId);
 
+  // Explicitly update consent state again after ReactGA initializes
+  // just in case GTM or other configs override the default.
+  if (typeof window.gtag === 'function') {
+    window.gtag('consent', 'update', {
+      'analytics_storage': 'granted',
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted'
+    });
+  }
+
   if (config.debug) {
     console.log('GA initialized:', config.measurementId);
   }
