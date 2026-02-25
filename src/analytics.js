@@ -8,7 +8,11 @@ const config = {
 export const initGA = () => {
   if (ReactGA.isInitialized) return;
 
-  ReactGA.initialize(config.measurementId);
+  ReactGA.initialize(config.measurementId, {
+    gaOptions: {
+      siteSpeedSampleRate: 100
+    }
+  });
 
   // Explicitly update consent state again after ReactGA initializes
   // just in case GTM or other configs override the default.
@@ -18,6 +22,15 @@ export const initGA = () => {
       'ad_storage': 'granted',
       'ad_user_data': 'granted',
       'ad_personalization': 'granted'
+    });
+
+    // Extract maximum user context
+    window.gtag('set', {
+      user_properties: {
+        browser_language: navigator.language || navigator.userLanguage,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`,
+        user_agent: navigator.userAgent
+      }
     });
   }
 
@@ -38,14 +51,15 @@ export const logPageView = () => {
   }
 };
 
-export const logEvent = (category, action, label) => {
+export const logEvent = (category, action, label, extraParams = {}) => {
   ReactGA.event({
     category,
     action,
-    label
+    label,
+    ...extraParams
   });
 
   if (config.debug) {
-    console.log('GA Event logged:', { category, action, label });
+    console.log('GA Event logged:', { category, action, label, ...extraParams });
   }
 };

@@ -7,10 +7,14 @@ import { Link } from 'react-router-dom';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import pdf from "../images/resume.pdf";
 
+import { logEvent } from '../analytics';
+
 const Resume = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleDownload = () => {
+    logEvent('file_download', 'download_resume', 'Resume PDF', { file_extension: 'pdf' });
+    
     const link = document.createElement('a');
     link.href = pdf;
     link.download = 'SaiSriHarsha_Resume.pdf';

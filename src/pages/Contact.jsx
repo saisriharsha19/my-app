@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMail, FiSend, FiCheck, FiMapPin, FiGithub, FiLinkedin } from 'react-icons/fi';
+import { logEvent } from '../analytics';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -20,6 +21,8 @@ const Contact = () => {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
+        logEvent('generate_lead', 'contact_submit', 'Contact Form', { email_domain: formData.email.split('@')[1] });
+        
         setSubmitted(true);
         setIsLoading(false);
         setTimeout(() => navigate('/thank-you'), 2000);

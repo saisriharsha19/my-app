@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiTwitter, FiLinkedin, FiGithub, FiPhone, FiMapPin } from "react-icons/fi";
-import { HiOutlineChevronDoubleUp } from "react-icons/hi";
+import { logEvent } from "../analytics";
 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -103,6 +103,9 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
+                    onClick={() => {
+                      logEvent('outbound_link', 'click_social', social.label, { link_url: social.url });
+                    }}
                     style={{
                       width: '32px',
                       height: '32px',
