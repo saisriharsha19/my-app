@@ -473,7 +473,7 @@ const Home = () => {
   const bgOpacity = useTransform(scrollY, [0, 1500], [1, 0]);
 
   return (
-    <div className="home-container min-h-screen relative">
+    <div className="home-container relative" style={{ zIndex: 1, minHeight: '100vh' }}>
       {/* GLOBAL BACKGROUND - Fixed Position for Seamless Mix */}
       <motion.div style={{ opacity: bgOpacity }} className="fixed inset-0 z-0 pointer-events-none">
         <WebGLBackground />

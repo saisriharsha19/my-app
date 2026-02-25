@@ -74,6 +74,8 @@ const Footer = () => {
 
       {/* Footer */}
       <footer style={{
+        position: 'relative',
+        zIndex: 50,
         background: 'var(--bg-secondary)',
         borderTop: '2px solid var(--accent-primary)',
         marginTop: '80px'
