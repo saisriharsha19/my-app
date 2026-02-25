@@ -8,16 +8,6 @@ const config = {
 export const initGA = () => {
   if (ReactGA.isInitialized) return;
 
-  // Set default consent to granted to fix `pscdl=denied` and `gcs=G100` issue
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { window.dataLayer.push(arguments); }
-  gtag('consent', 'default', {
-    'analytics_storage': 'granted',
-    'ad_storage': 'granted',
-    'ad_user_data': 'granted',
-    'ad_personalization': 'granted'
-  });
-
   ReactGA.initialize(config.measurementId);
 
   if (config.debug) {
