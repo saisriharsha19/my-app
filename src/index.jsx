@@ -4,6 +4,9 @@ import { ThemeProvider } from './ThemeContext';
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { initGA } from "./analytics";
+
+initGA(); // Initialize Google Analytics before the App renders
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

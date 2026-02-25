@@ -6,7 +6,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home'; // eager — it's the landing page
 import { ThemeProvider } from './ThemeContext';
 import './App.css';
-import { initGA, logPageView } from './analytics';
+import { logPageView } from './analytics';
 
 // Route-level code splitting: non-home pages are lazy-loaded so their JS
 // is not parsed on the initial landing-page visit, saving ~200-400ms parse time.
@@ -35,17 +35,7 @@ function PageTracker() {
 }
 
 
-const analyticsInitialized = { current: false };
-
 function AppContent() {
-  useEffect(() => {
-    if (analyticsInitialized.current) return;
-    analyticsInitialized.current = true;
-
-    // Initialize Google Analytics
-    initGA();
-  }, []);
-
   return (
     <Router>
       <PageTracker />
