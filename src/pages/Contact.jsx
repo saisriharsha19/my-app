@@ -1,4 +1,5 @@
 // src/pages/Contact.jsx
+import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,6 +36,10 @@ const Contact = () => {
 
   return (
     <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
+      <Helmet>
+        <title>Contact | Sai Sri Harsha Guddati</title>
+        <meta name="description" content="Get in touch with Sai Sri Harsha Guddati. Available for new projects." />
+      </Helmet>
       <AnimatePresence mode="wait">
         {submitted ? (
           <motion.div

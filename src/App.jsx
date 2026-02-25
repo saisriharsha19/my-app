@@ -7,6 +7,7 @@ import Home from './pages/Home'; // eager — it's the landing page
 import { ThemeProvider } from './ThemeContext';
 import './App.css';
 import { logPageView } from './analytics';
+import { HelmetProvider } from 'react-helmet-async';
 
 // Route-level code splitting: non-home pages are lazy-loaded so their JS
 // is not parsed on the initial landing-page visit, saving ~200-400ms parse time.
@@ -26,9 +27,13 @@ function PageTracker() {
     // Scroll to top on route change
     window.scrollTo(0, 0);
 
-    // Log pageview for Google Analytics
-    logPageView();
+    // Log pageview for Google Analytics after a brief delay
+    // to allow react-helmet-async to update the document.title
+    const timeoutId = setTimeout(() => {
+      logPageView();
+    }, 50);
 
+    return () => clearTimeout(timeoutId);
   }, [location]);
 
   return null;
@@ -64,9 +69,11 @@ function AppContent() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }
 

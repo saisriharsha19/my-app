@@ -1,4 +1,5 @@
 // src/pages/ExperiencePage.jsx
+import { Helmet } from 'react-helmet-async';
 import { motion } from "framer-motion";
 import { FiBriefcase, FiHome, FiFileText, FiMapPin, FiCalendar } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -44,6 +45,10 @@ const ExperiencePage = () => {
 
   return (
     <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
+      <Helmet>
+        <title>Experience | Sai Sri Harsha Guddati</title>
+        <meta name="description" content="Professional experience and work history of Sai Sri Harsha Guddati." />
+      </Helmet>
       <motion.div
         className="text-center mb-16"
         initial={{ opacity: 0, y: -20 }}

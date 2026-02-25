@@ -1,4 +1,5 @@
 // src/pages/Blog.jsx
+import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -82,6 +83,10 @@ const Blog = () => {
 
   return (
     <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
+      <Helmet>
+        <title>Blog | Sai Sri Harsha Guddati</title>
+        <meta name="description" content="Read my latest articles, stories, and thoughts on software engineering." />
+      </Helmet>
       <motion.div
         className="text-center mb-16"
         initial={{ opacity: 0, y: -20 }}

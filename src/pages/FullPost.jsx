@@ -1,4 +1,5 @@
 // src/pages/FullPost.jsx
+import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -99,6 +100,10 @@ const FullPost = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{post.title} | Sai Sri Harsha Guddati</title>
+        <meta name="description" content={post.content?.substring(0, 150) || "Read this article by Sai Sri Harsha"} />
+      </Helmet>
       {/* Reading Progress Bar */}
       <div style={{
         position: 'fixed',

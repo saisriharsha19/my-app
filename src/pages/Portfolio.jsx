@@ -1,8 +1,11 @@
 // src/pages/Portfolio.jsx
+import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiExternalLink, FiGithub } from 'react-icons/fi';
 import { fetchWithCache } from '../utils/apiCache';
+
+const preloadedImages = new Set();
 
 const Portfolio = () => {
   const [items, setItems] = useState([]);
@@ -35,15 +38,22 @@ const Portfolio = () => {
     return () => abortController.abort();
   }, []);
 
-  // Preload all project images into the browser's HTTP/memory cache as soon as
-  // portfolio data arrives. GitHub raw image URLs are external, so this ensures
-  // they are warm before the user scrolls to them or revisits the page.
+  // Smarter prefetching: stagger requests to avoid 429 Too Many Requests
+  // and track them in a global Set so we only prefetch each URL once per session.
   useEffect(() => {
     if (items.length === 0) return;
+    
+    let delay = 0;
     items.forEach((item) => {
-      if (item.image_url) {
-        const img = new Image();
-        img.src = item.image_url;
+      if (item.image_url && !preloadedImages.has(item.image_url)) {
+        preloadedImages.add(item.image_url);
+        
+        setTimeout(() => {
+          const img = new Image();
+          img.src = item.image_url;
+        }, delay);
+        
+        delay += 250; // Stagger each prefetch by 250ms
       }
     });
   }, [items]);
@@ -76,6 +86,10 @@ const Portfolio = () => {
 
   return (
     <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
+      <Helmet>
+        <title>Portfolio | Sai Sri Harsha Guddati</title>
+        <meta name="description" content="View my latest projects, applications, and experiments." />
+      </Helmet>
       <motion.div
         className="text-center mb-16"
         initial={{ opacity: 0, y: -20 }}

@@ -1,4 +1,5 @@
 // src/pages/Resume.jsx
+import { Helmet } from 'react-helmet-async';
 import React, { useState } from 'react';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { motion } from 'framer-motion';
@@ -25,6 +26,10 @@ const Resume = () => {
 
   return (
     <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
+      <Helmet>
+        <title>Resume | Sai Sri Harsha Guddati</title>
+        <meta name="description" content="Download and view the professional resume of Sai Sri Harsha Guddati." />
+      </Helmet>
       <motion.div
         className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12"
         initial={{ opacity: 0, y: -20 }}

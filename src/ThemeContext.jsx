@@ -4,27 +4,19 @@ import React, { createContext, useState, useEffect } from 'react';
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Check localStorage first
-    const savedTheme = localStorage.getItem('theme');
-    // Check system preference
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  // Initialize theme synchronously to prevent 100ms FCP layout shift
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
+    const systemPrefersDark = typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     if (savedTheme) {
-      const isDark = savedTheme === 'dark';
-      setIsDarkMode(isDark);
       document.documentElement.setAttribute('data-theme', savedTheme);
+      return savedTheme === 'dark';
     } else {
-      setIsDarkMode(systemPrefersDark);
       document.documentElement.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+      return systemPrefersDark;
     }
-    
-    // Remove loading state after theme is set
-    setTimeout(() => setIsLoading(false), 100);
-  }, []);
+  });
 
   // Listen for system theme changes
   useEffect(() => {
@@ -67,8 +59,8 @@ export const ThemeProvider = ({ children }) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, isLoading }}>
-      {!isLoading && children}
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+      {children}
     </ThemeContext.Provider>
   );
 };

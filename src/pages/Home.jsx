@@ -1,4 +1,5 @@
 // src/pages/Home.jsx
+import { Helmet } from 'react-helmet-async';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiGithub, FiLinkedin, FiMail, FiCpu, FiLayout, FiCloud, FiDatabase, FiLayers } from 'react-icons/fi';
@@ -474,6 +475,10 @@ const Home = () => {
 
   return (
     <div className="home-container relative" style={{ zIndex: 1, minHeight: '100vh' }}>
+      <Helmet>
+        <title>Sai Sri Harsha Guddati | Software Engineer | AI/ML, Cloud & React Developer</title>
+        <meta name="description" content="Sai Sri Harsha Guddati - Software Engineer with expertise in Python, React, Cloud, AI/ML, and Software Engineering. Explore my portfolio to learn more about my projects and experience." />
+      </Helmet>
       {/* GLOBAL BACKGROUND - Fixed Position for Seamless Mix */}
       <motion.div style={{ opacity: bgOpacity }} className="fixed inset-0 z-0 pointer-events-none">
         <WebGLBackground />
