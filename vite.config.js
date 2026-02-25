@@ -10,8 +10,8 @@ export default defineConfig({
     },
     build: {
         outDir: 'build',
-        // Suppress the 500 kB warning for the Three.js chunk (expected to be large)
-        chunkSizeWarningLimit: 800,
+        // Suppress the warning for the Three.js chunk (expected to be large)
+        chunkSizeWarningLimit: 1000,
         // Skip gzip-size reporting to speed up build output step
         reportCompressedSize: false,
         rollupOptions: {
