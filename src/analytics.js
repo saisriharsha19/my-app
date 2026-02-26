@@ -7,6 +7,16 @@ const config = {
 
 const STORED_PARAMS_KEY = 'ga_stored_params';
 
+// GA4 natively uses 'campaign_source', 'campaign_medium', 'campaign_name' for manual attribution overrides.
+const UTM_TO_GA4_MAP = {
+  'utm_source': 'campaign_source',
+  'utm_medium': 'campaign_medium',
+  'utm_campaign': 'campaign_name',
+  'source': 'campaign_source',
+  'medium': 'campaign_medium',
+  'campaign': 'campaign_name'
+};
+
 export const getAndStoreUrlParams = () => {
   if (typeof window === 'undefined') return {};
   
@@ -15,8 +25,13 @@ export const getAndStoreUrlParams = () => {
   let hasNewParams = false;
 
   for (const [key, value] of searchParams.entries()) {
-    // Capture UTM parameters and other common tracking parameters
-    if (key.startsWith('utm_') || ['ref', 'source', 'campaign', 'gclid', 'fbclid'].includes(key)) {
+    // Check if it's a known mapped parameter
+    if (UTM_TO_GA4_MAP[key]) {
+      newParams[UTM_TO_GA4_MAP[key]] = value;
+      hasNewParams = true;
+    } 
+    // Otherwise just pass through other utm_ or tracking markers (like gclid)
+    else if (key.startsWith('utm_') || ['ref', 'gclid', 'fbclid'].includes(key)) {
       newParams[key] = value;
       hasNewParams = true;
     }
