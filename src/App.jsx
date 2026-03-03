@@ -47,9 +47,8 @@ function AppContent() {
       <PageTracker />
       <div className="App flex flex-col min-h-screen">
         <Navbar />
-        <main className="main-content flex-1 flex flex-col">
-          {/* Suspense fallback is null — pages handle their own loading states */}
-          <Suspense fallback={null}>
+        <Suspense fallback={null}>
+          <main className="main-content flex-1 flex flex-col">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/blog" element={<Blog />} />
@@ -73,9 +72,9 @@ function AppContent() {
               <Route path="/sri-harsha-backend" element={<NameVariation />} />
               <Route path="/sai-sri-harsha-portfolio" element={<NameVariation />} />
             </Routes>
-          </Suspense>
-        </main>
-        <Footer />
+          </main>
+          <Footer />
+        </Suspense>
       </div>
     </Router>
   );
