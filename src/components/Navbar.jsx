@@ -14,6 +14,13 @@ const navLinks = [
   { name: 'Contact', path: '/contact' },
 ];
 
+const NAME_VARIATIONS = [
+  "/sai-sri-harsha", "/sri-harsha", "/sai-harsha", "/harsha", 
+  "/sai-harsha-distributed-systems", "/sri-harsha-ai-engineer", 
+  "/harsha-guddati-software-engineer", "/sai-sri-harsha-gainesville", 
+  "/sai-harsha-kubernetes", "/sri-harsha-backend", "/sai-sri-harsha-portfolio"
+];
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,7 +32,14 @@ const Navbar = () => {
 
   // Recalculate blob position on location change or resize
   useEffect(() => {
-    const activeLink = navRefs.current[location.pathname];
+    let activePath = location.pathname;
+    if (NAME_VARIATIONS.includes(activePath)) {
+      activePath = '/';
+    } else if (activePath.startsWith('/blog/')) {
+      activePath = '/blog';
+    }
+
+    const activeLink = navRefs.current[activePath];
     if (activeLink) {
       setBlobStyle({
         left: activeLink.offsetLeft,
@@ -33,20 +47,21 @@ const Navbar = () => {
         opacity: 1,
       });
     } else {
-      // If no active link found (e.g. 404), maybe hide it or default to something
-      // For now, let's keep it visible if it was visible, or hide it.
-      // But typically we want it to move to the valid link. 
-      // If current path isn't in navLinks, maybe set opacity 0?
-      // Let's assume there's always a valid link or we hide it.
-      const found = navLinks.find(l => l.path === location.pathname);
-      if (!found) setBlobStyle(prev => ({ ...prev, opacity: 0 }));
+      setBlobStyle(prev => ({ ...prev, opacity: 0 }));
     }
   }, [location.pathname]);
 
   // Handle Resize to readjust blob
   useEffect(() => {
     const handleResize = () => {
-      const activeLink = navRefs.current[location.pathname];
+      let activePath = location.pathname;
+      if (NAME_VARIATIONS.includes(activePath)) {
+        activePath = '/';
+      } else if (activePath.startsWith('/blog/')) {
+        activePath = '/blog';
+      }
+      
+      const activeLink = navRefs.current[activePath];
       if (activeLink) {
         setBlobStyle({
           left: activeLink.offsetLeft,
@@ -98,7 +113,10 @@ const Navbar = () => {
             {/* Nav Links with Sliding Blob - Manual Calculation */}
             <div className="hidden md:flex items-center gap-2 relative">
               {navLinks.map((link) => {
-                const isActive = location.pathname === link.path;
+                let activePath = location.pathname;
+                if (NAME_VARIATIONS.includes(activePath)) activePath = '/';
+                else if (activePath.startsWith('/blog/')) activePath = '/blog';
+                const isActive = activePath === link.path;
                 return (
                   <Link
                     key={link.path}

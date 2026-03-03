@@ -160,14 +160,14 @@ const NameVariation = () => {
             className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-12"
           >
             <Link to="/">
-              <MagneticButton className="btn-secondary glass-panel flex items-center gap-2 px-6 py-3 shadow-md hover:bg-black/5 dark:hover:bg-white/10">
+              <button className="btn-secondary glass-panel flex items-center gap-2 px-6 py-3 shadow-md hover:bg-black/5 dark:hover:bg-white/10">
                 <FiHome /> Back Home
-              </MagneticButton>
+              </button>
             </Link>
             <Link to="/portfolio">
-              <MagneticButton className="btn-primary shadow-lg flex items-center gap-2 px-6 py-3 hover:shadow-xl transition-shadow">
+              <button className="btn-primary shadow-lg flex items-center gap-2 px-6 py-3 hover:shadow-xl transition-shadow">
                 View Portfolio <FiArrowRight />
-              </MagneticButton>
+              </button>
             </Link>
           </motion.div>
         </motion.section>
