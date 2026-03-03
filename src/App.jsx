@@ -45,9 +45,9 @@ function AppContent() {
   return (
     <Router>
       <PageTracker />
-      <div className="App">
+      <div className="App flex flex-col min-h-screen">
         <Navbar />
-        <main className="main-content">
+        <main className="main-content flex-1 flex flex-col">
           {/* Suspense fallback is null — pages handle their own loading states */}
           <Suspense fallback={null}>
             <Routes>

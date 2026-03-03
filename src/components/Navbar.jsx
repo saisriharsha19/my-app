@@ -32,14 +32,16 @@ const Navbar = () => {
 
   // Recalculate blob position on location change or resize
   useEffect(() => {
-    let activePath = location.pathname;
+    let activePath = location.pathname.toLowerCase();
+    if (activePath.endsWith('/') && activePath !== '/') activePath = activePath.slice(0, -1);
+    
     if (NAME_VARIATIONS.includes(activePath)) {
       activePath = '/';
     } else if (activePath.startsWith('/blog/')) {
       activePath = '/blog';
     }
 
-    const activeLink = navRefs.current[activePath];
+    const activeLink = navRefs.current[activePath] || navRefs.current['/'];
     if (activeLink) {
       setBlobStyle({
         left: activeLink.offsetLeft,
@@ -54,14 +56,16 @@ const Navbar = () => {
   // Handle Resize to readjust blob
   useEffect(() => {
     const handleResize = () => {
-      let activePath = location.pathname;
+      let activePath = location.pathname.toLowerCase();
+      if (activePath.endsWith('/') && activePath !== '/') activePath = activePath.slice(0, -1);
+      
       if (NAME_VARIATIONS.includes(activePath)) {
         activePath = '/';
       } else if (activePath.startsWith('/blog/')) {
         activePath = '/blog';
       }
       
-      const activeLink = navRefs.current[activePath];
+      const activeLink = navRefs.current[activePath] || navRefs.current['/'];
       if (activeLink) {
         setBlobStyle({
           left: activeLink.offsetLeft,
@@ -113,7 +117,9 @@ const Navbar = () => {
             {/* Nav Links with Sliding Blob - Manual Calculation */}
             <div className="hidden md:flex items-center gap-2 relative">
               {navLinks.map((link) => {
-                let activePath = location.pathname;
+                let activePath = location.pathname.toLowerCase();
+                if (activePath.endsWith('/') && activePath !== '/') activePath = activePath.slice(0, -1);
+                
                 if (NAME_VARIATIONS.includes(activePath)) activePath = '/';
                 else if (activePath.startsWith('/blog/')) activePath = '/blog';
                 const isActive = activePath === link.path;
