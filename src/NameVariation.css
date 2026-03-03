@@ -1,0 +1,140 @@
+.name-variation-container {
+  min-height: 100vh;
+  padding-top: 80px;
+  background: var(--bg-primary, #0f172a);
+  color: var(--text-primary, #f8fafc);
+  font-family: 'Inter', sans-serif;
+}
+
+.nv-hero {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 1) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.nv-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.nv-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  background: linear-gradient(to right, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nv-subtitle {
+  font-size: 1.25rem;
+  color: #94a3b8;
+  margin-bottom: 50px;
+}
+
+.nv-metrics {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.nv-metric-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+  padding: 25px 40px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.nv-metric-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+.nv-metric-card h3 {
+  font-size: 2.5rem;
+  color: #38bdf8;
+  margin: 0 0 10px 0;
+}
+
+.nv-metric-card p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.nv-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.nv-text-block {
+  margin-bottom: 60px;
+}
+
+.nv-text-block h2 {
+  font-size: 2rem;
+  margin-bottom: 25px;
+  color: #f1f5f9;
+}
+
+.nv-text-block p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.nv-text-block strong {
+  color: #e2e8f0;
+}
+
+.nv-stack h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #f1f5f9;
+}
+
+.nv-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.nv-badges span {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  transition: all 0.3s ease;
+}
+
+.nv-badges span:hover {
+  background: rgba(56, 189, 248, 0.2);
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .nv-title {
+    font-size: 2.2rem;
+  }
+  .nv-metrics {
+    flex-direction: column;
+    align-items: center;
+  }
+  .nv-metric-card {
+    width: 100%;
+    max-width: 300px;
+  }
+}

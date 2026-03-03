@@ -18,6 +18,7 @@ const ThankYouPage = lazy(() => import('./pages/ThankYouPage'));
 const FullPost = lazy(() => import('./pages/FullPost'));
 const ExperiencePage = lazy(() => import('./pages/ExperiencePage'));
 const Resume = lazy(() => import('./pages/Resume'));
+const NameVariation = lazy(() => import('./pages/NameVariation'));
 
 // PageTracker: Logs pageviews to GA on route changes
 function PageTracker() {
@@ -58,6 +59,19 @@ function AppContent() {
               <Route path="/blog/:postId" element={<FullPost />} />
               <Route path="/experience" element={<ExperiencePage />} />
               <Route path="/resume" element={<Resume />} />
+              
+              {/* Name Variation SEO Landing Pages */}
+              <Route path="/sai-sri-harsha" element={<NameVariation />} />
+              <Route path="/sri-harsha" element={<NameVariation />} />
+              <Route path="/sai-harsha" element={<NameVariation />} />
+              <Route path="/harsha" element={<NameVariation />} />
+              <Route path="/sai-harsha-distributed-systems" element={<NameVariation />} />
+              <Route path="/sri-harsha-ai-engineer" element={<NameVariation />} />
+              <Route path="/harsha-guddati-software-engineer" element={<NameVariation />} />
+              <Route path="/sai-sri-harsha-gainesville" element={<NameVariation />} />
+              <Route path="/sai-harsha-kubernetes" element={<NameVariation />} />
+              <Route path="/sri-harsha-backend" element={<NameVariation />} />
+              <Route path="/sai-sri-harsha-portfolio" element={<NameVariation />} />
             </Routes>
           </Suspense>
         </main>

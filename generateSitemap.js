@@ -25,6 +25,17 @@ async function generateSitemap() {
     { url: "/portfolio", changefreq: "weekly", priority: 0.8 },
     { url: "/contact", changefreq: "monthly", priority: 0.7 },
     { url: "/resume", changefreq: "monthly", priority: 0.7 },
+    { url: "/sai-sri-harsha", changefreq: "monthly", priority: 0.9 },
+    { url: "/sri-harsha", changefreq: "monthly", priority: 0.9 },
+    { url: "/sai-harsha", changefreq: "monthly", priority: 0.9 },
+    { url: "/harsha", changefreq: "monthly", priority: 0.9 },
+    { url: "/sai-harsha-distributed-systems", changefreq: "monthly", priority: 0.9 },
+    { url: "/sri-harsha-ai-engineer", changefreq: "monthly", priority: 0.9 },
+    { url: "/harsha-guddati-software-engineer", changefreq: "monthly", priority: 0.9 },
+    { url: "/sai-sri-harsha-gainesville", changefreq: "monthly", priority: 0.9 },
+    { url: "/sai-harsha-kubernetes", changefreq: "monthly", priority: 0.9 },
+    { url: "/sri-harsha-backend", changefreq: "monthly", priority: 0.9 },
+    { url: "/sai-sri-harsha-portfolio", changefreq: "monthly", priority: 0.9 }
   ];
 
   const blogPosts = await fetchBlogPosts();

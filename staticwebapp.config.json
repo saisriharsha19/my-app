@@ -1,0 +1,15 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  },
+  "globalHeaders": {
+    "Cache-Control": "public, max-age=31536000"
+  },
+  "routes": [
+    {
+      "route": "https://saisriharsha.com/*",
+      "redirect": "https://www.saisriharsha.com/{*path}",
+      "statusCode": 301
+    }
+  ]
+}
