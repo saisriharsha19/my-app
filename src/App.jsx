@@ -8,6 +8,7 @@ import { ThemeProvider } from './ThemeContext';
 import './App.css';
 import { logPageView } from './analytics';
 import { HelmetProvider } from 'react-helmet-async';
+import CatLoader from './components/CatLoader';
 
 // Route-level code splitting: non-home pages are lazy-loaded so their JS
 // is not parsed on the initial landing-page visit, saving ~200-400ms parse time.
@@ -45,6 +46,7 @@ function AppContent() {
   return (
     <Router>
       <PageTracker />
+      <CatLoader isPrerender={true} />
       <div className="App flex flex-col min-h-screen">
         <Navbar />
         <Suspense fallback={null}>

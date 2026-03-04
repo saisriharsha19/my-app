@@ -4,7 +4,7 @@ import { Float, ContactShadows, Environment, Html } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
-const CatModel = ({ isWakingUp, isDarkMode }) => {
+const CatModel = ({ isWakingUp, isDarkMode, isPrerender }) => {
   const groupRef = useRef();
   const leftEyeRef = useRef();
   const rightEyeRef = useRef();
@@ -13,7 +13,7 @@ const CatModel = ({ isWakingUp, isDarkMode }) => {
 
   // Animation loop for breathing when sleeping and eye opening
   useFrame((state, delta) => {
-    if (!groupRef.current) return;
+    if (isPrerender || !groupRef.current) return;
     
     const t = state.clock.getElapsedTime();
 
@@ -209,8 +209,9 @@ const CatModel = ({ isWakingUp, isDarkMode }) => {
         </group>
 
         {/* HTML Overlay anchored directly to 3D Space (Top Right of Head) */}
-        <Html position={[0.9, 1.9, 0]} center zIndexRange={[100, 0]}>
-          <AnimatePresence mode="wait">
+        {!isPrerender && (
+          <Html position={[0.9, 1.9, 0]} center zIndexRange={[100, 0]}>
+            <AnimatePresence mode="wait">
             {!isWakingUp && (
               <motion.div
                 key="zzz-container"
@@ -252,12 +253,13 @@ const CatModel = ({ isWakingUp, isDarkMode }) => {
             )}
           </AnimatePresence>
         </Html>
+        )}
       </Float>
     </group>
   );
 };
 
-const CatLoader = ({ isWakingUp }) => {
+const CatLoader = ({ isWakingUp, isPrerender = false }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -293,18 +295,18 @@ const CatLoader = ({ isWakingUp }) => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center w-full relative overflow-hidden"
-      style={{
+      className={isPrerender ? "" : "flex flex-col items-center justify-center w-full relative overflow-hidden"}
+      style={isPrerender ? { position: 'fixed', top: 0, left: 0, width: '1px', height: '1px', opacity: 0, pointerEvents: 'none', zIndex: -9999 } : {
         minHeight: 'calc(100vh - var(--navbar-height))',
         paddingTop: 'var(--navbar-height)',
         paddingBottom: '80px',
         background: 'transparent'
       }}
     >
-      <div className="relative w-80 h-80 md:w-96 md:h-96 select-none -mt-4">
+      <div className={isPrerender ? "" : "relative w-80 h-80 md:w-96 md:h-96 select-none -mt-4"}>
         
         {/* 3D Canvas */}
-        <Canvas camera={{ position: [0, 1.5, 6.5], fov: 45 }}>
+        <Canvas frameloop={isPrerender ? 'never' : 'always'} camera={{ position: [0, 1.5, 6.5], fov: 45 }}>
           {/* Soft, gentle lighting for the incredibly matte, white cute cat */}
           <ambientLight intensity={isDarkMode ? 1.0 : 1.2} />
           
@@ -319,7 +321,7 @@ const CatLoader = ({ isWakingUp }) => {
             color={isDarkMode ? "#c7d2fe" : "#e2e8f0"} 
           />
           
-          <CatModel isWakingUp={isWakingUp} isDarkMode={isDarkMode} />
+          <CatModel isWakingUp={isWakingUp} isDarkMode={isDarkMode} isPrerender={isPrerender} />
           
           <Environment preset="city" blur={1} />
           
@@ -338,13 +340,15 @@ const CatLoader = ({ isWakingUp }) => {
       </div>
       
       {/* Loading Text */}
-      <motion.div 
-        className={`mt-2 text-sm md:text-base font-bold tracking-[0.3em] uppercase bg-clip-text text-transparent bg-gradient-to-r ${isDarkMode ? 'from-blue-300 to-indigo-300' : 'from-indigo-600 to-purple-600'}`}
-        animate={{ opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        {isWakingUp ? "Waking Up..." : "Loading Awesome..."}
-      </motion.div>
+      {!isPrerender && (
+        <motion.div 
+          className={`mt-2 text-sm md:text-base font-bold tracking-[0.3em] uppercase bg-clip-text text-transparent bg-gradient-to-r ${isDarkMode ? 'from-blue-300 to-indigo-300' : 'from-indigo-600 to-purple-600'}`}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {isWakingUp ? "Waking Up..." : "Loading Awesome..."}
+        </motion.div>
+      )}
     </div>
   );
 };

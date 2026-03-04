@@ -76,6 +76,7 @@ body {
   line-height: 1.5;
   transition: background-color 0.3s, color 0.3s;
   overflow-x: hidden;
+  width: 100%;
 }
 
 a {
@@ -717,29 +718,44 @@ textarea:focus {
 
 /* Navbar Dock */
 .navbar-dock {
-  width: 95%;
+  width: calc(100% - 2rem); /* Account for mobile margins instead of strictly 95% */
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 3rem;
-  /* px-12 py-6 equivalent */
+  padding: 1rem 1.5rem; /* Reduced padding for mobile */
+  /* px-12 py-6 equivalent on larger screens handled via media queries */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid transparent;
   border-radius: 9999px;
   /* always rounded for consistency, or transition it */
 }
 
+@media (min-width: 768px) {
+  .navbar-dock {
+    width: 95%;
+    padding: 1.5rem 3rem;
+  }
+}
+
 /* Scrolled State */
 .navbar-dock.scrolled {
-  max-width: 1000px;
-  padding: 1rem 3rem;
+  width: calc(100% - 2rem);
+  max-width: 1024px;
+  padding: 0.75rem 1.5rem;
   /* slightly more visible */
   backdrop-filter: blur(15px) saturate(140%);
   -webkit-backdrop-filter: blur(15px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+@media (min-width: 768px) {
+  .navbar-dock.scrolled {
+    width: 95%;
+    padding: 1rem 3rem;
+  }
 }
 
 [data-theme="dark"] .navbar-dock.scrolled {

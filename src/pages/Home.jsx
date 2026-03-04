@@ -55,7 +55,7 @@ const expertiseItems = [
 // only one useScroll() listener for the entire home page.
 const HeroSection = ({ y, opacity }) => {
   return (
-    <section className="min-h-screen flex flex-col justify-start items-center relative overflow-hidden px-6 pb-20" style={{ paddingTop: 'calc(var(--navbar-height) + 3rem)' }}>
+    <section className="min-h-screen flex flex-col justify-start items-center relative overflow-hidden px-4 md:px-6 pb-20" style={{ paddingTop: 'calc(var(--navbar-height) + 3rem)' }}>
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="hero-bg-blob blob-1" />
         <div className="hero-bg-blob blob-2" />
@@ -208,7 +208,6 @@ const ExpertiseCarousel = () => {
                   margin: '0 auto 24px',
                   fontSize: '32px',
                   color: 'white',
-                  boxShadow: '0 10px 30px -10px var(--accent-primary)'
                 }}>
                   {expertiseItems[activeIndex].icon}
                 </div>
@@ -474,7 +473,7 @@ const Home = () => {
   const bgOpacity = useTransform(scrollY, [0, 1500], [1, 0]);
 
   return (
-    <div className="home-container relative" style={{ zIndex: 1, minHeight: '100vh' }}>
+    <div className="home-container relative overflow-x-hidden" style={{ zIndex: 1, minHeight: '100vh', width: '100%' }}>
       <Helmet>
         <title>Sai Sri Harsha Guddati | Software Engineer | AI/ML, Cloud & React Developer</title>
         <meta name="description" content="Sai Sri Harsha Guddati - Software Engineer with expertise in Python, React, Cloud, AI/ML, and Software Engineering. Explore my portfolio to learn more about my projects and experience." />

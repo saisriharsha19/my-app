@@ -62,7 +62,7 @@ const Footer = () => {
               justifyContent: 'center',
               cursor: 'pointer',
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-              zIndex: 50,
+              zIndex: 9999, // Ensure it's above everything
               fontSize: '18px'
             }}
             aria-label="Scroll to top"
@@ -75,7 +75,7 @@ const Footer = () => {
       {/* Footer */}
       <footer style={{
         position: 'relative',
-        zIndex: 50,
+        zIndex: 10, // Lower than the scroll-to-top button
         background: 'var(--bg-secondary)',
         borderTop: '2px solid var(--accent-primary)',
         marginTop: '80px'
