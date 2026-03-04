@@ -65,16 +65,10 @@ export const getAndStoreUrlParams = () => {
 export const initGA = () => {
   if (ReactGA.isInitialized) return;
 
-  ReactGA.initialize(config.measurementId, {
-    gaOptions: {
-      siteSpeedSampleRate: 100
-    }
-  });
-
   const urlParams = getAndStoreUrlParams();
 
-  // Explicitly update consent state again after ReactGA initializes
-  // just in case GTM or other configs override the default.
+  // Explicitly update consent state before GA initializes to ensure initial hits
+  // (like session_start) aren't dropped due to missing consent.
   if (typeof window.gtag === 'function') {
     window.gtag('consent', 'update', {
       'analytics_storage': 'granted',
@@ -83,9 +77,11 @@ export const initGA = () => {
       'ad_personalization': 'granted'
     });
 
-    // Extract maximum user context and set tracked parameters globally
+    // Set globally tracked parameters (including campaign source, medium, name).
+    // This MUST be called before ReactGA.initialize() so the first event 
+    // captures correct attribution, avoiding the "(not set)" issue.
     window.gtag('set', {
-      ...urlParams, // This explicitly sets UTM/custom parameters for all subsequent hits
+      ...urlParams, 
       user_properties: {
         browser_language: navigator.language || navigator.userLanguage,
         screen_resolution: `${window.screen.width}x${window.screen.height}`,
@@ -93,6 +89,15 @@ export const initGA = () => {
       }
     });
   }
+
+  ReactGA.initialize(config.measurementId, {
+    gaOptions: {
+      siteSpeedSampleRate: 100
+    },
+    gtagOptions: {
+      send_page_view: false // Prevent double pageview since PageTracker in App.jsx handles it
+    }
+  });
 
   if (config.debug) {
     console.log('GA initialized:', config.measurementId, 'with params:', urlParams);
