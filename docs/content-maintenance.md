@@ -19,3 +19,7 @@ Use `src/data/profile.js` for career facts, impact, education, and curated proje
 Do not restore the earlier intern title, rounded GPA, 800→480 ms headline, or 10M-document TCS claim from historical versions. P95 remains a secondary detail in the current résumé, rather than the homepage’s headline impact.
 
 Project diagrams are conceptual illustrations of each project's purpose. They show no fabricated usage counters or live operational data.
+
+The 27 engineering journals in `src/data/journals.json` were published October 9, 2026. They use the profile facts above, original engineering commentary, clearly illustrative scenarios, and primary documentation links for specific technical behavior. They do not claim that hypothetical incidents occurred at UF or TCS. Keep actual publication dates separate from any future notebook or draft dates.
+
+These articles are repository-managed content. `src/data/journals.js` merges them with the existing API archive without replacing the three historical posts. Local articles remain available if that API is offline. The build prerenders every local article, adds exact Azure routes, and includes their URLs in the sitemap. Stable slugs are permanent public URLs; retain them when editing. Update `dateModified` separately if later revisions require it.

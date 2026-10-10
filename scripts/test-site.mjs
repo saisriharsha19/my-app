@@ -22,6 +22,8 @@ await build({
     "export { default as Home } from './src/pages/Home.jsx';",
     "export { default as Portfolio } from './src/pages/Portfolio.jsx';",
     "export { default as Blog } from './src/pages/Blog.jsx';",
+    "export { default as FullPost } from './src/pages/FullPost.jsx';",
+    "export { journals, mergeJournals, readingMinutes } from './src/data/journals.js';",
     "export { default as Contact } from './src/pages/Contact.jsx';",
     "export { default as Navbar } from './src/components/Navbar.jsx';",
     "export { default as Experience } from './src/pages/ExperiencePage.jsx';",
@@ -133,15 +135,63 @@ try {
   let articleAttempt = 0;
   globalThis.fetch = async () => { if (articleAttempt++ === 0) throw new Error('Unavailable'); return { ok: true, json: async () => [{ id: 1, title: 'Understanding RAG', content: 'A retrieval article', created_at: '2026-10-01', author: 'Harsha' }] }; };
   mount(components.Blog, '/blog');
-  await screen.findByText('The journal is temporarily unavailable.');
+  await screen.findByText('Earlier articles are temporarily unavailable. The new journal is ready to read.');
+  assert.equal(document.querySelectorAll('.journal-card').length, 6);
+  assert.ok(screen.getByRole('heading', { name: 'Nine billion tokens, and the work behind the number' }));
   fireEvent.click(screen.getByRole('button', { name: /Try again/ }));
+  fireEvent.change(screen.getByRole('textbox', { name: 'Search articles' }), { target: { value: 'Understanding RAG' } });
   await screen.findByRole('heading', { name: 'Understanding RAG' });
-  fireEvent.change(screen.getByRole('textbox', { name: 'Search articles' }), { target: { value: 'absent' } });
+  fireEvent.change(screen.getByRole('textbox', { name: 'Search articles' }), { target: { value: 'no-such-journal-92834' } });
   assert.ok(screen.getByText('No articles match that search.'));
   fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
+  assert.equal(document.querySelectorAll('.journal-card').length, 6);
+  fireEvent.click(screen.getByRole('button', { name: '5', exact: true }));
   assert.ok(screen.getByRole('link', { name: /Understanding RAG/ }));
   reset();
-  console.log('PASS: journal retry, loaded articles, and search');
+  console.log('PASS: 27 offline journals, archive retry, merged legacy articles, search, and pagination');
+
+  assert.equal(components.journals.length, 27);
+  assert.equal(new Set(components.journals.map(post => post.id)).size, 27);
+  assert.equal(components.mergeJournals([components.journals[0]]).length, 27);
+  assert.equal(components.readingMinutes('word '.repeat(440)), 2);
+  let articleFetches = 0;
+  globalThis.fetch = async () => { articleFetches++; throw new Error('Offline'); };
+  const journal = components.journals[0];
+  mount(() => h(components.FullPost, { postId: journal.id }), '/blog/' + journal.id);
+  assert.ok(screen.getByRole('heading', { name: journal.title }));
+  assert.equal(document.querySelectorAll('.article-body h2').length, 3);
+  assert.equal(screen.getByRole('navigation', { name: 'Keep reading' }).querySelectorAll('a').length, 3);
+  await act(async () => {});
+  assert.equal(articleFetches, 0, 'Local articles must not depend on the backend');
+  reset();
+  globalThis.fetch = async () => ({ ok: true, json: async () => ({ id: 7, title: 'Existing archive article', content: 'The historical article remains readable.', created_at: '2025-07-20' }) });
+  mount(() => h(components.FullPost, { postId: '7' }), '/blog/7');
+  await screen.findByRole('heading', { name: 'Existing archive article' });
+  assert.ok(screen.getByText('The historical article remains readable.'));
+  reset();
+  globalThis.fetch = async () => ({ ok: false });
+  mount(() => h(components.FullPost, { postId: 'missing-article' }), '/blog/missing-article');
+  await screen.findByText('This article could not be loaded.');
+  assert.ok(screen.getByRole('link', { name: /Browse the journal/ }));
+  reset();
+  const sitemap = await readFile('build/sitemap.xml', 'utf8');
+  for (const post of components.journals) {
+    assert.match(post.id, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+    assert.ok(post.content.split(/\s+/).length >= 300, 'Article is too short: ' + post.id);
+    assert.equal(post.created_at.slice(0, 10), '2026-10-09');
+    const document = new JSDOM(await readFile('build/blog/' + post.id + '/index.html', 'utf8')).window.document;
+    assert.equal(document.querySelector('h1').textContent, post.title);
+    assert.ok(document.querySelector('.article-body').textContent.length > 1500);
+    assert.equal(document.querySelectorAll('link[rel="canonical"]').length, 1);
+    assert.equal(document.querySelector('link[rel="canonical"]').href, 'https://www.saisriharsha.com/blog/' + post.id);
+    assert.equal(document.querySelector('meta[property="og:title"]').content, post.title + ' — Sai Sri Harsha Guddati');
+    const schema = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
+    const article = schema['@graph'].find(item => item['@type'] === 'BlogPosting');
+    assert.equal(article.headline, post.title);
+    assert.equal(article.datePublished, post.created_at);
+    assert.ok(sitemap.includes('<loc>https://www.saisriharsha.com/blog/' + post.id + '</loc>'));
+  }
+  console.log('PASS: 27 substantial, unique, prerendered articles with dates, canonical URLs, sharing metadata, schema, and sitemap entries');
 
   globalThis.fetch = async () => ({ ok: false });
   mount(components.Contact, '/contact');

@@ -12,11 +12,13 @@ import Experience from './pages/ExperiencePage';
 import Blog from './pages/Blog';
 import Contact from './pages/Contact';
 import Resume from './pages/Resume';
+import FullPost from './pages/FullPost';
+import { journals } from './data/journals';
 
 const pages = { '/': Home, '/portfolio': Portfolio, '/experience': Experience, '/blog': Blog, '/contact': Contact, '/resume': Resume };
-export const routes = Object.keys(pages);
+export const routes = [...Object.keys(pages), ...journals.map(post => '/blog/' + post.id)];
 export function render(path) {
-  const Page = pages[path];
+  const Page = pages[path] || (() => <FullPost postId={path.slice('/blog/'.length)} />);
   const context = {};
   const html = renderToString(<HelmetProvider context={context}><ThemeContext.Provider value={{ isDarkMode: false, toggleTheme() {} }}><StaticRouter location={path}><RouteMetadata /><div className="App flex flex-col min-h-screen"><Navbar /><main id="main-content" className="main-content flex-1 flex flex-col"><Page /></main><Footer /></div></StaticRouter></ThemeContext.Provider></HelmetProvider>);
   return { html, head: context.helmet.title.toString() + context.helmet.meta.toString() + context.helmet.link.toString() + context.helmet.script.toString() };

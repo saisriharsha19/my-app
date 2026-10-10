@@ -1,5 +1,6 @@
 const { SitemapStream, streamToPromise } = require("sitemap");
 const { createWriteStream } = require("fs");
+const journals = require('./src/data/journals.json');
 
 async function fetchBlogPosts() {
   try {
@@ -40,6 +41,7 @@ async function generateSitemap() {
   ];
 
   const blogPosts = await fetchBlogPosts();
+  journals.forEach(post => staticPages.push({ url: '/blog/' + post.id, lastmod: post.created_at.slice(0, 10), changefreq: 'monthly', priority: 0.7 }));
   blogPosts.forEach((post) => {
     staticPages.push({ url: `/blog/${post.id}`, changefreq: "weekly", priority: 0.7 });
   });
