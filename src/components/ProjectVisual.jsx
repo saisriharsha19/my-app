@@ -3,21 +3,21 @@ import { FiPause, FiPlay } from 'react-icons/fi';
 
 const captions = {
   guard: 'EXECUTION CONTEXT → RISK ANALYSIS → YOUR DECISION',
-  browser: 'PAGE CONTEXT → PRIVACY FILTER → CONVERSATION',
+  browser: 'DOM + OCR → LOCAL CONTEXT → EXTRACTIVE Q&A',
   retrieval: 'DOCUMENTS → RETRIEVAL → GROUNDED ANSWERS',
-  analytics: 'EVENTS → AGGREGATION → OBSERVABILITY',
+  analytics: 'SDK EVENTS → KAFKA → CLICKHOUSE',
   vision: 'IMAGES + DOCUMENTS → CONTEXT',
   orchestration: 'PROMPTS → MODELS → EVALUATION',
-  streaming: 'INGEST → PROCESS → STREAM',
-  dashboard: 'STREAMING DATA → ANALYTICAL VIEWS',
+  streaming: 'INCIDENT PDF → ROW EXTRACTION → SQLITE',
+  dashboard: 'SQLITE → GEOCODING → CLUSTERS + CHARTS',
   etl: 'EXTRACT → TRANSFORM → LOAD',
   resume: 'PARSE → MATCH → REFINE',
-  redaction: 'DETECT ENTITIES → REDACT SENSITIVE CONTENT',
+  redaction: 'REDACTED CONTEXT → FEATURES → NAME PREDICTION',
   crawler: 'DISCOVER → COLLECT → STRUCTURE',
   chat: 'MESSAGES → DELIVERY → CONVERSATION',
   api: 'REQUESTS → SERVICES → CONTENT',
   geo: 'LOCATION → GEOSPATIAL CONTEXT',
-  compiler: 'SOURCE → TOKENS → SYNTAX TREE',
+  compiler: 'SOURCE → PARSE TREE → VISITOR + SCOPES',
 };
 
 function Box({ x, y, width = 80, height = 44, label, phase = 0 }) {
@@ -35,7 +35,7 @@ function Diagram({ type }) {
     case 'guard':
       return <><rect className="diagram-node" x="20" y="27" width="195" height="118" rx="5" /><text className="terminal-label" x="34" y="51">intentguard exec</text><path className="diagram-line" d="M34 68H188M34 88H140M34 108H167" /><rect className="guard-review" x="31" y="76" width="166" height="22" rx="3" /><Flow d="M215 86H246" /><path className="guard-shield diagram-node" d="M289 40L324 54V84C324 111 306 127 289 137C272 127 254 111 254 84V54Z" /><path className="shield-check" d="M273 85L285 97L306 73" /><text className="diagram-label" x="118" y="169" textAnchor="middle">CONTEXT + COMMAND</text><text className="diagram-label" x="289" y="169" textAnchor="middle">REVIEW</text></>;
     case 'browser':
-      return <><rect className="diagram-node" x="16" y="25" width="160" height="132" rx="5" /><path className="diagram-line" d="M16 46H176M30 62H135M30 81H154M30 103H116M30 123H145" /><circle className="diagram-dot" cx="29" cy="35" r="3" /><circle className="diagram-dot" cx="41" cy="35" r="3" /><rect className="browser-context" x="25" y="72" width="137" height="21" rx="2" /><Flow d="M176 91H216" /><rect className="diagram-node" x="216" y="46" width="128" height="111" rx="5" /><text className="diagram-label" x="230" y="68">CONTEXTUAL CHAT</text><path className="diagram-line" d="M230 87H322M230 103H306M230 119H316" /><rect className="chat-stream" x="230" y="133" width="80" height="4" rx="2" /></>;
+      return <><rect className="diagram-node" x="16" y="25" width="160" height="132" rx="5" /><path className="diagram-line" d="M16 46H176M30 62H135M30 81H154M30 103H116M30 123H145" /><circle className="diagram-dot" cx="29" cy="35" r="3" /><circle className="diagram-dot" cx="41" cy="35" r="3" /><rect className="browser-context" x="25" y="72" width="137" height="21" rx="2" /><Flow d="M176 91H216" /><rect className="diagram-node" x="216" y="46" width="128" height="111" rx="5" /><text className="diagram-label" x="230" y="68">EXTRACTIVE Q&A</text><path className="diagram-line" d="M230 87H322M230 103H306M230 119H316" /><rect className="chat-stream" x="230" y="133" width="80" height="4" rx="2" /></>;
     case 'retrieval':
       return <><rect className="diagram-node" x="17" y="30" width="47" height="62" rx="3" /><rect className="diagram-node" x="32" y="64" width="47" height="62" rx="3" /><path className="diagram-line" d="M27 48H53M27 62H49M43 85H68M43 100H63" /><Flow d="M79 96H126" /><Box x={126} y={63} width={98} label="VECTOR INDEX" phase={2} /><Flow d="M224 85H270" phase={3} /><Box x={270} y={63} width={74} label="ANSWER" phase={5} /><text className="diagram-label" x="49" y="156" textAnchor="middle">DOCUMENTS</text><path className="retrieval-match" d="M151 121H198" /><text className="diagram-label" x="175" y="156" textAnchor="middle">RELEVANT CONTEXT</text></>;
     case 'analytics':
@@ -45,7 +45,7 @@ function Diagram({ type }) {
     case 'orchestration':
       return <><Box x={14} y={65} width={76} label="PROMPT" /><Flow d="M90 87H118V36H142M118 87H142M118 87V138H142" /><Box x={142} y={15} width={80} label="MODEL A" phase={1} /><Box x={142} y={66} width={80} label="MODEL B" phase={3} /><Box x={142} y={117} width={80} label="MODEL C" phase={5} /><Flow d="M222 37H248V87H272M222 88H272M222 139H248V87" phase={3} /><Box x={272} y={65} width={74} label="EVALUATE" phase={6} /></>;
     case 'streaming':
-      return <><text className="diagram-label" x="20" y="27">INCIDENT EVENT STREAMS</text>{[62,96,130].map((y, i) => <g key={y}><path className="diagram-line" d={'M25 ' + y + 'H335'} /><rect className="stream-packet" x="29" y={y - 5} width="12" height="10" rx="2" style={{ animationDelay: '-' + i * 2 + 's' }} /></g>)}<rect className="stream-processor" x="156" y="43" width="48" height="108" rx="5" /><path className="diagram-line" d="M168 69H192M168 94H192M168 119H192" /></>;
+      return <><text className="diagram-label" x="20" y="27">INCIDENT PDF RECORDS</text>{[62,96,130].map((y, i) => <g key={y}><path className="diagram-line" d={'M25 ' + y + 'H335'} /><rect className="stream-packet" x="29" y={y - 5} width="12" height="10" rx="2" style={{ animationDelay: '-' + i * 2 + 's' }} /></g>)}<rect className="stream-processor" x="156" y="43" width="48" height="108" rx="5" /><path className="diagram-line" d="M168 69H192M168 94H192M168 119H192" /></>;
     case 'dashboard':
       return <><rect className="diagram-node" x="20" y="25" width="320" height="137" rx="5" /><path className="diagram-line" d="M20 48H340M178 48V162" /><text className="diagram-label" x="33" y="41">INCIDENT OVERVIEW</text><path className="dashboard-trace" d="M36 136L58 114L81 126L104 83L126 94L149 66L166 76" />{Array.from({length:12}, (_,i) => <rect className="dashboard-cell" key={i} x={194+(i%4)*31} y={66+Math.floor(i/4)*28} width="23" height="20" rx="2" style={{animationDelay:'-'+i*.5+'s'}} />)}</>;
     case 'etl':

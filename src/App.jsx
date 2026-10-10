@@ -15,6 +15,7 @@ import RouteMetadata from './components/RouteMetadata';
 // is not parsed on the initial landing-page visit, saving ~200-400ms parse time.
 const Blog = lazy(() => import('./pages/Blog'));
 const Portfolio = lazy(() => import('./pages/Portfolio'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const Contact = lazy(() => import('./pages/Contact'));
 const FullPost = lazy(() => import('./pages/FullPost'));
 const ExperiencePage = lazy(() => import('./pages/ExperiencePage'));
@@ -54,6 +55,7 @@ function AppContent() {
               <Route path="/" element={<Home />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/portfolio/:projectSlug" element={<ProjectDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/thank-you" element={<Navigate to="/contact" replace />} />
               <Route path="/blog/:postId" element={<FullPost />} />

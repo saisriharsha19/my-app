@@ -21,6 +21,7 @@ await build({
   stdin: { contents: [
     "export { default as Home } from './src/pages/Home.jsx';",
     "export { default as Portfolio } from './src/pages/Portfolio.jsx';",
+    "export { default as ProjectDetail } from './src/pages/ProjectDetail.jsx';",
     "export { default as Blog } from './src/pages/Blog.jsx';",
     "export { default as FullPost } from './src/pages/FullPost.jsx';",
     "export { journals, readingMinutes } from './src/data/journals.js';",
@@ -37,7 +38,7 @@ await build({
   define: { 'process.env.NODE_ENV': '"test"' },
 });
 const React = await import('react');
-const { MemoryRouter, useLocation } = await import('react-router-dom');
+const { MemoryRouter, useLocation, Routes, Route } = await import('react-router-dom');
 const { HelmetProvider } = (await import('react-helmet-async')).default;
 const { render, screen, fireEvent, waitFor, cleanup, act } = await import('@testing-library/react');
 const components = (await import(pathToFileURL(modulePath).href)).default;
@@ -66,6 +67,7 @@ try {
 
   mount(components.Portfolio, '/portfolio');
   assert.equal(document.querySelectorAll('.portfolio-card').length, 16);
+  assert.equal(screen.getAllByRole('link', { name: /Engineering notes for/ }).length, 16);
   fireEvent.click(screen.getByRole('button', { name: 'Data', exact: true }));
   assert.equal(document.querySelectorAll('.portfolio-card').length, 4);
   fireEvent.change(screen.getByRole('textbox', { name: 'Search projects' }), { target: { value: 'nothing matches this' } });
@@ -76,6 +78,22 @@ try {
   reset();
   console.log('PASS: JSON portfolio, category filtering, search, and reset');
 
+  mount(components.Portfolio, '/portfolio');
+  fireEvent.change(screen.getByRole('textbox', { name: 'Search projects' }), { target: { value: 'ClickHouse' } });
+  assert.equal(document.querySelectorAll('.portfolio-card').length, 1);
+  assert.ok(screen.getByRole('link', { name: 'Engineering notes for AppTrack' }));
+  reset();
+  mount(() => h(Routes, null, h(Route, { path: '/portfolio/:projectSlug', element: h(components.ProjectDetail) })), '/portfolio/webchat');
+  assert.ok(screen.getByRole('heading', { name: 'WebChat', level: 1 }));
+  assert.ok(screen.getByText('POST /sync → temp_id / server_id / status'));
+  assert.ok(screen.getByText(/two-second window/));
+  assert.equal(screen.getByRole('navigation', { name: 'Implementation source files' }).querySelectorAll('a').length, 4);
+  reset();
+  mount(() => h(components.ProjectDetail, { projectSlug: 'does-not-exist' }), '/portfolio/does-not-exist');
+  assert.ok(screen.getByRole('heading', { name: 'Project not found.' }));
+  reset();
+  console.log('PASS: technical search, project route parameters, contracts, source links, and missing-project recovery');
+
   mount(components.Experience, '/experience');
   assert.ok(screen.getByText('Infrastructure Platform Engineer IV'));
   assert.ok(screen.getByText('9B+'));
@@ -83,6 +101,9 @@ try {
   assert.ok(screen.getByRole('heading', { name: 'M.S. in Computer Science' }));
   assert.ok(!document.body.textContent.includes('Intern'));
   assert.ok(!document.body.textContent.includes('GPA'));
+  assert.equal(document.querySelectorAll('.platform-system').length, 3);
+  assert.equal(document.querySelectorAll('.career-implementation').length, 9);
+  assert.ok(screen.getByText(/Control plane: API keys/));
   reset();
   console.log('PASS: current role, shared-platform impact, accurate career and completed education');
 
@@ -164,6 +185,33 @@ try {
   assert.ok(screen.getByRole('link', { name: /Browse the journal/ }));
   reset();
   const sitemap = await readFile('build/sitemap.xml', 'utf8');
+  for (const project of components.projects) {
+    const path = '/portfolio/' + project.technical.slug;
+    const document = new JSDOM(await readFile('build' + path + '/index.html', 'utf8')).window.document;
+    assert.equal(document.querySelector('h1').textContent, project.name);
+    assert.equal(document.querySelectorAll('.architecture-details > div').length, 3);
+    assert.equal(document.querySelectorAll('.case-contracts code').length, 2);
+    assert.ok(document.querySelector('.case-scope').textContent.includes(project.technical.scope));
+    assert.equal(document.querySelector('link[rel="canonical"]').href, 'https://www.saisriharsha.com' + path);
+    assert.equal(document.querySelectorAll('meta[name="description"]').length, 1);
+    assert.equal(document.querySelector('meta[property="og:description"]').content, project.technical.summary);
+    const schema = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
+    assert.equal(schema['@graph'].find(item => item['@type'] === 'SoftwareSourceCode').codeRepository, project.project_url);
+    assert.ok(sitemap.includes('<loc>https://www.saisriharsha.com' + path + '</loc>'));
+    for (const link of document.querySelectorAll('.case-sources a')) {
+      assert.ok(link.href.startsWith(project.project_url + '/blob/'));
+      assert.equal(link.getAttribute('rel'), 'noreferrer');
+    }
+  }
+  const browserProject = components.projects.find(project => project.id === 29);
+  assert.ok(browserProject.description.includes('extractive'));
+  assert.ok(!browserProject.tags.includes('FastAPI'));
+  const ingestionProject = components.projects.find(project => project.id === 33);
+  assert.ok(ingestionProject.description.includes('SQLite'));
+  assert.ok(!ingestionProject.description.includes('streaming'));
+  const predictionProject = components.projects.find(project => project.id === 37);
+  assert.ok(predictionProject.description.includes('reconstruct names'));
+  console.log('PASS: 16 readable engineering pages, architecture, contracts, boundaries, schema, sitemap, and corrected implementation facts');
   for (const post of components.journals) {
     assert.match(post.id, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
     assert.ok(post.content.split(/\s+/).length >= 300, 'Article is too short: ' + post.id);

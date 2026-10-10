@@ -21,12 +21,13 @@ npm test
 npm run preview
 ```
 
-The build writes to `build/` and prerenders six main pages plus all 30 journals. React provides search, filtering, navigation, and theme controls. Tests cover the career profile, project filtering, 16 distinct diagrams, motion controls, stationary portraits, journal search and pagination, preserved article URLs, dates, email contact, and generated metadata. Content tests prohibit backend requests.
+The build writes to `build/` and prerenders 52 pages: six main pages, 30 journals, and 16 engineering project pages. React provides search, filtering, navigation, and theme controls. Tests cover the career profile, technical search, project routes and contracts, 16 diagrams, motion controls, stationary portraits, journal search and pagination, preserved URLs, dates, email contact, and generated metadata. Content tests prohibit backend requests.
 
 ## Content and design
 
 - `src/data/profile.json`: personal context, selected projects, and career narrative. `profile.js` exports this content to the components.
 - `src/data/journals.json`: all 30 journal entries, including the three original posts at `/blog/7`, `/blog/8`, and `/blog/9`.
+- `src/data/engineering.json`: source-linked implementation notes, component flows, API/data contracts, decisions, and scope for all 16 projects.
 - `src/data/portfolio-archive.json`: a preserved export of the 15 original public database project records; the current curated projects live in `profile.json`.
 - `src/editorial.css`: responsive design system and locally hosted fonts.
 - `src/pages/`: the primary site pages.

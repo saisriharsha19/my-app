@@ -1,0 +1,1159 @@
+[
+  {
+    "id": "intentguard",
+    "slug": "intentguard",
+    "status": "Alpha CLI",
+    "languages": [
+      "Python"
+    ],
+    "summary": "A staged command-review pipeline combining shell rules, a lightweight classifier, BM25-ranked history, and LiteLLM before an allow, warn, or block decision.",
+    "flow": [
+      "Command + user",
+      "Rules + classifier",
+      "BM25 history + LLM",
+      "Risk → execution decision"
+    ],
+    "architecture": [
+      {
+        "title": "Local interception",
+        "detail": "A Typer CLI submits the command and user context to a local review API. Warn decisions require the literal CONFIRM response; block decisions exit before execution."
+      },
+      {
+        "title": "Layered analysis",
+        "detail": "The engine short-circuits rules above 0.9 risk, then combines classifier risk, a history anomaly signal, and an LLM assessment. BM25 selects five relevant actions from up to 100 recent records filtered by user."
+      },
+      {
+        "title": "Recorded decisions",
+        "detail": "SQLite stores commands, timestamps, risk scores, decisions, user confirmation, intent, and serialized context for the next review."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Critical signals survive averaging",
+        "detail": "The scoring function preserves the highest individual rule, classifier, or LLM risk when it exceeds 0.8. Decision thresholds are greater than 0.7 for block and greater than 0.4 for warn."
+      },
+      {
+        "title": "Context stays bounded",
+        "detail": "History retrieval uses shell-tokenized commands and BM25 rather than appending the entire command log to every LLM call. LLM contribution scales with its reported confidence."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "analyze_action(command, user, context)",
+        "detail": "Returns risk_score, intent, decision, reason, and confidence."
+      },
+      {
+        "name": "allow / warn / block",
+        "detail": "The interceptor translates analysis into execution behavior, with explicit confirmation for warn."
+      }
+    ],
+    "scope": "This is an alpha review tool. The current interceptor allows execution if its local API is unreachable or times out, so it is an advisory layer rather than a mandatory security boundary.",
+    "sourceFiles": [
+      "intentguard/reasoning/engine.py",
+      "intentguard/reasoning/context.py",
+      "intentguard/reasoning/risk.py",
+      "intentguard/interceptors/cli.py"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "intentguard/reasoning/engine.py",
+        "url": "https://github.com/saisriharsha19/IntentGuard/blob/main/intentguard/reasoning/engine.py"
+      },
+      {
+        "label": "intentguard/reasoning/context.py",
+        "url": "https://github.com/saisriharsha19/IntentGuard/blob/main/intentguard/reasoning/context.py"
+      },
+      {
+        "label": "intentguard/reasoning/risk.py",
+        "url": "https://github.com/saisriharsha19/IntentGuard/blob/main/intentguard/reasoning/risk.py"
+      },
+      {
+        "label": "intentguard/interceptors/cli.py",
+        "url": "https://github.com/saisriharsha19/IntentGuard/blob/main/intentguard/interceptors/cli.py"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "slug": "weblms",
+    "status": "Browser prototype",
+    "languages": [
+      "TypeScript"
+    ],
+    "summary": "A browser extension that turns visible DOM text and OCR into extractive answers, with IndexedDB caching and a local request monitor.",
+    "flow": [
+      "DOM + images",
+      "Text + table extraction",
+      "Question classification",
+      "Extractive answer"
+    ],
+    "architecture": [
+      {
+        "title": "Structured page extraction",
+        "detail": "A DOM TreeWalker skips scripts, styles, and hidden elements while collecting text. Separate paths gather viewport-adjacent content, document metadata, and table rows."
+      },
+      {
+        "title": "OCR off the page thread",
+        "detail": "A Comlink-exposed OCR worker wraps Tesseract.js and returns recognized text with OCR confidence. IndexedDB stores page contexts and model-related cache records."
+      },
+      {
+        "title": "Extractive Q&A",
+        "detail": "QAEngine classifies questions as summary, extraction, specific, or general, then scores and selects sentences from the page context. Timing markers cover processing and answer generation."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Local context is the core",
+        "detail": "The implementation does not require a FastAPI or Redis service. Its privacy monitor wraps fetch and XMLHttpRequest, permits extension/blob URLs and local hosts, and rejects other absolute hosts in the monitored context."
+      },
+      {
+        "title": "Extraction before generation",
+        "detail": "The implemented answer path uses sentence-selection heuristics. The model loader includes an ONNX integration placeholder; the current worker signals the main Q&A engine rather than running a downloaded model."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "QAEngine.processQuestion(question)",
+        "detail": "Produces questionId, text, confidence, isComplete, and timestamp."
+      },
+      {
+        "name": "recognizeText(imageData)",
+        "detail": "Returns extracted text and OCR confidence from the worker."
+      }
+    ],
+    "scope": "A prototype of local page understanding. The current heuristics are not a generative LLM, and the request monitor is not a complete extension-wide security sandbox.",
+    "sourceFiles": [
+      "src/content/dom-parser.ts",
+      "src/ai/qa-engine.ts",
+      "src/workers/ocr-worker.ts",
+      "src/ai/model-loader.ts",
+      "src/utils/privacy.ts"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "src/content/dom-parser.ts",
+        "url": "https://github.com/saisriharsha19/WebLMS/blob/main/src/content/dom-parser.ts"
+      },
+      {
+        "label": "src/ai/qa-engine.ts",
+        "url": "https://github.com/saisriharsha19/WebLMS/blob/main/src/ai/qa-engine.ts"
+      },
+      {
+        "label": "src/workers/ocr-worker.ts",
+        "url": "https://github.com/saisriharsha19/WebLMS/blob/main/src/workers/ocr-worker.ts"
+      },
+      {
+        "label": "src/ai/model-loader.ts",
+        "url": "https://github.com/saisriharsha19/WebLMS/blob/main/src/ai/model-loader.ts"
+      },
+      {
+        "label": "src/utils/privacy.ts",
+        "url": "https://github.com/saisriharsha19/WebLMS/blob/main/src/utils/privacy.ts"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "slug": "rag-agent",
+    "status": "Retrieval application",
+    "languages": [
+      "Python"
+    ],
+    "summary": "A Streamlit document assistant using recursive text splitting, MiniLM embeddings, persistent Chroma cosine search, document selection, and optional web-search augmentation.",
+    "flow": [
+      "Files → text",
+      "Chunks → MiniLM",
+      "Chroma retrieval",
+      "Guardrails + answer"
+    ],
+    "architecture": [
+      {
+        "title": "Multi-format ingestion",
+        "detail": "DocumentProcessor reads PDFs, Word documents, spreadsheets, JSON, CSV, Markdown, and text. Its default splitter uses 1,000-character chunks with 200-character overlap and preserves metadata."
+      },
+      {
+        "title": "Persistent semantic index",
+        "detail": "VectorStore embeds chunks with all-MiniLM-L6-v2 and stores them in a Chroma PersistentClient collection configured for cosine distance. Ingestion validates chunks, checks generated IDs, and adds records in batches."
+      },
+      {
+        "title": "Inspectable answer path",
+        "detail": "RAGPipeline checks the query, retrieves candidates, applies selected-document filtering, optionally searches the web, and builds an answer with separate document and web source collections."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Evidence and answer travel together",
+        "detail": "The result includes context quality, source records, guardrail warnings, and per-request metrics such as processing time and retrieved source counts. Those fields let the UI expose the route to an answer."
+      },
+      {
+        "title": "Selection filtering has a limit",
+        "detail": "The pipeline retrieves twice the requested candidate count and then filters by selected filenames. A highly selective request can still return fewer passages than requested."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "similarity_search(query, k=5)",
+        "detail": "Retrieves document records, metadata, and relevance scores."
+      },
+      {
+        "name": "sources.documents / sources.web_results",
+        "detail": "Keeps uploaded-document evidence separate from external search evidence."
+      }
+    ],
+    "scope": "A public application implementation, not evidence of measured production throughput. Filename selection is a retrieval preference and should not be described as tenant authorization.",
+    "sourceFiles": [
+      "src/document_processor.py",
+      "src/vector_store.py",
+      "src/rag_pipeline.py",
+      "app.py"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "src/document_processor.py",
+        "url": "https://github.com/saisriharsha19/RAG_Agent/blob/main/src/document_processor.py"
+      },
+      {
+        "label": "src/vector_store.py",
+        "url": "https://github.com/saisriharsha19/RAG_Agent/blob/main/src/vector_store.py"
+      },
+      {
+        "label": "src/rag_pipeline.py",
+        "url": "https://github.com/saisriharsha19/RAG_Agent/blob/main/src/rag_pipeline.py"
+      },
+      {
+        "label": "app.py",
+        "url": "https://github.com/saisriharsha19/RAG_Agent/blob/main/app.py"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "slug": "apptrack",
+    "status": "Analytics prototype",
+    "languages": [
+      "Go",
+      "TypeScript",
+      "Python",
+      "SQL"
+    ],
+    "summary": "A multi-language event collection system: HTTP and UDP ingestion in Go, Kafka transport, and a ClickHouse consumer with column-oriented event storage.",
+    "flow": [
+      "JS / Go / Python SDK",
+      "Go collector",
+      "Kafka topic",
+      "ClickHouse events"
+    ],
+    "architecture": [
+      {
+        "title": "Two ingestion transports",
+        "detail": "The collector accepts JSON at POST /api/v1/event and also listens for UDP datagrams. Missing event IDs and timestamps are filled with UUIDs and Unix milliseconds."
+      },
+      {
+        "title": "Kafka transport",
+        "detail": "Events are serialized into the uamt-events topic through kafka-go. The consumer reads that topic with the clickhouse-consumer group and maps records into an events insert."
+      },
+      {
+        "title": "Analytical storage",
+        "detail": "The ClickHouse events table uses MergeTree ordered by timestamp and event_type. A separate users table uses ReplacingMergeTree with updated_at as its version column."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Fast acknowledgment is not durable acknowledgment",
+        "detail": "The HTTP collector responds 202 Accepted after launching a goroutine to publish the event. A later Kafka write failure is logged, so the acknowledgment does not prove durable delivery."
+      },
+      {
+        "title": "Storage is explicit and inspectable",
+        "detail": "The schema separates event identity, session, event type, JSON metadata, and system attributes. The current consumer executes one insert per event rather than batching writes."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "POST /api/v1/event → 202",
+        "detail": "Returns received status and event_id."
+      },
+      {
+        "name": "events(event_id, timestamp, session_id, event_type, metadata, system_*)",
+        "detail": "A stable event shape carried from collector to analytical storage."
+      }
+    ],
+    "scope": "The repositories establish an ingestion architecture. Durable acknowledgments, insertion batching, and replay/deduplication guarantees would require further work before claiming production-grade delivery.",
+    "sourceFiles": [
+      "collector/main.go",
+      "consumer/main.go",
+      "infra/init.sql"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "collector/main.go",
+        "url": "https://github.com/saisriharsha19/AppTrack/blob/master/collector/main.go"
+      },
+      {
+        "label": "consumer/main.go",
+        "url": "https://github.com/saisriharsha19/AppTrack/blob/master/consumer/main.go"
+      },
+      {
+        "label": "infra/init.sql",
+        "url": "https://github.com/saisriharsha19/AppTrack/blob/master/infra/init.sql"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "slug": "vision-ai",
+    "status": "Multimodal prototype",
+    "languages": [
+      "Python",
+      "TypeScript"
+    ],
+    "summary": "A FastAPI and Next.js document-chat prototype with layered PDF extraction, OCR fallback, local embeddings, NumPy similarity search, and persisted source metadata.",
+    "flow": [
+      "Upload + extraction",
+      "Text + OCR fallback",
+      "MiniLM + NumPy index",
+      "Context → chat"
+    ],
+    "architecture": [
+      {
+        "title": "Extraction fallbacks",
+        "detail": "The backend tries multiple PDF extraction paths and can use pdf2image with pytesseract for scanned pages. The same service accepts document uploads and exposes audio transcription."
+      },
+      {
+        "title": "Local similarity search",
+        "detail": "The preferred embedding model is all-MiniLM-L6-v2. Document vectors live in NumPy arrays; retrieval computes cosine similarity and selects up to five matching chunks."
+      },
+      {
+        "title": "File-based persistence",
+        "detail": "Chunks and metadata are saved as JSON, while vector arrays are saved as compressed NPZ files. Source records associate retrieved chunks with document IDs and filenames."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "A transparent index",
+        "detail": "File-based NumPy storage makes the prototype easy to inspect without a vector database. Search scans the stored vectors rather than using an approximate-nearest-neighbor service."
+      },
+      {
+        "title": "Fallback quality must be visible",
+        "detail": "The current code returns random vectors if the local embedding model is unavailable or embedding generation fails. That keeps the path executable but does not preserve meaningful semantic retrieval."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "search_documents(query, top_k=5)",
+        "detail": "Returns doc_id, filename, content, and score for selected chunks."
+      },
+      {
+        "name": "chunks.json / metadata.json / vectors.npz",
+        "detail": "Persists the text, document mapping, and vector representations separately."
+      }
+    ],
+    "scope": "A multimodal prototype with a clear improvement boundary: embedding failures should be surfaced explicitly before the retrieval result is trusted.",
+    "sourceFiles": [
+      "Vision-AI/backend/main.py",
+      "Vision-AI/frontend/chatbot-ui/src/app/page.tsx"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "Vision-AI/backend/main.py",
+        "url": "https://github.com/saisriharsha19/Vision-AI/blob/main/Vision-AI/backend/main.py"
+      },
+      {
+        "label": "Vision-AI/frontend/chatbot-ui/src/app/page.tsx",
+        "url": "https://github.com/saisriharsha19/Vision-AI/blob/main/Vision-AI/frontend/chatbot-ui/src/app/page.tsx"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "slug": "navigator-prompt",
+    "status": "Prompt workflow application",
+    "languages": [
+      "Python",
+      "TypeScript",
+      "SQL"
+    ],
+    "summary": "A Next.js prompt workspace connected to FastAPI task APIs, Celery generation/evaluation workers, Redis result handling, and a saved prompt library.",
+    "flow": [
+      "Next.js action",
+      "FastAPI task API",
+      "Celery + Redis",
+      "Status + prompt library"
+    ],
+    "architecture": [
+      {
+        "title": "Task-based frontend contract",
+        "detail": "Server actions submit prompt-generation or evaluation work and receive a task ID and status URL. The frontend models PENDING, STARTED, SUCCESS, FAILURE, and RETRY states."
+      },
+      {
+        "title": "Background execution",
+        "detail": "The published Python API defines separate generation and evaluation queues, JSON task serialization, late acknowledgment, and retrying Celery tasks. Redis Sentinel configuration resolves master and replica clients."
+      },
+      {
+        "title": "History and library",
+        "detail": "The frontend database adapter uses PostgreSQL in production and a SQLite development fallback for local prompt history. Actions separate recent history from saved library entries and starring."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Long work has an identity",
+        "detail": "A task URL lets the interface inspect progress independently of the initial submission. The backend caches successful task results and exposes failure states."
+      },
+      {
+        "title": "Public code is a separate artifact",
+        "detail": "This repository contains a public prompt-workflow implementation. It is not presented as a published copy of UF IT’s internal NaviGator Prompt Builder deployment."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "POST /prompts/generate",
+        "detail": "Queues a generation task and returns task identification."
+      },
+      {
+        "name": "GET /prompts/task/{task_id}",
+        "detail": "Reports background execution state and a result when available."
+      }
+    ],
+    "scope": "The code demonstrates task APIs and persistence choices. Redis Sentinel configuration and retry settings alone do not prove a deployed high-availability topology or exactly-once execution.",
+    "sourceFiles": [
+      "frontend/studio/src/app/actions.ts",
+      "templates/miscellaneous/api.py",
+      "frontend/studio/src/lib/db.ts"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "frontend/studio/src/app/actions.ts",
+        "url": "https://github.com/saisriharsha19/NavigatorPrompt/blob/main/frontend/studio/src/app/actions.ts"
+      },
+      {
+        "label": "templates/miscellaneous/api.py",
+        "url": "https://github.com/saisriharsha19/NavigatorPrompt/blob/main/templates/miscellaneous/api.py"
+      },
+      {
+        "label": "frontend/studio/src/lib/db.ts",
+        "url": "https://github.com/saisriharsha19/NavigatorPrompt/blob/main/frontend/studio/src/lib/db.ts"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "slug": "incident-pdf-ingestion",
+    "status": "Course project",
+    "languages": [
+      "Python",
+      "SQL"
+    ],
+    "summary": "A Python CLI that downloads public incident PDFs, reconstructs wrapped records with regular expressions, inserts structured rows into SQLite, and reports grouped incident counts.",
+    "flow": [
+      "Incident PDF",
+      "PyPDF2 + row parser",
+      "SQLite records",
+      "GROUP BY nature"
+    ],
+    "architecture": [
+      {
+        "title": "PDF-to-text boundary",
+        "detail": "The download function returns PDF bytes through BytesIO. PyPDF2 extracts page text, while the parser skips report headers and identifies new incident lines by date."
+      },
+      {
+        "title": "Wrapped-record reconstruction",
+        "detail": "A regular expression matches time, incident number, location, incident nature, and agency code. Continuation lines are joined to the preceding record for another parse attempt."
+      },
+      {
+        "title": "Relational output",
+        "detail": "The incidents table has five text columns. Parameterized executemany inserts parsed rows; a GROUP BY query prints occurrence counts by incident nature."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "A batch pipeline with clear stages",
+        "detail": "The repository implements download, extraction, storage, and reporting. It does not implement a live event-stream processor despite the repository’s historical name."
+      },
+      {
+        "title": "Rebuild semantics",
+        "detail": "Database setup drops and recreates the incidents table. A run replaces the table rather than providing an incremental ingestion or deduplication protocol."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "fetchincidents → extractincidents → populatedb",
+        "detail": "Separates transport, parsing, and storage functions."
+      },
+      {
+        "name": "incidents(time, number, location, nature, ori)",
+        "detail": "Normalizes each extracted record into a queryable row."
+      }
+    ],
+    "scope": "A format-specific incident ingestion project. Its parser relies on the report’s known incident and agency labels and should be reevaluated if the PDF layout changes.",
+    "sourceFiles": [
+      "project0/func.py",
+      "project0/main.py",
+      "tests/test_download.py"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "project0/func.py",
+        "url": "https://github.com/saisriharsha19/Realtime_Incident_Data_Processor/blob/main/project0/func.py"
+      },
+      {
+        "label": "project0/main.py",
+        "url": "https://github.com/saisriharsha19/Realtime_Incident_Data_Processor/blob/main/project0/main.py"
+      },
+      {
+        "label": "tests/test_download.py",
+        "url": "https://github.com/saisriharsha19/Realtime_Incident_Data_Processor/blob/main/tests/test_download.py"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "slug": "incident-visualization",
+    "status": "Course project",
+    "languages": [
+      "Python",
+      "SQL"
+    ],
+    "summary": "A Flask incident-analysis interface built on SQLite, pandas, OpenCage geocoding, KMeans clustering, and Matplotlib/Seaborn charts.",
+    "flow": [
+      "SQLite incidents",
+      "pandas + geocoding",
+      "KMeans + aggregation",
+      "Flask chart views"
+    ],
+    "architecture": [
+      {
+        "title": "Tabular analysis",
+        "detail": "The visualization module loads incident records into a pandas DataFrame and counts the most common incident natures."
+      },
+      {
+        "title": "Geographic projection",
+        "detail": "Incident addresses are sent to OpenCage for coordinates. Rows without usable coordinates are removed before KMeans clustering over latitude and longitude."
+      },
+      {
+        "title": "Rendered chart artifacts",
+        "detail": "Matplotlib and Seaborn export a top-20 incident bar chart, a geographic cluster plot, and a 24-hour incident distribution histogram for the Flask interface."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Charts are batch outputs",
+        "detail": "The implementation produces image artifacts from a dataset snapshot. It is not a continuously updated live dashboard."
+      },
+      {
+        "title": "Missing coordinates affect the view",
+        "detail": "Failed geocoding removes records from the clustering dataset, so the geographic view has a narrower population than the incident-frequency chart."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "create_visualizations(db_path)",
+        "detail": "Reads SQLite and writes bar_chart.png, clustering.png, and histogram.png."
+      },
+      {
+        "name": "geocode_address(address)",
+        "detail": "Returns coordinates or an empty result for the spatial-analysis stage."
+      }
+    ],
+    "scope": "A visualization project rather than a production incident service. Coordinate clustering is exploratory; it does not establish geographic distance-aware clustering or causal patterns.",
+    "sourceFiles": [
+      "project3/visualization.py",
+      "project3/app.py",
+      "project3/func.py"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "project3/visualization.py",
+        "url": "https://github.com/saisriharsha19/Real_Time_Incident_Data_Visualizer/blob/main/project3/visualization.py"
+      },
+      {
+        "label": "project3/app.py",
+        "url": "https://github.com/saisriharsha19/Real_Time_Incident_Data_Visualizer/blob/main/project3/app.py"
+      },
+      {
+        "label": "project3/func.py",
+        "url": "https://github.com/saisriharsha19/Real_Time_Incident_Data_Visualizer/blob/main/project3/func.py"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "slug": "fbi-data-pipeline",
+    "status": "Data CLI",
+    "languages": [
+      "Python"
+    ],
+    "summary": "A small, explicit ETL command that reads FBI Wanted API pages or local JSON and normalizes records into a thorn-delimited text format.",
+    "flow": [
+      "API page / JSON file",
+      "Record normalization",
+      "Multi-value fields",
+      "Delimited output"
+    ],
+    "architecture": [
+      {
+        "title": "Two input adapters",
+        "detail": "The command accepts either --page for the FBI Wanted API or --file for a UTF-8 JSON file. HTTP errors propagate through requests.raise_for_status."
+      },
+      {
+        "title": "A normalization function",
+        "detail": "process_data accepts an items envelope or a list of records. It normalizes subjects and field_offices into lists, handles missing values, and joins non-empty values."
+      },
+      {
+        "title": "Portable text output",
+        "detail": "Each output line contains title, subjects, and field offices separated by the thorn character þ. The CLI writes the transformed records to standard output."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Keep transformation independent",
+        "detail": "API access and file reading both feed the same normalization function. That makes processing behavior testable without a live HTTP request."
+      },
+      {
+        "title": "Be precise about the dataset",
+        "detail": "The source is the FBI Wanted list API. This project is not a general FBI crime-statistics warehouse or a scheduled multi-source pipeline."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "--page N / --file PATH",
+        "detail": "Chooses a remote page or a local input artifact."
+      },
+      {
+        "name": "title þ subjects þ field_offices",
+        "detail": "Defines the three-field output contract."
+      }
+    ],
+    "scope": "A focused data-conversion project with tests for fetching and transformation. Pagination orchestration, retries, scheduling, and warehouse loading are outside the implemented CLI.",
+    "sourceFiles": [
+      "main.py",
+      "tests/test_fetch_data_from_api.py",
+      "tests/test_process_data.py"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "main.py",
+        "url": "https://github.com/saisriharsha19/FBI_Data_Fetcher_and_Processor/blob/main/main.py"
+      },
+      {
+        "label": "tests/test_fetch_data_from_api.py",
+        "url": "https://github.com/saisriharsha19/FBI_Data_Fetcher_and_Processor/blob/main/tests/test_fetch_data_from_api.py"
+      },
+      {
+        "label": "tests/test_process_data.py",
+        "url": "https://github.com/saisriharsha19/FBI_Data_Fetcher_and_Processor/blob/main/tests/test_process_data.py"
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "slug": "resume-ranking",
+    "status": "NLP application",
+    "languages": [
+      "Python"
+    ],
+    "summary": "A Flask resume-ranking workflow combining document extraction, sentence embeddings, TF-IDF similarity, structured skills, and job-description matching.",
+    "flow": [
+      "PDF / DOCX",
+      "Text + NLP features",
+      "Semantic + lexical similarity",
+      "Ranked result"
+    ],
+    "architecture": [
+      {
+        "title": "Document extraction",
+        "detail": "The application uses PyPDF2 and docx2txt, with pdf2image and pytesseract available for scanned inputs. It parses resume content into structured fields."
+      },
+      {
+        "title": "Two matching signals",
+        "detail": "SentenceTransformer embeddings provide cosine semantic similarity. A TF-IDF vectorizer provides a separate keyword similarity against the job description."
+      },
+      {
+        "title": "Structured ranking",
+        "detail": "The ranker combines configured semantic and keyword weights with skills and other extracted signals. Results expose component scores rather than just a single unexplained number."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Lexical and semantic signals stay separate",
+        "detail": "Exact terminology and paraphrased experience are different matching cases. Keeping their scores visible helps explain why a resume ranked the way it did."
+      },
+      {
+        "title": "Extraction quality affects matching",
+        "detail": "OCR or parsing mistakes become inputs to both similarity paths. A confident-looking ranking should still be checked against the extracted document text."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "calculate_similarity(resume_text, job_description)",
+        "detail": "Returns semantic_score, keyword_score, and overall_score."
+      },
+      {
+        "name": "ResumeData / RankingResult",
+        "detail": "Dataclasses organize extracted information and ranking components."
+      }
+    ],
+    "scope": "A ranking tool for exploring fit against a job description. Its scores do not predict hiring decisions or establish compatibility with every employer’s applicant-tracking system.",
+    "sourceFiles": [
+      "app.py",
+      "test_app.py",
+      "templates/index.html"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "app.py",
+        "url": "https://github.com/saisriharsha19/SOTA_ATS_RESUME/blob/main/app.py"
+      },
+      {
+        "label": "test_app.py",
+        "url": "https://github.com/saisriharsha19/SOTA_ATS_RESUME/blob/main/test_app.py"
+      },
+      {
+        "label": "templates/index.html",
+        "url": "https://github.com/saisriharsha19/SOTA_ATS_RESUME/blob/main/templates/index.html"
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "slug": "redacted-name-prediction",
+    "status": "NLP course project",
+    "languages": [
+      "Python"
+    ],
+    "summary": "A supervised name-reconstruction experiment using redaction length, nearby words, part-of-speech features, n-grams, and a class-balanced logistic regression model.",
+    "flow": [
+      "Redacted TSV contexts",
+      "NLTK + feature strings",
+      "CountVectorizer",
+      "Logistic regression names"
+    ],
+    "architecture": [
+      {
+        "title": "Redaction-aware features",
+        "detail": "The feature extractor counts block characters, locates the redacted token, and captures neighboring words, POS tags, sentence length, position, and local n-gram features."
+      },
+      {
+        "title": "Supervised classification",
+        "detail": "Training rows are selected from a split-labeled TSV. CountVectorizer turns feature strings into sparse features, and LogisticRegression uses balanced class weights to predict name labels."
+      },
+      {
+        "title": "Validation and submission",
+        "detail": "Validation computes weighted precision, recall, and F1. The test path generates a TSV containing record IDs and predicted names."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Study information leakage",
+        "detail": "The experiment asks how much identity signal survives in surrounding text. It reconstructs redacted names; it does not detect and redact sensitive entities."
+      },
+      {
+        "title": "Feature engineering is inspectable",
+        "detail": "Redaction length and adjacent POS features make the inputs explicit. The learned labels are drawn from the training set rather than generated as arbitrary names."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "extract_features(context)",
+        "detail": "Creates a feature string from masked text and its neighborhood."
+      },
+      {
+        "name": "submission.tsv: id, name",
+        "detail": "Exports model predictions without changing the source documents."
+      }
+    ],
+    "scope": "A supervised reconstruction experiment. No validated accuracy percentage is published here; repository metric display formatting is not treated as benchmark evidence.",
+    "sourceFiles": [
+      "unredactor.py",
+      "tests/test_unredaction_functions.py",
+      "tests/test_main.py"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "unredactor.py",
+        "url": "https://github.com/saisriharsha19/ML-Based_Redaction_Name_Prediction_System/blob/main/unredactor.py"
+      },
+      {
+        "label": "tests/test_unredaction_functions.py",
+        "url": "https://github.com/saisriharsha19/ML-Based_Redaction_Name_Prediction_System/blob/main/tests/test_unredaction_functions.py"
+      },
+      {
+        "label": "tests/test_main.py",
+        "url": "https://github.com/saisriharsha19/ML-Based_Redaction_Name_Prediction_System/blob/main/tests/test_main.py"
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "slug": "university-job-scraper",
+    "status": "Automation script",
+    "languages": [
+      "Python"
+    ],
+    "summary": "A Requests and BeautifulSoup scraper for UF job listings that pairs result rows with summaries and composes an email report.",
+    "flow": [
+      "UF jobs HTML",
+      "BeautifulSoup rows",
+      "Normalized listings",
+      "Email report"
+    ],
+    "architecture": [
+      {
+        "title": "Targeted HTML extraction",
+        "detail": "The scraper fetches a filtered UF jobs page and locates the search-results-content table body. It processes alternating primary and summary rows."
+      },
+      {
+        "title": "Listing data shape",
+        "detail": "Each listing carries title, link, department, location, closing date, and summary. The implementation returns the first 20 parsed jobs."
+      },
+      {
+        "title": "Message composition",
+        "detail": "An SMTP path builds an email from the collected listings using environment-provided mail configuration. The script logs its run and invokes the scraper once from its entry point."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "A site-specific parser",
+        "detail": "Pairing adjacent rows is simple and matches the expected page structure. It also makes the scraper sensitive to changes in that HTML layout."
+      },
+      {
+        "title": "Keep scheduling claims separate",
+        "detail": "The published entry point performs one run. Scheduling can be supplied externally, but the script is not a distributed crawling service or a built-in scheduler."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "scrape_new_job_listings()",
+        "detail": "Returns structured listing dictionaries or an empty result."
+      },
+      {
+        "name": "title / department / closing_date / summary",
+        "detail": "Retains the information needed to compose a useful report."
+      }
+    ],
+    "scope": "A targeted automation script. It does not establish multi-node crawling, durable deduplication, or delivery guarantees.",
+    "sourceFiles": [
+      "main.py",
+      "Dockerfile",
+      "requirements.txt"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "main.py",
+        "url": "https://github.com/saisriharsha19/data-scraper/blob/main/main.py"
+      },
+      {
+        "label": "Dockerfile",
+        "url": "https://github.com/saisriharsha19/data-scraper/blob/main/Dockerfile"
+      },
+      {
+        "label": "requirements.txt",
+        "url": "https://github.com/saisriharsha19/data-scraper/blob/main/requirements.txt"
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "slug": "webchat",
+    "status": "Full-stack application",
+    "languages": [
+      "TypeScript",
+      "Python"
+    ],
+    "summary": "An offline-capable chat application with React, Dexie/IndexedDB, authenticated FastAPI WebSockets, queued server processing, room delivery, and reconciliation APIs.",
+    "flow": [
+      "React + local pending record",
+      "Authenticated WebSocket",
+      "Message persistence + room fanout",
+      "Reconnect + sync"
+    ],
+    "architecture": [
+      {
+        "title": "Local-first message state",
+        "detail": "Dexie stores messages with pending, synced, or failed status and temp IDs. The frontend persists outgoing messages while offline and attempts reconciliation when connectivity returns."
+      },
+      {
+        "title": "Connection-aware delivery",
+        "detail": "The FastAPI ConnectionManager maps users to multiple connection IDs, tracks room membership, queues message work, and handles chat, read receipts, and call-signaling events."
+      },
+      {
+        "title": "Reconciliation path",
+        "detail": "POST /sync accepts offline messages, returns temp-to-server ID mappings, and retrieves up to 100 new messages from the user’s rooms since a supplied sync time."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Delivery and storage are distinct",
+        "detail": "A WebSocket gives timely updates, while IndexedDB and the sync API preserve local work across disconnects. Client synchronization errors use exponential backoff capped at 30 seconds."
+      },
+      {
+        "title": "Deduplication is currently heuristic",
+        "detail": "The sync endpoint checks matching sender, room, and content within a two-second window. That is a practical heuristic, not a durable idempotency-key guarantee."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "WebSocket /ws/chat",
+        "detail": "Carries chat messages, read receipts, room joins, and signaling events."
+      },
+      {
+        "name": "POST /sync → temp_id / server_id / status",
+        "detail": "Reconciles offline records with server-side messages."
+      }
+    ],
+    "scope": "The connection manager uses in-process maps and queues. Scaling delivery across multiple backend instances requires an additional shared coordination or fanout layer.",
+    "sourceFiles": [
+      "backend/routers/websocket_router.py",
+      "backend/routers/sync_router.py",
+      "frontend/src/lib/db.ts",
+      "frontend/src/WebSocketContext.tsx"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "backend/routers/websocket_router.py",
+        "url": "https://github.com/saisriharsha19/WebChat/blob/master/backend/routers/websocket_router.py"
+      },
+      {
+        "label": "backend/routers/sync_router.py",
+        "url": "https://github.com/saisriharsha19/WebChat/blob/master/backend/routers/sync_router.py"
+      },
+      {
+        "label": "frontend/src/lib/db.ts",
+        "url": "https://github.com/saisriharsha19/WebChat/blob/master/frontend/src/lib/db.ts"
+      },
+      {
+        "label": "frontend/src/WebSocketContext.tsx",
+        "url": "https://github.com/saisriharsha19/WebChat/blob/master/frontend/src/WebSocketContext.tsx"
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "slug": "portfolio-content-api",
+    "status": "Archived service",
+    "languages": [
+      "Python",
+      "SQL"
+    ],
+    "summary": "The original FastAPI and SQLAlchemy content service, retained as a project after the website migrated to static JSON, prerendered pages, and direct email contact.",
+    "flow": [
+      "FastAPI routes",
+      "SQLAlchemy sessions",
+      "Azure SQL models",
+      "JSON API responses"
+    ],
+    "architecture": [
+      {
+        "title": "Content routes",
+        "detail": "FastAPI routers separate portfolio items, blog posts, and contact submissions. Models represent each of those content types."
+      },
+      {
+        "title": "SQL persistence",
+        "detail": "SQLAlchemy sessions use the mssql+pyodbc dialect and an ODBC SQL Server driver to access Azure SQL. Contact records include creation time and email-sent state."
+      },
+      {
+        "title": "Completed frontend migration",
+        "detail": "The current website reads profile and journal JSON from its repository, generates static article and project pages, and uses email links for contact. It no longer calls this service."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Static content removes a runtime dependency",
+        "detail": "Content changes now travel through Git review and the existing build/deploy workflow. The live site stays readable when the original API is unavailable."
+      },
+      {
+        "title": "Retirement preserves records",
+        "detail": "The website’s 30 journals and original public project records were exported before database access was disabled. Existing private contact records remain in the retained database."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "/portfolio / /blog / /contact",
+        "detail": "The original router boundaries for content and submissions."
+      },
+      {
+        "name": "profile.json / journals.json",
+        "detail": "The replacement content sources for the current website."
+      }
+    ],
+    "scope": "An archived API, not the current website’s backend. Its database network access is disabled; the database remains retained rather than deleted.",
+    "sourceFiles": [
+      "app/main.py",
+      "app/models.py",
+      "app/routes/blog.py",
+      "app/routes/portfolio.py"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "app/main.py",
+        "url": "https://github.com/saisriharsha19/personal-website-backend/blob/master/app/main.py"
+      },
+      {
+        "label": "app/models.py",
+        "url": "https://github.com/saisriharsha19/personal-website-backend/blob/master/app/models.py"
+      },
+      {
+        "label": "app/routes/blog.py",
+        "url": "https://github.com/saisriharsha19/personal-website-backend/blob/master/app/routes/blog.py"
+      },
+      {
+        "label": "app/routes/portfolio.py",
+        "url": "https://github.com/saisriharsha19/personal-website-backend/blob/master/app/routes/portfolio.py"
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "slug": "geoguard",
+    "status": "Privacy prototype",
+    "languages": [
+      "Python",
+      "JavaScript"
+    ],
+    "summary": "A location-privacy experiment that clusters visit history, identifies frequently visited places, perturbs sensitive coordinates, and overrides browser geolocation methods.",
+    "flow": [
+      "Location history",
+      "DBSCAN + POI detection",
+      "Coordinate perturbation",
+      "Geolocation override"
+    ],
+    "architecture": [
+      {
+        "title": "History-based sensitivity",
+        "detail": "GeoGuardPrivacy reads JSON location history, standardizes coordinates, and uses DBSCAN to identify clusters. Visit counts determine which clusters qualify as points of interest."
+      },
+      {
+        "title": "Distance and perturbation",
+        "detail": "The implementation uses Haversine calculations for cluster radii and checks whether a coordinate is near a sensitive place before selecting a privacy level."
+      },
+      {
+        "title": "Browser integration",
+        "detail": "The extension wraps getCurrentPosition, watchPosition, and clearWatch and uses page messages to request privacy-preserving location responses."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Sensitivity comes from repeated visits",
+        "detail": "The model treats frequently visited clusters differently from sparse or noisy points. Default clustering uses eps 0.1 and min_samples 3 after standardization."
+      },
+      {
+        "title": "Privacy requires more than moving a point",
+        "detail": "Coordinate perturbation is the implemented mechanism. Its protection depends on the history, policy, browser integration, and the information a receiving application already has."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "get_privacy_preserving_location(lat, lng)",
+        "detail": "Returns a replacement coordinate pair for the configured privacy behavior."
+      },
+      {
+        "name": "GEO_GUARD_LOCATION_REQUEST / RESPONSE",
+        "detail": "Connects the page-level geolocation wrapper with extension messaging."
+      }
+    ],
+    "scope": "A geolocation privacy prototype. Perturbation and DBSCAN clustering do not establish a formal differential-privacy guarantee or an extension-wide security boundary.",
+    "sourceFiles": [
+      "backend/main.py",
+      "geogaurd_extension/locationOverride.js",
+      "geogaurd_extension/background.js"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "backend/main.py",
+        "url": "https://github.com/saisriharsha19/GeoGaurd/blob/main/backend/main.py"
+      },
+      {
+        "label": "geogaurd_extension/locationOverride.js",
+        "url": "https://github.com/saisriharsha19/GeoGaurd/blob/main/geogaurd_extension/locationOverride.js"
+      },
+      {
+        "label": "geogaurd_extension/background.js",
+        "url": "https://github.com/saisriharsha19/GeoGaurd/blob/main/geogaurd_extension/background.js"
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "slug": "delphi-interpreter",
+    "status": "Language implementation",
+    "languages": [
+      "Java",
+      "ANTLR"
+    ],
+    "summary": "A Delphi/Pascal interpreter built around an ANTLR grammar and a Java parse-tree visitor with nested scopes, class definitions, object fields, and method metadata.",
+    "flow": [
+      "Delphi source",
+      "ANTLR lexer + parser",
+      "Parse-tree visitor",
+      "Scopes + object state"
+    ],
+    "architecture": [
+      {
+        "title": "Grammar boundary",
+        "detail": "delphi.g4 defines program structure, declarations, expressions, and class-related constructs. Generated lexer and parser classes turn source into a parse tree."
+      },
+      {
+        "title": "Visitor-based evaluation",
+        "detail": "DelphiInterpreter extends delphiBaseVisitor<Object>. visitProgram pushes a global scope, visits declarations and the compound statement, then pops that scope."
+      },
+      {
+        "title": "Runtime structures",
+        "detail": "Hash maps store classes, fields, methods, and visibility. A stack of scope maps and object instances carry execution state, including a this binding for method-related visits."
+      }
+    ],
+    "decisions": [
+      {
+        "title": "Syntax and runtime state are separate",
+        "detail": "The grammar describes accepted structures; visitor methods interpret them. This keeps language recognition distinct from symbol and object handling."
+      },
+      {
+        "title": "The implementation follows the parse tree",
+        "detail": "The public code uses an ANTLR parse-tree visitor. It does not show a separately constructed optimization-oriented AST or a native-code compiler backend."
+      }
+    ],
+    "contracts": [
+      {
+        "name": "DelphiInterpreter extends delphiBaseVisitor<Object>",
+        "detail": "Defines the evaluation entry points used by the generated parser."
+      },
+      {
+        "name": "Stack<Map<String, Object>> scopes",
+        "detail": "Represents nested environments separately from class definitions."
+      }
+    ],
+    "scope": "An interpreter exploration of a Delphi/Pascal subset. Support should be assessed against the grammar and visitor implementation rather than assuming full language compatibility.",
+    "sourceFiles": [
+      "delphi.g4",
+      "DelphiInterpreter.java",
+      "Main.java"
+    ],
+    "reviewed": "2026-10-09",
+    "sources": [
+      {
+        "label": "delphi.g4",
+        "url": "https://github.com/saisriharsha19/CompilerDesign/blob/master/delphi.g4"
+      },
+      {
+        "label": "DelphiInterpreter.java",
+        "url": "https://github.com/saisriharsha19/CompilerDesign/blob/master/DelphiInterpreter.java"
+      },
+      {
+        "label": "Main.java",
+        "url": "https://github.com/saisriharsha19/CompilerDesign/blob/master/Main.java"
+      }
+    ]
+  }
+]

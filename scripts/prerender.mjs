@@ -33,8 +33,7 @@ for (const route of routes) {
 }
 await rm(temporaryModule);
 const routing = JSON.parse(await readFile('staticwebapp.config.json', 'utf8'));
-const articles = JSON.parse(await readFile('src/data/journals.json', 'utf8'));
-routing.routes.unshift(...articles.map(post => ({ route: '/blog/' + post.id, rewrite: '/blog/' + post.id + '/index.html' })));
+routing.routes.unshift(...routes.filter(route => route.startsWith('/blog/') || route.startsWith('/portfolio/')).map(route => ({ route, rewrite: route + '/index.html' })));
 await writeFile(resolve(outputDir, 'staticwebapp.config.json'), JSON.stringify(routing, null, 2));
 await generateSitemap(resolve(outputDir, 'sitemap.xml'));
 console.log('Prerendered ' + routes.length + ' pages with readable HTML and route metadata.');
