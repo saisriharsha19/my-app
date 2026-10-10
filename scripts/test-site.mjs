@@ -136,4 +136,11 @@ try {
   assert.ok(logo.includes('width="64" height="64" viewBox="0 0 64 64"'));
   assert.ok(card.includes('width="64" height="64" xlink:href="data:image/svg+xml;base64,' + Buffer.from(logo).toString('base64')));
   console.log('PASS: 1200 × 630 sharing card with exact native 64 × 64 SVG source');
+  const routing = JSON.parse(await readFile('build/staticwebapp.config.json', 'utf8'));
+  const normalizedRoutes = routing.routes.map(rule => rule.route.replace(/\/$/, ''));
+  assert.equal(new Set(normalizedRoutes).size, normalizedRoutes.length, 'Azure treats trailing-slash routes as duplicates');
+  for (const rule of routing.routes.filter(rule => rule.rewrite)) {
+    await readFile('build' + rule.rewrite);
+  }
+  console.log('PASS: unique Azure route rules and existing prerender targets');
 } finally { cleanup(); await rm(modulePath); dom.window.close(); }

@@ -27,15 +27,7 @@
       "rewrite": "/portfolio/index.html"
     },
     {
-      "route": "/portfolio/",
-      "rewrite": "/portfolio/index.html"
-    },
-    {
       "route": "/experience",
-      "rewrite": "/experience/index.html"
-    },
-    {
-      "route": "/experience/",
       "rewrite": "/experience/index.html"
     },
     {
@@ -43,23 +35,11 @@
       "rewrite": "/blog/index.html"
     },
     {
-      "route": "/blog/",
-      "rewrite": "/blog/index.html"
-    },
-    {
       "route": "/contact",
       "rewrite": "/contact/index.html"
     },
     {
-      "route": "/contact/",
-      "rewrite": "/contact/index.html"
-    },
-    {
       "route": "/resume",
-      "rewrite": "/resume/index.html"
-    },
-    {
-      "route": "/resume/",
       "rewrite": "/resume/index.html"
     },
     {
