@@ -4,7 +4,7 @@ The identity belongs to Sai Sri Harsha Guddati. The tone is curious, capable, an
 
 ## Mark
 
-The source of truth is [favicon.svg](../public/favicon.svg): a geometric H with a separated lime terminal, on a rounded teal tile. Its intrinsic size and viewBox are **64 × 64**. The social card embeds that exact source at **64 × 64**, without redrawing, recoloring, stretching, or cropping it. Preserve clear space of at least 16 px in card compositions. Navigation may scale it proportionally to 32 × 32.
+The source of truth is [favicon.svg](../public/favicon.svg): a geometric H with a separated coral terminal, on a rounded midnight blue tile. Its intrinsic size and viewBox are **64 × 64**. The social card embeds that exact source at **64 × 64**, without redrawing, recoloring, stretching, or cropping it. Preserve clear space of at least 16 px in card compositions. Navigation may scale it proportionally to 32 × 32.
 
 The 16, 32, 64, and 180 px PNGs and the ICO are exported from that same source.
 
@@ -12,14 +12,14 @@ The 16, 32, 64, and 180 px PNGs and the ICO are exported from that same source.
 
 | Role | Color |
 | --- | --- |
-| Main ink / logo surface | #183B36 |
-| Dark canvas | #102D29 |
-| Paper | #F2F3ED |
-| Foreground on dark | #EDF3E8 |
-| Accent | #C5EC86 |
-| Secondary foreground on dark | #B6CDC0 |
+| Main ink / logo surface | #101B35 |
+| Dark canvas | #090F20 |
+| Paper | #F4F6FA |
+| Foreground on dark | #EDF3FF |
+| Accent | #ACC4FF |
+| Secondary foreground on dark | #B7C8E8 |
 
-Use paper for spacious reading surfaces, teal for emphasis, and lime sparingly for the mark, directional details, and selected typography. Avoid decorative gradients.
+Use silver for spacious reading surfaces and midnight blue for emphasis. Cobalt (#255EE8) and ice blue (#ACC4FF) define interactive and highlighted elements. Coral (#FFAA8F) is reserved for the monogram terminal and a few project illustration surfaces. Avoid decorative gradients.
 
 ## Typography
 
@@ -29,7 +29,7 @@ Both fonts are hosted locally, with their OFL licenses. Card text is exported as
 
 ## Photography
 
-Use the actual supplied portrait. Preserve the face, clothing, lighting, and background. The public portrait and sharing card remove the bottom 10% of the source photograph, as requested, to exclude the mark at the bottom. Keep the source photograph intact for future edits.
+Use the actual supplied portrait. Preserve the face, clothing, lighting, and background. The public portrait and sharing card remove the bottom 10% of the source photograph, as requested, to exclude the mark at the bottom. The website uses the full cropped resolution (864 × 1065), encoded at high quality, with no saturation filter, tilt, scale animation, or hover zoom. Keep the source photograph intact for future edits.
 
 ## Social card
 
@@ -41,4 +41,4 @@ Regenerate the assets with:
 node scripts/generate-brand.mjs
 ```
 
-Keep reduced-motion support, visible keyboard focus, mobile reflow, and readable contrast in future site changes.
+Keep text, cards, and portraits stationary and free of filters. Only internal SVG diagram marks animate, on 8–12 second cycles. Pause motion outside the viewport and provide a control on each diagram. Reduced-motion preferences disable all diagram animation. Preserve visible keyboard focus, mobile reflow, and readable contrast.

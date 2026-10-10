@@ -19,6 +19,6 @@ export function render(path) {
   const Page = pages[path];
   const context = {};
   const html = renderToString(<HelmetProvider context={context}><ThemeContext.Provider value={{ isDarkMode: false, toggleTheme() {} }}><StaticRouter location={path}><RouteMetadata /><div className="App flex flex-col min-h-screen"><Navbar /><main id="main-content" className="main-content flex-1 flex flex-col"><Page /></main><Footer /></div></StaticRouter></ThemeContext.Provider></HelmetProvider>);
-  return { html, head: context.helmet.title.toString() + context.helmet.meta.toString() + context.helmet.link.toString() };
+  return { html, head: context.helmet.title.toString() + context.helmet.meta.toString() + context.helmet.link.toString() + context.helmet.script.toString() };
 }
 

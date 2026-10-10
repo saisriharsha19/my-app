@@ -17,4 +17,4 @@ Twelve personal and creative websites were reviewed for this redesign. Their con
 | [Maggie Appleton](https://maggieappleton.com/) | Treating writing as an ongoing place for learning and thinking |
 | [swyx](https://www.swyx.io/) | Linking public projects and writing into a discoverable profile |
 
-The resulting identity uses a paper-and-teal editorial layout, an actual portrait, a geometric monogram, conceptual project illustrations, and concise personal context grounded in the existing website and GitHub profile.
+The resulting identity uses a silver-and-midnight-blue editorial layout, an actual portrait, a geometric monogram, conceptual project illustrations, and concise personal context grounded in the existing website and GitHub profile.

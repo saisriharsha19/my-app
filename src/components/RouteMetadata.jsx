@@ -1,10 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
+import { profile } from '../data/profile';
 const base = 'https://www.saisriharsha.com';
 const descriptions = {
-  '/': 'Sai Sri Harsha Guddati builds software, distributed systems, and AI infrastructure. Explore his projects, engineering journey, and writing.',
-  '/portfolio': 'Explore AppTrack, WebLMS, RAG Agent, and projects across AI, distributed systems, and data engineering by Sai Sri Harsha Guddati.',
-  '/experience': 'The engineering journey of Sai Sri Harsha Guddati: University of Florida IT, Tata Consultancy Services, and Internshala.',
+  '/': profile.summary,
+  '/portfolio': 'Explore IntentGuard, WebLMS, RAG Agent, and projects across AI, distributed systems, and data engineering by Sai Sri Harsha Guddati.',
+  '/experience': profile.summary,
   '/blog': 'Engineering notes, ideas, and lessons on software, systems, and AI from Sai Sri Harsha Guddati.',
   '/contact': 'Connect with Sai Sri Harsha Guddati about software engineering, AI systems, and collaboration.',
   '/resume': 'Read and download Sai Sri Harsha Guddati’s software engineering and AI infrastructure resume.',
@@ -17,6 +18,8 @@ export default function RouteMetadata() {
   const canonical = base + (isAlias || cleanPath === '/' ? '/' : cleanPath);
   const title = titles[cleanPath] || titles['/'];
   const description = descriptions[cleanPath] || descriptions['/'];
-  return <Helmet><link rel="canonical" href={canonical} /><meta property="og:url" content={canonical} /><meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:image" content={base + '/social-card.png'} /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="Sai Sri Harsha Guddati — Software, systems, and AI" /><meta property="og:type" content={cleanPath.startsWith('/blog/') ? 'article' : 'website'} /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:creator" content="@SriHarsha_19" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={base + '/social-card.png'} /></Helmet>;
+  const shareImage = base + '/social-card.png?v=' + profile.assetVersion;
+  const schema = { "@context": "https://schema.org", "@graph": [{ "@type": "Person", "@id": base + "/#person", name: profile.name, url: base + "/", image: base + "/profile.webp", jobTitle: profile.role, description: profile.summary, worksFor: { "@type": "Organization", name: profile.employer }, sameAs: [profile.github, profile.linkedin, profile.twitter], knowsAbout: ["AI infrastructure", "LiteLLM", "Kubernetes", "Real-time streaming", "Retrieval-augmented generation", "LLM evaluation"] }, { "@type": "ProfilePage", "@id": base + "/#profile", url: base + "/", name: profile.name, mainEntity: { "@id": base + "/#person" } }, { "@type": "WebSite", url: base + "/", name: "Harsha — " + profile.name, publisher: { "@id": base + "/#person" } }] };
+  return <Helmet><script type="application/ld+json">{JSON.stringify(schema)}</script><link rel="canonical" href={canonical} /><meta property="og:url" content={canonical} /><meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:image" content={shareImage} /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="Sai Sri Harsha Guddati — Software, systems, and AI" /><meta property="og:type" content={cleanPath.startsWith('/blog/') ? 'article' : 'website'} /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:creator" content="@SriHarsha_19" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={shareImage} /></Helmet>;
 }
 

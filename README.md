@@ -21,7 +21,7 @@ npm test
 npm run preview
 ```
 
-The build writes to `build/` and prerenders the six main pages so their headings, biography, and metadata are readable without JavaScript. React provides the interactive experience. Tests cover project filtering, API fallbacks, journal search, contact error recovery, navigation, theme persistence, and generated metadata. Contact requests are mocked in tests.
+The build writes to `build/` and prerenders the six main pages so their headings, biography, and metadata are readable without JavaScript. React provides the interactive experience. Tests cover the current career profile, project filtering, API fallbacks, 16 distinct diagrams, pause controls and offscreen suspension, stationary portraits, journal search, contact error recovery, navigation, theme persistence, and generated metadata. Contact requests are mocked in tests.
 
 ## Content and design
 
@@ -34,7 +34,7 @@ The build writes to `build/` and prerenders the six main pages so their headings
 
 The full portfolio and journal use the existing backend API. Selected projects remain readable when the project API is unavailable. The contact page preserves backend submission and provides an actionable error state.
 
-[Brand guidelines](docs/brand-guidelines.md) · [12 design references](docs/design-references.md) · [Launch copy](docs/launch-copy.md)
+[Brand guidelines](docs/brand-guidelines.md) · [Current content](docs/content-maintenance.md) · [12 design references](docs/design-references.md) · [Launch copy](docs/launch-copy.md)
 
 ## Deployment
 

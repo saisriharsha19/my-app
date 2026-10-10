@@ -6,7 +6,9 @@ These are prepared drafts for the owner to publish. The GitHub profile is update
 
 I rebuilt my personal website to tell a clearer story about the work I care about: dependable software, distributed systems, and useful AI.
 
-It brings together my experience at University of Florida IT and TCS, along with projects like AppTrack, WebLMS, and RAG Agent. There’s also a space for engineering notes and the lessons behind the code.
+I’m an Infrastructure Platform Engineer IV at University of Florida IT. My work includes maintaining and extending the LiteLLM gateway on a shared platform processing 9B+ tokens/day, building real-time streaming services, and operating Kubernetes infrastructure.
+
+The site brings together that experience, my earlier TCS work, and projects like IntentGuard, WebLMS, and RAG Agent.
 
 Take a look: https://www.saisriharsha.com/?utm_source=linkedin&utm_medium=social&utm_campaign=portfolio_refresh
 
@@ -18,16 +20,16 @@ If you’re working on AI platforms, backend systems, or an interesting engineer
 
 Rebuilt my personal site: AI projects, distributed systems, the story behind the work, and room for engineering notes.
 
-Explore AppTrack, WebLMS, RAG Agent, and more:
+Explore IntentGuard, WebLMS, RAG Agent, and more:
 https://www.saisriharsha.com/?utm_source=x&utm_medium=social&utm_campaign=portfolio_refresh
 
 ## LinkedIn headline
 
-Software & AI Engineer | Distributed Systems, Backend Platforms & AI Infrastructure | University of Florida · TCS
+Infrastructure Platform Engineer IV at UF IT | AI Gateways, Distributed Systems & Real-Time Platforms | M.S. Computer Science
 
 ## Short profile bio
 
-Software engineer building distributed systems, AI infrastructure, and full-stack products. Experience with UF IT and TCS. Curious about the systems behind useful software.
+Infrastructure Platform Engineer IV at UF IT. Building and operating AI gateways, real-time services, retrieval pipelines, and full-stack tools. Previously Systems Engineer at TCS.
 
 ## Featured link
 

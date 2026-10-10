@@ -1,24 +1,72 @@
-// Context is grounded in the existing site biography, career history, and project API.
+// Current career context reconciled against the owner's October 2026 résumé.
 export const profile = {
-  name: 'Sai Sri Harsha Guddati', shortName: 'Harsha',
+  name: 'Sai Sri Harsha Guddati',
+  shortName: 'Harsha',
+  role: 'Infrastructure Platform Engineer IV',
+  employer: 'University of Florida Information Technology',
+  location: 'Gainesville, Florida',
   email: 'saisriharshaguddati1@gmail.com',
   github: 'https://github.com/saisriharsha19',
-  linkedin: 'https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/',
+  linkedin: 'https://www.linkedin.com/in/sai-sri-harsha-guddati',
   twitter: 'https://x.com/SriHarsha_19',
+  summary: 'Infrastructure Platform Engineer IV at UF IT, building and operating AI gateways, real-time services, retrieval pipelines, and full-stack tools.',
+  reviewed: '2026-10-09',
+  assetVersion: '20261009-blue',
 };
+export const impact = [
+  { value: '9B+', unit: 'tokens / day', label: 'Shared AI platform behind the LiteLLM gateway I maintain and extend' },
+  { value: '2,000+', unit: 'concurrent streams', label: 'Real-time token delivery across 12+ generative AI workflows' },
+  { value: '10+', unit: 'microservices', label: 'Production services deployed and operated on Kubernetes' },
+];
+export const education = [
+  { school: 'University of Florida', degree: 'M.S. in Computer Science', date: 'Jan 2024 — Dec 2025', location: 'Gainesville, Florida' },
+  { school: 'Jawaharlal Nehru Technological University Kakinada', degree: 'B.Tech in Computer Science', date: 'Aug 2018 — Jun 2022', location: 'Kakinada, India' },
+];
 export const projects = [
-  { id: 28, name: 'AppTrack', title: 'AppTrack', category: 'Systems', kind: 'Event ingestion & analytics', description: 'An event ingestion and analytics platform exploring observability, structured data pipelines, and performance monitoring at scale.', project_url: profile.github + '/AppTrack', visual: 'signals', tags: ['Observability', 'Data pipelines', 'Analytics'] },
-  { id: 29, name: 'WebLMS', title: 'WebLMS', category: 'AI', kind: 'AI browser copilot', description: 'A context-aware browser copilot that brings on-screen content into conversational workflows, with a focus on privacy and local processing.', project_url: profile.github + '/WebLMS', visual: 'browser', tags: ['Browser extension', 'AI', 'Privacy'] },
+  { id: 'intentguard', name: 'IntentGuard', title: 'IntentGuard', category: 'AI', kind: 'Command-line risk analysis', description: 'An alpha Python command-line agent that gathers execution context, evaluates command risk through LiteLLM, and explains risky actions before you confirm or abort.', project_url: profile.github + '/IntentGuard', visual: 'guard', tags: ['Python', 'LiteLLM', 'CLI'] },
+  { id: 29, name: 'WebLMS', title: 'WebLMS', category: 'AI', kind: 'Contextual browser assistant', description: 'A browser assistant that extracts page context through DOM parsing and OCR, applies client-side privacy filters, and coordinates cached, streamed responses for contextual AI chat.', project_url: profile.github + '/WebLMS', visual: 'browser', tags: ['TypeScript', 'WebExtensions', 'FastAPI', 'Redis'] },
   { id: 30, name: 'RAG Agent', title: 'RAG Agent', category: 'AI', kind: 'Document retrieval & reasoning', description: 'Embeddings, semantic search, and contextual reasoning brought together in an agent for working across documents.', project_url: profile.github + '/RAG_Agent', visual: 'retrieval', tags: ['Embeddings', 'Semantic search', 'Agents'] },
-  { id: 31, name: 'Vision AI', title: 'Vision AI', category: 'AI', kind: 'Document-grounded conversation', description: 'A full-stack AI assistant connecting a modern chat interface with document retrieval and conversational intelligence.', project_url: profile.github + '/Vision-AI', visual: 'retrieval', tags: ['Full stack', 'RAG', 'Chat'] },
-  { id: 32, name: 'NavigatorPrompt', title: 'NavigatorPrompt', category: 'AI', kind: 'Prompt orchestration', description: 'A backend for managing, refining, and organizing prompts across AI workflows.', project_url: profile.github + '/NavigatorPrompt', visual: 'browser', tags: ['Prompts', 'Automation', 'Backend'] },
-  { id: 33, name: 'Realtime Incident Processor', title: 'Realtime Incident Processor', category: 'Data', kind: 'Streaming data processing', description: 'A streaming engine for incident data ingestion, transformation, and event-driven analytics.', project_url: profile.github + '/Realtime_Incident_Data_Processor', visual: 'signals', tags: ['Streaming', 'Data engineering', 'Events'] },
-  { id: 42, name: 'Compiler Design', title: 'Compiler Design', category: 'Systems', kind: 'Language internals', description: 'A Delphi / Pascal interpreter exploring lexical analysis, ANTLR parsing, and execution through an abstract syntax tree.', project_url: profile.github + '/CompilerDesign', visual: 'signals', tags: ['Java', 'ANTLR', 'Compilers'] },
-  { id: 38, name: 'Distributed Data Scraper', title: 'Distributed Data Scraper', category: 'Data', kind: 'Automated data collection', description: 'A Python scraping pipeline focused on high-throughput collection and fault-tolerant data processing.', project_url: profile.github + '/data-scraper', visual: 'signals', tags: ['Python', 'Pipelines', 'Automation'] },
+  { id: 28, name: 'AppTrack', title: 'AppTrack', category: 'Systems', kind: 'Event ingestion & analytics', description: 'An event ingestion and analytics platform connecting structured data pipelines with observability and performance monitoring.', project_url: profile.github + '/AppTrack', visual: 'analytics', tags: ['Observability', 'Data pipelines', 'Analytics'] },
+  { id: 31, name: 'Vision AI', title: 'Vision AI', category: 'AI', kind: 'Document-grounded conversation', description: 'A full-stack assistant connecting document and image processing with retrieval and conversational intelligence.', project_url: profile.github + '/Vision-AI', visual: 'vision', tags: ['Full stack', 'RAG', 'Computer vision'] },
+  { id: 32, name: 'NavigatorPrompt', title: 'NavigatorPrompt', category: 'AI', kind: 'Prompt orchestration', description: 'A backend for managing, refining, and organizing prompts across AI workflows.', project_url: profile.github + '/NavigatorPrompt', visual: 'orchestration', tags: ['Prompts', 'Automation', 'Backend'] },
+  { id: 33, name: 'Realtime Incident Processor', title: 'Realtime Incident Processor', category: 'Data', kind: 'Streaming data processing', description: 'A streaming engine for incident data ingestion, transformation, and event-driven analytics.', project_url: profile.github + '/Realtime_Incident_Data_Processor', visual: 'streaming', tags: ['Streaming', 'Data engineering', 'Events'] },
+  { id: 34, name: 'Incident Visualizer', title: 'Incident Visualizer', category: 'Data', kind: 'Incident dashboards', description: 'A visualization system turning streaming incident datasets into live dashboards and analytical views.', project_url: profile.github + '/Real_Time_Incident_Data_Visualizer', visual: 'dashboard', tags: ['Visualization', 'Dashboards', 'Streaming'] },
+  { id: 35, name: 'FBI Data Pipeline', title: 'FBI Data Pipeline', category: 'Data', kind: 'Public dataset ETL', description: 'A structured ingestion and transformation pipeline that turns raw public datasets into analytics-ready data.', project_url: profile.github + '/FBI_Data_Fetcher_and_Processor', visual: 'etl', tags: ['ETL', 'Public data', 'Pipelines'] },
+  { id: 36, name: 'SOTA ATS Resume', title: 'SOTA ATS Resume', category: 'AI', kind: 'Resume parsing & optimization', description: 'An AI-assisted resume tool exploring intelligent parsing, content optimization, and applicant tracking compatibility.', project_url: profile.github + '/SOTA_ATS_RESUME', visual: 'resume', tags: ['Parsing', 'NLP', 'AI'] },
+  { id: 37, name: 'ML Redaction Engine', title: 'ML Redaction Engine', category: 'AI', kind: 'Sensitive entity redaction', description: 'A machine learning system for detecting sensitive entities and redacting them through structured NLP pipelines.', project_url: profile.github + '/ML-Based_Redaction_Name_Prediction_System', visual: 'redaction', tags: ['NLP', 'Privacy', 'Entities'] },
+  { id: 38, name: 'Distributed Data Scraper', title: 'Distributed Data Scraper', category: 'Data', kind: 'Automated data collection', description: 'A scraping and processing system that collects university job postings, structures them, and delivers updates on a schedule.', project_url: profile.github + '/data-scraper', visual: 'crawler', tags: ['Python', 'Pipelines', 'Automation'] },
+  { id: 39, name: 'WebChat', title: 'WebChat', category: 'Systems', kind: 'Real-time messaging', description: 'A TypeScript chat system for real-time communication and modular frontend development.', project_url: profile.github + '/WebChat', visual: 'chat', tags: ['TypeScript', 'Messaging', 'Real time'] },
+  { id: 40, name: 'Personal Website Backend', title: 'Personal Website Backend', category: 'Systems', kind: 'Portfolio content API', description: 'The API behind this portfolio: project content, journal entries, and contact workflows.', project_url: profile.github + '/personal-website-backend', visual: 'api', tags: ['FastAPI', 'REST', 'Content'] },
+  { id: 41, name: 'GeoGuard', title: 'GeoGuard', category: 'Systems', kind: 'Geospatial exploration', description: 'A location-aware project exploring geospatial validation, privacy, and frontend workflows.', project_url: profile.github + '/GeoGaurd', visual: 'geo', tags: ['Geospatial', 'Privacy', 'Location'] },
+  { id: 42, name: 'Compiler Design', title: 'Compiler Design', category: 'Systems', kind: 'Language internals', description: 'A Delphi / Pascal interpreter exploring lexical analysis, ANTLR parsing, and execution through an abstract syntax tree.', project_url: profile.github + '/CompilerDesign', visual: 'compiler', tags: ['Java', 'ANTLR', 'Compilers'] },
 ];
 export const experiences = [
-  { company: 'University of Florida', team: 'Information Technology', role: 'Software Engineer Intern', date: 'May 2025', location: 'Gainesville, Florida', intro: 'Bringing AI systems into the real world.', description: 'Work spanning a distributed AI platform supporting 30,000+ users, production microservices, and a unified gateway for multiple language models.', details: ['Built Prompt Builder and full-stack AI services with FastAPI, Next.js, Celery, Redis, and PostgreSQL.', 'Migrated services to Kubernetes, bringing deployment time from hours to minutes.', 'Reduced P95 latency from 800 ms to 480 ms through metrics-driven optimization with Prometheus and Grafana.'], tags: ['FastAPI', 'Kubernetes', 'LLMs', 'Redis'] },
-  { company: 'Tata Consultancy Services', team: 'Enterprise software', role: 'Software Development Engineer', date: 'Aug 2022 — Dec 2023', location: 'Hyderabad, India', intro: 'The foundation: backend systems at enterprise scale.', description: 'Built backend applications, improved database performance, and automated cloud deployments for enterprise environments.', details: ['Shipped Python / Flask and React applications on Azure Kubernetes Service.', 'Optimized PostgreSQL and MSSQL queries through indexing and database tuning.', 'Built semantic search and RAG systems over 10M+ documents, with deployment workflows using Terraform and Azure DevOps.'], tags: ['Python', 'React', 'Azure', 'PostgreSQL'] },
-  { company: 'Internshala', team: 'Software engineering', role: 'Software Development Engineer Intern', date: 'May — Aug 2021', location: 'Remote', intro: 'Learning how systems behave under load.', description: 'Worked on transaction processing and event-driven services, with an emphasis on throughput and API performance.', details: ['Developed Java Spring Boot microservices for real-time transactions.', 'Worked with Apache Kafka and event processing.', 'Improved API latency through thread and connection pool tuning.'], tags: ['Java', 'Spring Boot', 'Kafka', 'Microservices'] },
+  {
+    company: 'University of Florida', team: 'Information Technology',
+    role: profile.role, date: 'May 2025 — Present', location: profile.location,
+    intro: 'AI infrastructure at university scale.',
+    description: 'I maintain and extend UFIT’s LiteLLM-based gateway on a shared platform processing 9B+ tokens per day, and build the products and services connected to it.',
+    highlights: [
+      { title: 'A gateway for shared AI access', text: 'Provider routing and failover, API-key authentication, RBAC, team isolation, budgets, and audit logging for multi-tenant LLM access.', label: '9B+ tokens / day on the shared platform' },
+      { title: 'NaviGator Prompt Builder', text: 'Led development across Next.js, TypeScript, and FastAPI, connecting prompt creation, evaluation, and sharing to backend AI services.', label: 'Product + platform ownership' },
+      { title: 'Real-time delivery', text: 'Redesigned streaming with Redis Pub/Sub, Celery, and Server-Sent Events for 2,000+ concurrent token streams across 12+ generative AI workflows.', label: '2,000+ concurrent streams' },
+      { title: 'Grounded answers and evaluation', text: 'Built OCR, chunking, hybrid retrieval, reranking, and source-attributed document pipelines, with regression harnesses for groundedness, tool calls, schema compliance, and provider failures.', label: 'Retrieval + evaluation' },
+      { title: 'A departmental Data Science Agent', text: 'Combined TimesFM forecasting, BM25, and dense retrieval over PostgreSQL/pgvector to work with Excel and PDF datasets containing hundreds of thousands of rows.', label: 'Data + reasoning' },
+      { title: 'Operating the platform', text: 'Deploy and operate 10+ Kubernetes microservices with Terraform, F5 load balancing, GitLab CI/CD, health checks, automated tests, and staged rollouts.', label: '10+ production microservices' },
+    ],
+    tags: ['LiteLLM', 'Kubernetes', 'FastAPI', 'Next.js', 'Redis', 'pgvector', 'Terraform', 'GitLab CI/CD'],
+  },
+  {
+    company: 'Tata Consultancy Services', team: 'Enterprise platforms',
+    role: 'Systems Engineer', date: 'Aug 2022 — Dec 2023', location: 'Hyderabad, India',
+    intro: 'Reliable services behind enterprise workflows.',
+    description: 'Built Java Spring Boot and Node.js services supporting 100K+ daily user interactions, with stable APIs and SQL-backed workflows across business units.',
+    highlights: [
+      { title: 'APIs that teams can build on', text: 'Request validation, idempotent processing, and backward-compatible REST contracts for independently deployed frontends and downstream systems.', label: '100K+ daily interactions' },
+      { title: 'Data performance', text: 'Tuned PostgreSQL and MSSQL query plans, joins, indexes, and connection usage, reducing average API response time by approximately 50%.', label: 'SQL + service optimization' },
+      { title: 'Asynchronous work and repeatable releases', text: 'Moved high-volume ingestion into workers with retries and rate limits, and maintained GitLab CI/CD pipelines for testing, packaging, and multi-environment deployment.', label: 'Workers + CI/CD' },
+    ],
+    tags: ['Java', 'Spring Boot', 'Node.js', 'PostgreSQL', 'MSSQL', 'GitLab CI/CD'],
+  },
 ];
 

@@ -24,6 +24,9 @@ await build({
     "export { default as Blog } from './src/pages/Blog.jsx';",
     "export { default as Contact } from './src/pages/Contact.jsx';",
     "export { default as Navbar } from './src/components/Navbar.jsx';",
+    "export { default as Experience } from './src/pages/ExperiencePage.jsx';",
+    "export { default as ProjectVisual } from './src/components/ProjectVisual.jsx';",
+    "export { projects } from './src/data/profile.js';",
     "export { default as RouteMetadata } from './src/components/RouteMetadata.jsx';",
     "export { ThemeProvider } from './src/ThemeContext.jsx';",
   ].join('\n'), resolveDir: process.cwd(), loader: 'jsx' },
@@ -34,7 +37,7 @@ await build({
 const React = await import('react');
 const { MemoryRouter, useLocation } = await import('react-router-dom');
 const { HelmetProvider } = (await import('react-helmet-async')).default;
-const { render, screen, fireEvent, waitFor, cleanup } = await import('@testing-library/react');
+const { render, screen, fireEvent, waitFor, cleanup, act } = await import('@testing-library/react');
 const components = (await import(pathToFileURL(modulePath).href)).default;
 const h = React.createElement;
 function Location() { return h('output', { 'data-testid': 'location' }, useLocation().pathname); }
@@ -50,6 +53,10 @@ try {
   assert.equal(screen.getByRole('img', { name: 'Sai Sri Harsha Guddati' }).getAttribute('fetchpriority'), 'high');
   assert.equal(screen.getByRole('link', { name: /Explore my work/ }).getAttribute('href'), '#selected-work');
   assert.ok(screen.getByRole('heading', { name: /More than/ }));
+  assert.ok(screen.getByText('9B+'));
+  assert.ok(screen.getByText(/INFRASTRUCTURE PLATFORM ENGINEER IV/));
+  assert.ok(!document.body.textContent.includes('P95'));
+  assert.equal(document.querySelectorAll('a button').length, 0, 'Animation controls must not be nested inside links');
   reset();
   console.log('PASS: personal homepage, portrait, and navigation');
 
@@ -57,21 +64,71 @@ try {
   mount(components.Portfolio, '/portfolio');
   await screen.findByText(/full project archive is temporarily unavailable/);
   fireEvent.click(screen.getByRole('button', { name: 'Data', exact: true }));
-  assert.equal(document.querySelectorAll('.portfolio-card').length, 2);
+  assert.equal(document.querySelectorAll('.portfolio-card').length, 4);
   fireEvent.change(screen.getByRole('textbox', { name: 'Search projects' }), { target: { value: 'nothing matches this' } });
   assert.ok(screen.getByText('No projects match that search.'));
   fireEvent.click(screen.getByRole('button', { name: 'Reset filters' }));
-  assert.equal(document.querySelectorAll('.portfolio-card').length, 8);
+  assert.equal(document.querySelectorAll('.portfolio-card').length, 16);
   reset();
   console.log('PASS: offline portfolio, category filtering, search, and reset');
 
   globalThis.fetch = async () => ({ ok: true, json: async () => [{ id: 99, title: 'New ETL Project: Data pipeline', description: 'Data processing', project_url: 'https://github.com/example/project' }] });
   mount(components.Portfolio, '/portfolio');
   await screen.findByRole('heading', { name: 'New ETL Project' });
+  assert.ok(screen.getByRole('heading', { name: 'IntentGuard' }), 'Remote archive must not erase newly curated work');
   fireEvent.click(screen.getByRole('button', { name: 'Data', exact: true }));
+  fireEvent.change(screen.getByRole('textbox', { name: 'Search projects' }), { target: { value: 'New ETL Project' } });
   assert.equal(document.querySelectorAll('.portfolio-card').length, 1);
   reset();
   console.log('PASS: remote project archive and classification');
+
+  mount(components.Experience, '/experience');
+  assert.ok(screen.getByText('Infrastructure Platform Engineer IV'));
+  assert.ok(screen.getByText('9B+'));
+  assert.ok(screen.getByText('Systems Engineer'));
+  assert.ok(screen.getByRole('heading', { name: 'M.S. in Computer Science' }));
+  assert.ok(!document.body.textContent.includes('Intern'));
+  assert.ok(!document.body.textContent.includes('GPA'));
+  reset();
+  console.log('PASS: current role, shared-platform impact, accurate career and completed education');
+
+  assert.equal(new Set(components.projects.map(project => project.visual)).size, 16);
+  for (const project of components.projects) {
+    mount(() => h(components.ProjectVisual, { name: project.name, type: project.visual }));
+    const diagram = document.querySelector('.project-visual');
+    assert.equal(diagram.dataset.animation, project.visual);
+    assert.ok(diagram.querySelector('svg.project-diagram'));
+    fireEvent.click(screen.getByRole('button', { name: 'Pause animation for ' + project.name }));
+    assert.equal(diagram.dataset.active, 'false');
+    assert.equal(screen.getByRole('button', { name: 'Play animation for ' + project.name }).getAttribute('aria-pressed'), 'true');
+    reset();
+  }
+  let intersection;
+  window.IntersectionObserver = class {
+    constructor(callback) { intersection = callback; }
+    observe() {}
+    disconnect() {}
+  };
+  mount(() => h(components.ProjectVisual, { name: 'Test project', type: 'streaming' }));
+  assert.equal(document.querySelector('.project-visual').dataset.active, 'false');
+  act(() => intersection([{ isIntersecting: true }]));
+  assert.equal(document.querySelector('.project-visual').dataset.active, 'true');
+  act(() => intersection([{ isIntersecting: false }]));
+  assert.equal(document.querySelector('.project-visual').dataset.active, 'false');
+  reset(); delete window.IntersectionObserver;
+  console.log('PASS: 16 distinct project diagrams, pause controls, and offscreen animation suspension');
+
+  const css = await readFile('src/editorial.css', 'utf8');
+  const stylesheet = document.createElement('style'); stylesheet.textContent = css; document.head.appendChild(stylesheet);
+  mount(components.Home);
+  assert.equal(window.getComputedStyle(document.querySelector('.hero-portrait')).transform, 'none');
+  assert.equal(window.getComputedStyle(document.querySelector('.portrait-image img')).filter, 'none');
+  assert.equal(window.getComputedStyle(document.querySelector('.portrait-image img')).animation, 'none');
+  assert.ok(css.includes('@media (prefers-reduced-motion: reduce)'));
+  assert.ok(css.includes('animation: none !important'));
+  assert.ok(!css.includes('editorial-enter'));
+  reset(); stylesheet.remove();
+  console.log('PASS: stationary portrait, no image filters, and reduced-motion support');
 
   let articleAttempt = 0;
   globalThis.fetch = async () => { if (articleAttempt++ === 0) throw new Error('Unavailable'); return { ok: true, json: async () => [{ id: 1, title: 'Understanding RAG', content: 'A retrieval article', created_at: '2026-10-01', author: 'Harsha' }] }; };
@@ -124,8 +181,11 @@ try {
     assert.ok(document.querySelector('#root main h1'), 'Missing prerendered heading: ' + route);
     assert.equal(document.querySelectorAll('link[rel="canonical"]').length, 1);
     assert.equal(document.querySelectorAll('meta[name="description"]').length, 1);
-    assert.ok(document.querySelector('meta[property="og:image"]').content.endsWith('/social-card.png'));
-    JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
+    assert.equal(new URL(document.querySelector('meta[property="og:image"]').content).pathname, '/social-card.png');
+    const schemas = document.querySelectorAll('script[type="application/ld+json"]');
+    assert.equal(schemas.length, 1);
+    const schema = JSON.parse(schemas[0].textContent);
+    assert.equal(schema['@graph'].find(entity => entity['@type'] === 'Person').jobTitle, 'Infrastructure Platform Engineer IV');
   }
   console.log('PASS: six static pages, unique canonical and description, social cards, and valid JSON-LD');
   const logo = await readFile('public/favicon.svg', 'utf8');
