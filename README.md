@@ -21,24 +21,26 @@ npm test
 npm run preview
 ```
 
-The build writes to `build/` and prerenders the six main pages so their headings, biography, and metadata are readable without JavaScript. React provides the interactive experience. Tests cover the current career profile, project filtering, API fallbacks, 16 distinct diagrams, pause controls and offscreen suspension, stationary portraits, journal search, contact error recovery, navigation, theme persistence, and generated metadata. Contact requests are mocked in tests.
+The build writes to `build/` and prerenders six main pages plus all 30 journals. React provides search, filtering, navigation, and theme controls. Tests cover the career profile, project filtering, 16 distinct diagrams, motion controls, stationary portraits, journal search and pagination, preserved article URLs, dates, email contact, and generated metadata. Content tests prohibit backend requests.
 
 ## Content and design
 
-- `src/data/profile.js`: personal context, selected projects, and career narrative.
+- `src/data/profile.json`: personal context, selected projects, and career narrative. `profile.js` exports this content to the components.
+- `src/data/journals.json`: all 30 journal entries, including the three original posts at `/blog/7`, `/blog/8`, and `/blog/9`.
+- `src/data/portfolio-archive.json`: a preserved export of the 15 original public database project records; the current curated projects live in `profile.json`.
 - `src/editorial.css`: responsive design system and locally hosted fonts.
 - `src/pages/`: the primary site pages.
 - `public/favicon.svg`: the 64 × 64 brand mark.
 - `scripts/generate-brand.mjs`: deterministic brand exports using the same SVG, outlined Manrope typography, and the user-requested cropped portrait.
 - `scripts/prerender.mjs`: static HTML and metadata export.
 
-The full portfolio and journal use the existing backend API. Selected projects remain readable when the project API is unavailable. The contact page preserves backend submission and provides an actionable error state.
+The website uses repository-managed JSON content, with no database or content API requests at runtime or build time. Contact links open an email draft in the visitor's email app; no message is stored or automatically sent by this site.
 
 [Brand guidelines](docs/brand-guidelines.md) · [Current content](docs/content-maintenance.md) · [12 design references](docs/design-references.md) · [Launch copy](docs/launch-copy.md)
 
 ## Deployment
 
-Pushes to `master` run the existing Azure Static Web Apps workflow. CI installs dependencies with Node 22, builds and tests, then uploads the verified `build/` directory. The root `staticwebapp.config.json` is copied into that output by the prerender step.
+Pushes to `master` run the existing Azure Static Web Apps workflow. CI installs dependencies with Node 22, builds and tests, then uploads the verified `build/` directory. The prerender step extends the root `staticwebapp.config.json` with exact journal routes and generates the sitemap from JSON.
 
 Run `node generateSitemap.js` to refresh the sitemap, including published journal entries. Canonical URLs use `https://www.saisriharsha.com`. SEO and sharing metadata aid discovery; recommendations and ranking cannot be guaranteed.
 

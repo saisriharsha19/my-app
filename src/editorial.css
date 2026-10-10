@@ -263,10 +263,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .education-note h2 { font-size: 24px; margin-top: 10px; font-weight: 500; }
 .education-note p:not(.eyebrow) { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
 .journal-list { border-top: 1px solid var(--rule); }
-.archive-notice { margin-bottom: 28px; color: var(--text-secondary); font-size: 13px; }
-.archive-notice p { margin-bottom: 12px; }
 .related-journals { border-top: 1px solid var(--rule); padding-top: 32px; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
 .related-journals .text-link { max-width: 100%; }
+.contact-direct h2 { font-size: clamp(28px, 3vw, 42px); line-height: 1.2; letter-spacing: -1px; }
+.contact-direct p { color: var(--text-secondary); font-size: 14px; line-height: 1.8; }
+.contact-direct .contact-email-note { font-size: 12px; }
 .journal-card { display: grid; grid-template-columns: 120px 1fr 40px; gap: 28px; padding-block: 32px; border-bottom: 1px solid var(--rule); transition: background .2s; }
 .journal-card:hover { background: var(--bg-secondary); }
 .journal-card time { font: 10px/1.8 Consolas, monospace; color: var(--text-secondary); }

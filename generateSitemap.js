@@ -1,56 +1,20 @@
-const { SitemapStream, streamToPromise } = require("sitemap");
-const { createWriteStream } = require("fs");
+const { SitemapStream, streamToPromise } = require('sitemap');
+const { writeFile } = require('node:fs/promises');
 const journals = require('./src/data/journals.json');
 
-async function fetchBlogPosts() {
-  try {
-    const fetch = (await import("node-fetch")).default; // Dynamic import for Node.js <18
-    const response = await fetch("https://backend-482511937770.europe-west1.run.app/blog/");
-
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
-    return await response.json();
-  } catch (error) {
-    console.error("Failed to fetch blog posts:", error);
-    return [];
-  }
-}
-
-async function generateSitemap() {
-  const BASE_URL = "https://www.saisriharsha.com";
-  const smStream = new SitemapStream({ hostname: BASE_URL });
-
-  const staticPages = [
-    { url: "/", changefreq: "daily", priority: 1.0 },
-    { url: "/blog", changefreq: "weekly", priority: 0.8 },
-    { url: "/portfolio", changefreq: "weekly", priority: 0.8 },
-    { url: "/experience", changefreq: "monthly", priority: 0.8 },
-    { url: "/contact", changefreq: "monthly", priority: 0.7 },
-    { url: "/resume", changefreq: "monthly", priority: 0.7 },
-    { url: "/sai-sri-harsha", changefreq: "monthly", priority: 0.9 },
-    { url: "/sri-harsha", changefreq: "monthly", priority: 0.9 },
-    { url: "/sai-harsha", changefreq: "monthly", priority: 0.9 },
-    { url: "/harsha", changefreq: "monthly", priority: 0.9 },
-    { url: "/sai-harsha-distributed-systems", changefreq: "monthly", priority: 0.9 },
-    { url: "/sri-harsha-ai-engineer", changefreq: "monthly", priority: 0.9 },
-    { url: "/harsha-guddati-software-engineer", changefreq: "monthly", priority: 0.9 },
-    { url: "/sai-sri-harsha-gainesville", changefreq: "monthly", priority: 0.9 },
-    { url: "/sai-harsha-kubernetes", changefreq: "monthly", priority: 0.9 },
-    { url: "/sri-harsha-backend", changefreq: "monthly", priority: 0.9 },
-    { url: "/sai-sri-harsha-portfolio", changefreq: "monthly", priority: 0.9 }
+async function generateSitemap(destination = './public/sitemap.xml') {
+  const stream = new SitemapStream({ hostname: 'https://www.saisriharsha.com' });
+  const pages = [
+    '/', '/blog', '/portfolio', '/experience', '/contact', '/resume',
+    '/sai-sri-harsha', '/sri-harsha', '/sai-harsha', '/harsha',
+    '/sai-harsha-distributed-systems', '/sri-harsha-ai-engineer',
+    '/harsha-guddati-software-engineer', '/sai-sri-harsha-gainesville',
+    '/sai-harsha-kubernetes', '/sri-harsha-backend', '/sai-sri-harsha-portfolio',
   ];
-
-  const blogPosts = await fetchBlogPosts();
-  journals.forEach(post => staticPages.push({ url: '/blog/' + post.id, lastmod: post.created_at.slice(0, 10), changefreq: 'monthly', priority: 0.7 }));
-  blogPosts.forEach((post) => {
-    staticPages.push({ url: `/blog/${post.id}`, changefreq: "weekly", priority: 0.7 });
-  });
-
-  staticPages.forEach((page) => smStream.write(page));
-  smStream.end();
-
-  const sitemap = await streamToPromise(smStream);
-  createWriteStream("./public/sitemap.xml").write(sitemap);
+  pages.forEach(url => stream.write({ url, changefreq: 'monthly', priority: url === '/' ? 1 : 0.8 }));
+  journals.forEach(post => stream.write({ url: '/blog/' + post.id, lastmod: (post.updated_at || post.published_at || post.created_at).slice(0, 10), changefreq: 'monthly', priority: 0.7 }));
+  stream.end();
+  await writeFile(destination, await streamToPromise(stream));
 }
-
-generateSitemap().then(() => console.log("Sitemap updated!"));
+module.exports = { generateSitemap };
+if (require.main === module) generateSitemap().then(() => console.log('Sitemap updated from JSON.')).catch(error => { console.error(error); process.exitCode = 1; });

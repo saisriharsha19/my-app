@@ -1,0 +1,107 @@
+[
+  {
+    "title": "AppTrack: High-Scale Analytics Engine",
+    "description": "A high-throughput event ingestion and analytics platform engineered for production-grade observability, structured data pipelines, and performance monitoring at scale.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/AppTrack",
+    "project_url": "https://github.com/saisriharsha19/AppTrack",
+    "id": 28
+  },
+  {
+    "title": "WebLMS: Privacy-First AI Browser Copilot",
+    "description": "A context-aware AI browser extension that captures on-screen content, applies intelligent reasoning, and enables secure conversational workflows with strict local processing.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/WebLMS",
+    "project_url": "https://github.com/saisriharsha19/WebLMS",
+    "id": 29
+  },
+  {
+    "title": "RAG Agent: Autonomous Retrieval Intelligence",
+    "description": "An advanced retrieval-augmented agent integrating embeddings, semantic search, and contextual reasoning to power intelligent multi-document AI workflows.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/RAG_Agent",
+    "project_url": "https://github.com/saisriharsha19/RAG_Agent",
+    "id": 30
+  },
+  {
+    "title": "Vision AI: Full-Stack RAG Chat System",
+    "description": "A production-style AI assistant combining modern frontend architecture with document-grounded conversational intelligence and semantic retrieval.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/Vision-AI",
+    "project_url": "https://github.com/saisriharsha19/Vision-AI",
+    "id": 31
+  },
+  {
+    "title": "NavigatorPrompt: LLM Orchestration Engine",
+    "description": "A structured prompt management and optimization backend designed for scalable AI pipelines, intelligent prompt refinement, and workflow automation.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/NavigatorPrompt",
+    "project_url": "https://github.com/saisriharsha19/NavigatorPrompt",
+    "id": 32
+  },
+  {
+    "title": "Realtime Incident Processor: Streaming Data Core",
+    "description": "A real-time streaming engine built for high-volume ingestion, transformation, and event-driven analytics in distributed environments.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/Realtime_Incident_Data_Processor",
+    "project_url": "https://github.com/saisriharsha19/Realtime_Incident_Data_Processor",
+    "id": 33
+  },
+  {
+    "title": "Incident Visualizer: Live Intelligence Dashboard",
+    "description": "A data engineering visualization system delivering real-time dashboards and analytical insights over streaming incident datasets.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/Real_Time_Incident_Data_Visualizer",
+    "project_url": "https://github.com/saisriharsha19/Real_Time_Incident_Data_Visualizer",
+    "id": 34
+  },
+  {
+    "title": "FBI Data Pipeline: Automated Intelligence ETL",
+    "description": "A structured data ingestion and transformation pipeline that converts raw public datasets into analytics-ready intelligence streams.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/FBI_Data_Fetcher_and_Processor",
+    "project_url": "https://github.com/saisriharsha19/FBI_Data_Fetcher_and_Processor",
+    "id": 35
+  },
+  {
+    "title": "SOTA ATS Resume: AI Resume Optimizer",
+    "description": "An AI-powered resume enhancement engine built to maximize applicant tracking compatibility through intelligent parsing and content optimization.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/SOTA_ATS_RESUME",
+    "project_url": "https://github.com/saisriharsha19/SOTA_ATS_RESUME",
+    "id": 36
+  },
+  {
+    "title": "ML Redaction Engine: Privacy-Aware NLP",
+    "description": "A machine learning system for automated sensitive data detection and intelligent redaction using entity prediction and structured NLP pipelines.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/ML-Based_Redaction_Name_Prediction_System",
+    "project_url": "https://github.com/saisriharsha19/ML-Based_Redaction_Name_Prediction_System",
+    "id": 37
+  },
+  {
+    "title": "Data Scraper: Automated Job Intelligence Bot",
+    "description": "A scheduled scraping and processing system that extracts university job postings, structures them, and delivers intelligent updates on cadence.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/data-scraper",
+    "project_url": "https://github.com/saisriharsha19/data-scraper",
+    "id": 38
+  },
+  {
+    "title": "WebChat: Real-Time Messaging Framework",
+    "description": "A modern TypeScript-based chat system designed for scalable real-time communication and modular frontend architecture.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/WebChat",
+    "project_url": "https://github.com/saisriharsha19/WebChat",
+    "id": 39
+  },
+  {
+    "title": "Personal Website Backend: Production API Core",
+    "description": "A backend service powering a dynamic portfolio platform with structured APIs, deployment-ready architecture, and scalable content delivery.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/personal-website-backend",
+    "project_url": "https://github.com/saisriharsha19/personal-website-backend",
+    "id": 40
+  },
+  {
+    "title": "GeoGuard: Geospatial Security Framework",
+    "description": "A location-aware security experimentation project exploring geospatial validation, access logic, and frontend security workflows.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/GeoGaurd",
+    "project_url": "https://github.com/saisriharsha19/GeoGaurd",
+    "id": 41
+  },
+  {
+    "title": "CompilerCore: Systems-Level Compiler Engine",
+    "description": "A foundational systems project implementing lexical analysis, parsing, and intermediate representation concepts in Java, reflecting deep understanding of compiler internals.",
+    "image_url": "https://opengraph.githubassets.com/1/saisriharsha19/CompilerDesign",
+    "project_url": "https://github.com/saisriharsha19/CompilerDesign",
+    "id": 42
+  }
+]

@@ -2,6 +2,8 @@ import { build } from 'esbuild';
 import { readdir, readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createRequire } from 'node:module';
+const { generateSitemap } = createRequire(import.meta.url)('../generateSitemap.js');
 
 const outputDir = resolve('build');
 const assets = await readdir(resolve(outputDir, 'assets'));
@@ -34,9 +36,6 @@ const routing = JSON.parse(await readFile('staticwebapp.config.json', 'utf8'));
 const articles = JSON.parse(await readFile('src/data/journals.json', 'utf8'));
 routing.routes.unshift(...articles.map(post => ({ route: '/blog/' + post.id, rewrite: '/blog/' + post.id + '/index.html' })));
 await writeFile(resolve(outputDir, 'staticwebapp.config.json'), JSON.stringify(routing, null, 2));
-let sitemap = await readFile(resolve(outputDir, 'sitemap.xml'), 'utf8');
-const entries = articles.filter(post => !sitemap.includes('<loc>https://www.saisriharsha.com/blog/' + post.id + '</loc>')).map(post => '<url><loc>https://www.saisriharsha.com/blog/' + post.id + '</loc><lastmod>' + post.created_at.slice(0, 10) + '</lastmod></url>').join('');
-sitemap = sitemap.replace('</urlset>', entries + '</urlset>');
-await writeFile(resolve(outputDir, 'sitemap.xml'), sitemap);
+await generateSitemap(resolve(outputDir, 'sitemap.xml'));
 console.log('Prerendered ' + routes.length + ' pages with readable HTML and route metadata.');
 

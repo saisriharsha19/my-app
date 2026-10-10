@@ -14,12 +14,14 @@ The career summary was reconciled against the owner's October 2026 résumé and 
 - IntentGuard: the current alpha implementation is Python + LiteLLM. Do not reuse an older Rust implementation description.
 - The public résumé is refreshed, and its portfolio link points to the canonical website domain.
 
-Use `src/data/profile.js` for career facts, impact, education, and curated projects. The homepage, experience page, and structured profile metadata use that data. Curated project records override older API descriptions for the same IDs; newly curated projects remain visible even when absent from the API.
+Edit `src/data/profile.json` for career facts, impact, education, and curated projects. `profile.js` exports the JSON to the homepage, experience page, portfolio, and structured metadata. The original 15 public project records are preserved in `portfolio-archive.json`; their older wording does not override current curated descriptions.
 
 Do not restore the earlier intern title, rounded GPA, 800→480 ms headline, or 10M-document TCS claim from historical versions. P95 remains a secondary detail in the current résumé, rather than the homepage’s headline impact.
 
 Project diagrams are conceptual illustrations of each project's purpose. They show no fabricated usage counters or live operational data.
 
-The 27 engineering journals in `src/data/journals.json` were published October 9, 2026. They use the profile facts above, original engineering commentary, clearly illustrative scenarios, and primary documentation links for specific technical behavior. They do not claim that hypothetical incidents occurred at UF or TCS. Keep actual publication dates separate from any future notebook or draft dates.
+The 27 new engineering journals in `src/data/journals.json` were published October 9, 2026. At the owner's request, their displayed journal dates (`created_at`) are distributed from January 9 through October 8, 2026. Actual publication dates remain in `published_at`, and revision dates in `updated_at`; these fields drive publication metadata and sitemap modification dates. The three imported archive articles retain their original July 2025 dates and numeric URLs.
 
-These articles are repository-managed content. `src/data/journals.js` merges them with the existing API archive without replacing the three historical posts. Local articles remain available if that API is offline. The build prerenders every local article, adds exact Azure routes, and includes their URLs in the sitemap. Stable slugs are permanent public URLs; retain them when editing. Update `dateModified` separately if later revisions require it.
+All 30 articles are repository-managed JSON content. They use grounded profile facts, original commentary, clearly illustrative scenarios, and primary documentation links for specific technical behavior. Hypothetical incidents are not represented as events at UF or TCS. The build prerenders every article, adds exact Azure routes, and generates the sitemap. Keep public slugs stable when editing and update `updated_at` for substantive revisions.
+
+The portfolio, journals, profile, and contact page have no backend dependency. Contact is direct email. The old `/thank-you` route redirects to contact because the website no longer submits or stores messages. See [database retirement](database-retirement.md) for the infrastructure scope and recovery procedure.

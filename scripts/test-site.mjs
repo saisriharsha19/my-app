@@ -23,7 +23,7 @@ await build({
     "export { default as Portfolio } from './src/pages/Portfolio.jsx';",
     "export { default as Blog } from './src/pages/Blog.jsx';",
     "export { default as FullPost } from './src/pages/FullPost.jsx';",
-    "export { journals, mergeJournals, readingMinutes } from './src/data/journals.js';",
+    "export { journals, readingMinutes } from './src/data/journals.js';",
     "export { default as Contact } from './src/pages/Contact.jsx';",
     "export { default as Navbar } from './src/components/Navbar.jsx';",
     "export { default as Experience } from './src/pages/ExperiencePage.jsx';",
@@ -50,6 +50,8 @@ function mount(Component, path = '/') {
 function reset() { cleanup(); sessionStorage.clear(); localStorage.clear(); }
 
 try {
+  let contentRequests = 0;
+  globalThis.fetch = async () => { contentRequests++; throw new Error('Content must not use the network'); };
   mount(components.Home);
   assert.match(screen.getByRole('heading', { level: 1 }).textContent, /Curiosity/);
   assert.equal(screen.getByRole('img', { name: 'Sai Sri Harsha Guddati' }).getAttribute('fetchpriority'), 'high');
@@ -62,27 +64,17 @@ try {
   reset();
   console.log('PASS: personal homepage, portrait, and navigation');
 
-  globalThis.fetch = async () => { throw new Error('Offline'); };
   mount(components.Portfolio, '/portfolio');
-  await screen.findByText(/full project archive is temporarily unavailable/);
+  assert.equal(document.querySelectorAll('.portfolio-card').length, 16);
   fireEvent.click(screen.getByRole('button', { name: 'Data', exact: true }));
   assert.equal(document.querySelectorAll('.portfolio-card').length, 4);
   fireEvent.change(screen.getByRole('textbox', { name: 'Search projects' }), { target: { value: 'nothing matches this' } });
   assert.ok(screen.getByText('No projects match that search.'));
   fireEvent.click(screen.getByRole('button', { name: 'Reset filters' }));
   assert.equal(document.querySelectorAll('.portfolio-card').length, 16);
+  assert.ok(screen.getByRole('heading', { name: 'IntentGuard' }));
   reset();
-  console.log('PASS: offline portfolio, category filtering, search, and reset');
-
-  globalThis.fetch = async () => ({ ok: true, json: async () => [{ id: 99, title: 'New ETL Project: Data pipeline', description: 'Data processing', project_url: 'https://github.com/example/project' }] });
-  mount(components.Portfolio, '/portfolio');
-  await screen.findByRole('heading', { name: 'New ETL Project' });
-  assert.ok(screen.getByRole('heading', { name: 'IntentGuard' }), 'Remote archive must not erase newly curated work');
-  fireEvent.click(screen.getByRole('button', { name: 'Data', exact: true }));
-  fireEvent.change(screen.getByRole('textbox', { name: 'Search projects' }), { target: { value: 'New ETL Project' } });
-  assert.equal(document.querySelectorAll('.portfolio-card').length, 1);
-  reset();
-  console.log('PASS: remote project archive and classification');
+  console.log('PASS: JSON portfolio, category filtering, search, and reset');
 
   mount(components.Experience, '/experience');
   assert.ok(screen.getByText('Infrastructure Platform Engineer IV'));
@@ -132,82 +124,78 @@ try {
   reset(); stylesheet.remove();
   console.log('PASS: stationary portrait, no image filters, and reduced-motion support');
 
-  let articleAttempt = 0;
-  globalThis.fetch = async () => { if (articleAttempt++ === 0) throw new Error('Unavailable'); return { ok: true, json: async () => [{ id: 1, title: 'Understanding RAG', content: 'A retrieval article', created_at: '2026-10-01', author: 'Harsha' }] }; };
   mount(components.Blog, '/blog');
-  await screen.findByText('Earlier articles are temporarily unavailable. The new journal is ready to read.');
   assert.equal(document.querySelectorAll('.journal-card').length, 6);
   assert.ok(screen.getByRole('heading', { name: 'Nine billion tokens, and the work behind the number' }));
-  fireEvent.click(screen.getByRole('button', { name: /Try again/ }));
-  fireEvent.change(screen.getByRole('textbox', { name: 'Search articles' }), { target: { value: 'Understanding RAG' } });
-  await screen.findByRole('heading', { name: 'Understanding RAG' });
+  assert.ok(screen.getByText('30 ARTICLES'));
+  fireEvent.change(screen.getByRole('textbox', { name: 'Search articles' }), { target: { value: 'Quantum-AI Convergence' } });
+  assert.ok(screen.getByRole('link', { name: /Quantum-AI Convergence/ }));
   fireEvent.change(screen.getByRole('textbox', { name: 'Search articles' }), { target: { value: 'no-such-journal-92834' } });
   assert.ok(screen.getByText('No articles match that search.'));
   fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
   assert.equal(document.querySelectorAll('.journal-card').length, 6);
   fireEvent.click(screen.getByRole('button', { name: '5', exact: true }));
-  assert.ok(screen.getByRole('link', { name: /Understanding RAG/ }));
+  assert.ok(screen.getByRole('link', { name: /Quantum-AI Convergence/ }));
   reset();
-  console.log('PASS: 27 offline journals, archive retry, merged legacy articles, search, and pagination');
+  console.log('PASS: 30 JSON journals, preserved archive, search, and pagination');
 
-  assert.equal(components.journals.length, 27);
-  assert.equal(new Set(components.journals.map(post => post.id)).size, 27);
-  assert.equal(components.mergeJournals([components.journals[0]]).length, 27);
+  assert.equal(components.journals.length, 30);
+  assert.equal(new Set(components.journals.map(post => post.id)).size, 30);
+  const newJournals = components.journals.filter(post => !post.archived);
+  assert.equal(newJournals.length, 27);
+  assert.equal(new Set(newJournals.map(post => post.created_at)).size, 27);
   assert.equal(components.readingMinutes('word '.repeat(440)), 2);
-  let articleFetches = 0;
-  globalThis.fetch = async () => { articleFetches++; throw new Error('Offline'); };
   const journal = components.journals[0];
   mount(() => h(components.FullPost, { postId: journal.id }), '/blog/' + journal.id);
   assert.ok(screen.getByRole('heading', { name: journal.title }));
   assert.equal(document.querySelectorAll('.article-body h2').length, 3);
+  assert.equal(document.querySelector('time').getAttribute('datetime'), journal.created_at);
   assert.equal(screen.getByRole('navigation', { name: 'Keep reading' }).querySelectorAll('a').length, 3);
-  await act(async () => {});
-  assert.equal(articleFetches, 0, 'Local articles must not depend on the backend');
   reset();
-  globalThis.fetch = async () => ({ ok: true, json: async () => ({ id: 7, title: 'Existing archive article', content: 'The historical article remains readable.', created_at: '2025-07-20' }) });
-  mount(() => h(components.FullPost, { postId: '7' }), '/blog/7');
-  await screen.findByRole('heading', { name: 'Existing archive article' });
-  assert.ok(screen.getByText('The historical article remains readable.'));
-  reset();
-  globalThis.fetch = async () => ({ ok: false });
+  for (const postId of ['7', '8', '9']) {
+    const archived = components.journals.find(post => post.id === postId);
+    mount(() => h(components.FullPost, { postId }), '/blog/' + postId);
+    assert.ok(screen.getByRole('heading', { name: archived.title }));
+    assert.ok(document.querySelector('.article-body').textContent.length > 1500);
+    reset();
+  }
   mount(() => h(components.FullPost, { postId: 'missing-article' }), '/blog/missing-article');
-  await screen.findByText('This article could not be loaded.');
+  assert.ok(screen.getByText('This article could not be found.'));
   assert.ok(screen.getByRole('link', { name: /Browse the journal/ }));
   reset();
   const sitemap = await readFile('build/sitemap.xml', 'utf8');
   for (const post of components.journals) {
     assert.match(post.id, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
     assert.ok(post.content.split(/\s+/).length >= 300, 'Article is too short: ' + post.id);
-    assert.equal(post.created_at.slice(0, 10), '2026-10-09');
+    if (!post.archived) {
+      assert.ok(post.created_at >= '2026-01-01' && post.created_at <= '2026-10-08');
+      assert.equal(post.published_at, '2026-10-09');
+    }
     const document = new JSDOM(await readFile('build/blog/' + post.id + '/index.html', 'utf8')).window.document;
     assert.equal(document.querySelector('h1').textContent, post.title);
     assert.ok(document.querySelector('.article-body').textContent.length > 1500);
     assert.equal(document.querySelectorAll('link[rel="canonical"]').length, 1);
     assert.equal(document.querySelector('link[rel="canonical"]').href, 'https://www.saisriharsha.com/blog/' + post.id);
     assert.equal(document.querySelector('meta[property="og:title"]').content, post.title + ' — Sai Sri Harsha Guddati');
+    assert.equal(document.querySelector('time').getAttribute('datetime'), post.created_at);
     const schema = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
     const article = schema['@graph'].find(item => item['@type'] === 'BlogPosting');
     assert.equal(article.headline, post.title);
-    assert.equal(article.datePublished, post.created_at);
+    assert.equal(article.datePublished, post.published_at);
+    assert.equal(article.dateModified, post.updated_at || post.published_at);
     assert.ok(sitemap.includes('<loc>https://www.saisriharsha.com/blog/' + post.id + '</loc>'));
   }
-  console.log('PASS: 27 substantial, unique, prerendered articles with dates, canonical URLs, sharing metadata, schema, and sitemap entries');
+  console.log('PASS: 30 static article pages, 27 varied journal dates, preserved publication metadata, schema, and sitemap');
 
-  globalThis.fetch = async () => ({ ok: false });
   mount(components.Contact, '/contact');
-  fireEvent.change(screen.getByRole('textbox', { name: 'YOUR NAME' }), { target: { value: 'Test Visitor' } });
-  fireEvent.change(screen.getByRole('textbox', { name: 'EMAIL ADDRESS' }), { target: { value: 'test@example.com' } });
-  fireEvent.change(screen.getByRole('textbox', { name: 'WHAT’S ON YOUR MIND?' }), { target: { value: 'A test message' } });
-  fireEvent.submit(document.querySelector('form'));
-  await screen.findByRole('alert');
-  assert.equal(screen.getByRole('button', { name: /Send message/ }).disabled, false);
-  let sent;
-  globalThis.fetch = async (url, options) => { sent = JSON.parse(options.body); return { ok: true }; };
-  fireEvent.submit(document.querySelector('form'));
-  await waitFor(() => assert.equal(screen.getByTestId('location').textContent, '/thank-you'));
-  assert.equal(sent.email, 'test@example.com');
+  const email = screen.getByRole('link', { name: /Write me an email/ });
+  assert.equal(email.getAttribute('href'), 'mailto:saisriharshaguddati1@gmail.com?subject=Hello%20Harsha');
+  assert.equal(document.querySelectorAll('form').length, 0);
+  assert.ok(screen.getByText('Opens a draft in your email app.'));
   reset();
-  console.log('PASS: contact failure recovery, payload, and success route (mocked; no messages sent)');
+  await act(async () => {});
+  assert.equal(contentRequests, 0, 'Site content and contact must not call a backend');
+  console.log('PASS: direct email contact and zero content/backend requests');
 
   mount(components.Navbar);
   const menu = screen.getByRole('button', { name: 'Open navigation' });
