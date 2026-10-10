@@ -23,6 +23,7 @@ async function generateSitemap() {
     { url: "/", changefreq: "daily", priority: 1.0 },
     { url: "/blog", changefreq: "weekly", priority: 0.8 },
     { url: "/portfolio", changefreq: "weekly", priority: 0.8 },
+    { url: "/experience", changefreq: "monthly", priority: 0.8 },
     { url: "/contact", changefreq: "monthly", priority: 0.7 },
     { url: "/resume", changefreq: "monthly", priority: 0.7 },
     { url: "/sai-sri-harsha", changefreq: "monthly", priority: 0.9 },

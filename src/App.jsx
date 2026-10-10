@@ -8,7 +8,8 @@ import { ThemeProvider } from './ThemeContext';
 import './App.css';
 import { logPageView } from './analytics';
 import { HelmetProvider } from 'react-helmet-async';
-import CatLoader from './components/CatLoader';
+import './editorial.css';
+import RouteMetadata from './components/RouteMetadata';
 
 // Route-level code splitting: non-home pages are lazy-loaded so their JS
 // is not parsed on the initial landing-page visit, saving ~200-400ms parse time.
@@ -19,7 +20,6 @@ const ThankYouPage = lazy(() => import('./pages/ThankYouPage'));
 const FullPost = lazy(() => import('./pages/FullPost'));
 const ExperiencePage = lazy(() => import('./pages/ExperiencePage'));
 const Resume = lazy(() => import('./pages/Resume'));
-const NameVariation = lazy(() => import('./pages/NameVariation'));
 
 // PageTracker: Logs pageviews to GA on route changes
 function PageTracker() {
@@ -46,11 +46,11 @@ function AppContent() {
   return (
     <Router>
       <PageTracker />
-      <CatLoader isPrerender={true} />
+      <RouteMetadata />
       <div className="App flex flex-col min-h-screen">
         <Navbar />
-        <Suspense fallback={null}>
-          <main className="main-content flex-1 flex flex-col">
+        <Suspense fallback={<div className="page-wrap empty-state" role="status">Opening the page…</div>}>
+          <main id="main-content" className="main-content flex-1 flex flex-col">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/blog" element={<Blog />} />
@@ -62,17 +62,17 @@ function AppContent() {
               <Route path="/resume" element={<Resume />} />
               
               {/* Name Variation SEO Landing Pages */}
-              <Route path="/sai-sri-harsha" element={<NameVariation />} />
-              <Route path="/sri-harsha" element={<NameVariation />} />
-              <Route path="/sai-harsha" element={<NameVariation />} />
-              <Route path="/harsha" element={<NameVariation />} />
-              <Route path="/sai-harsha-distributed-systems" element={<NameVariation />} />
-              <Route path="/sri-harsha-ai-engineer" element={<NameVariation />} />
-              <Route path="/harsha-guddati-software-engineer" element={<NameVariation />} />
-              <Route path="/sai-sri-harsha-gainesville" element={<NameVariation />} />
-              <Route path="/sai-harsha-kubernetes" element={<NameVariation />} />
-              <Route path="/sri-harsha-backend" element={<NameVariation />} />
-              <Route path="/sai-sri-harsha-portfolio" element={<NameVariation />} />
+              <Route path="/sai-sri-harsha" element={<Home />} />
+              <Route path="/sri-harsha" element={<Home />} />
+              <Route path="/sai-harsha" element={<Home />} />
+              <Route path="/harsha" element={<Home />} />
+              <Route path="/sai-harsha-distributed-systems" element={<Home />} />
+              <Route path="/sri-harsha-ai-engineer" element={<Home />} />
+              <Route path="/harsha-guddati-software-engineer" element={<Home />} />
+              <Route path="/sai-sri-harsha-gainesville" element={<Home />} />
+              <Route path="/sai-harsha-kubernetes" element={<Home />} />
+              <Route path="/sri-harsha-backend" element={<Home />} />
+              <Route path="/sai-sri-harsha-portfolio" element={<Home />} />
             </Routes>
           </main>
           <Footer />

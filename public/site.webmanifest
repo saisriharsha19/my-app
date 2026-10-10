@@ -1,11 +1,11 @@
 {
   "name": "Sai Sri Harsha Guddati Portfolio",
-  "short_name": "Sai Sri Harsha's Website",
+  "short_name": "Harsha",
   "description": "Personal portfolio of Sai Sri Harsha Guddati showcasing projects and skills in Software Engineering, AI, ML, Cloud, and more.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#f2f3ed",
+  "theme_color": "#183b36",
   "icons": [
     {
       "src": "/favicon-16x16.png",

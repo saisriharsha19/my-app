@@ -1,15 +1,78 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": [
+      "/assets/*",
+      "/fonts/*",
+      "/*.png",
+      "/*.webp",
+      "/*.svg",
+      "/*.ico",
+      "/*.pdf",
+      "/*.xml"
+    ]
   },
   "globalHeaders": {
-    "Cache-Control": "public, max-age=31536000"
+    "Cache-Control": "no-cache",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "mimeTypes": {
+    ".webp": "image/webp",
+    ".woff2": "font/woff2"
   },
   "routes": [
     {
-      "route": "https://saisriharsha.com/*",
-      "redirect": "https://www.saisriharsha.com/{*path}",
-      "statusCode": 301
+      "route": "/portfolio",
+      "rewrite": "/portfolio/index.html"
+    },
+    {
+      "route": "/portfolio/",
+      "rewrite": "/portfolio/index.html"
+    },
+    {
+      "route": "/experience",
+      "rewrite": "/experience/index.html"
+    },
+    {
+      "route": "/experience/",
+      "rewrite": "/experience/index.html"
+    },
+    {
+      "route": "/blog",
+      "rewrite": "/blog/index.html"
+    },
+    {
+      "route": "/blog/",
+      "rewrite": "/blog/index.html"
+    },
+    {
+      "route": "/contact",
+      "rewrite": "/contact/index.html"
+    },
+    {
+      "route": "/contact/",
+      "rewrite": "/contact/index.html"
+    },
+    {
+      "route": "/resume",
+      "rewrite": "/resume/index.html"
+    },
+    {
+      "route": "/resume/",
+      "rewrite": "/resume/index.html"
+    },
+    {
+      "route": "/assets/*",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "route": "/fonts/*",
+      "headers": {
+        "Cache-Control": "public, max-age=604800"
+      }
     }
   ]
 }

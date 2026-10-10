@@ -1,267 +1,30 @@
-// src/pages/Contact.jsx
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiMail, FiSend, FiCheck, FiMapPin, FiGithub, FiLinkedin } from 'react-icons/fi';
+import { FiArrowUpRight } from 'react-icons/fi';
+import { profile } from '../data/profile';
 import { logEvent } from '../analytics';
 
-const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+export default function Contact() {
+  const [data, setData] = useState({ name: '', email: '', message: '' });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+  async function submit(event) {
+    event.preventDefault(); setLoading(true); setError('');
     try {
-      const response = await fetch('https://backend-482511937770.europe-west1.run.app/contact/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        logEvent('generate_lead', 'contact_submit', 'Contact Form', { email_domain: formData.email.split('@')[1] });
-        
-        setSubmitted(true);
-        setIsLoading(false);
-        setTimeout(() => navigate('/thank-you'), 2000);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="container" style={{ minHeight: '100vh', paddingTop: '140px', paddingBottom: '80px' }}>
-      <Helmet>
-        <title>Contact | Sai Sri Harsha Guddati</title>
-        <meta name="description" content="Get in touch with Sai Sri Harsha Guddati. Available for new projects." />
-      </Helmet>
-      <AnimatePresence mode="wait">
-        {submitted ? (
-          <motion.div
-            key="success"
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center',
-              padding: '80px 24px'
-            }}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-          >
-            <div style={{
-              width: '80px',
-              height: '80px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #10b981, #059669)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '24px',
-              color: 'white',
-              fontSize: '36px'
-            }}>
-              <FiCheck />
-            </div>
-            <h2 style={{ fontSize: '28px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '8px' }}>
-              Message Sent!
-            </h2>
-            <p style={{ color: 'var(--text-secondary)' }}>Redirecting...</p>
-          </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{ maxWidth: '700px', margin: '0 auto' }}
-          >
-            {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-              <h1 style={{
-                fontSize: 'clamp(2rem, 5vw, 3rem)',
-                fontWeight: '700',
-                color: 'var(--text-primary)',
-                marginBottom: '12px',
-                letterSpacing: '-0.02em'
-              }}>
-                Get in <span className="text-gradient">Touch</span>
-              </h1>
-              <p style={{ fontSize: '17px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                Have a project in mind? Let's make something great together.
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '16px',
-              marginBottom: '40px',
-              flexWrap: 'wrap'
-            }}>
-              <a
-                href="mailto:saisriharshaguddati1@gmail.com"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 20px',
-                  borderRadius: '10px',
-                  background: 'var(--bg-secondary)',
-                  color: 'var(--text-primary)',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <FiMail size={16} style={{ color: 'var(--accent-primary)' }} />
-                Email Me
-              </a>
-              <a
-                href="https://github.com/saisriharsha19"
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 20px',
-                  borderRadius: '10px',
-                  background: 'var(--bg-secondary)',
-                  color: 'var(--text-primary)',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  fontWeight: '500'
-                }}
-              >
-                <FiGithub size={16} style={{ color: 'var(--accent-primary)' }} />
-                GitHub
-              </a>
-              <a
-                href="https://www.linkedin.com/in/sai-sri-harsha-guddati-552373180/"
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 20px',
-                  borderRadius: '10px',
-                  background: 'var(--bg-secondary)',
-                  color: 'var(--text-primary)',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  fontWeight: '500'
-                }}
-              >
-                <FiLinkedin size={16} style={{ color: 'var(--accent-primary)' }} />
-                LinkedIn
-              </a>
-            </div>
-
-            {/* Form */}
-            <div className="glass-panel" style={{ padding: '40px', borderRadius: '20px' }}>
-              <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '24px' }}>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    marginBottom: '8px',
-                    color: 'var(--text-primary)'
-                  }}>
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Your name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="form-input"
-                  />
-                </div>
-
-                <div style={{ marginBottom: '24px' }}>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    marginBottom: '8px',
-                    color: 'var(--text-primary)'
-                  }}>
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="form-input"
-                  />
-                </div>
-
-                <div style={{ marginBottom: '32px' }}>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    marginBottom: '8px',
-                    color: 'var(--text-primary)'
-                  }}>
-                    Message
-                  </label>
-                  <textarea
-                    required
-                    rows="5"
-                    placeholder="Tell me about your project..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="form-input"
-                    style={{
-                      resize: 'vertical',
-                      minHeight: '140px',
-                      fontFamily: 'inherit'
-                    }}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="btn-primary w-full justify-center"
-                  style={{ padding: '18px', fontSize: '16px' }}
-                >
-                  {isLoading ? 'Sending...' : <>Send Message <FiSend size={18} /></>}
-                </button>
-              </form>
-            </div>
-
-            {/* Location footer */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              marginTop: '32px',
-              color: 'var(--text-secondary)',
-              fontSize: '14px'
-            }}>
-              <FiMapPin size={14} />
-              <span>Based in Gainesville, FL • Available worldwide</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
-export default Contact;
+      const response = await fetch('https://backend-482511937770.europe-west1.run.app/contact/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      if (!response.ok) throw new Error('Submission failed');
+      logEvent('generate_lead', 'contact_submit', 'Contact Form');
+      navigate('/thank-you');
+    } catch {
+      setError('Your message could not be sent. Please try again, or use the email link to reach me directly.');
+    } finally { setLoading(false); }
+  }
+  return <div className="interior-page contact-page page-wrap">
+    <Helmet><title>Contact — Sai Sri Harsha Guddati</title><meta name="description" content="Get in touch with Sai Sri Harsha Guddati about software engineering, AI systems, projects, and collaboration." /></Helmet>
+    <header className="page-heading"><p className="eyebrow">A CONVERSATION STARTS HERE</p><h1>Interesting problems.<br /><em>Good company.</em></h1></header>
+    <div className="contact-layout"><div className="contact-details"><p>Have a project in mind, a question about my work, or an idea worth exploring? I’d love to hear from you.</p><a className="email-link" href={'mailto:' + profile.email}>{profile.email} <FiArrowUpRight /></a><div className="footer-socials"><a href={profile.github} target="_blank" rel="noreferrer">GitHub <FiArrowUpRight /></a><a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn <FiArrowUpRight /></a><a href={profile.twitter} target="_blank" rel="noreferrer">X <FiArrowUpRight /></a></div><div className="contact-note">The work I’m drawn to:<br />Backend systems · AI infrastructure · Full-stack products</div></div>
+    <form className="contact-form" onSubmit={submit}><label>YOUR NAME<input name="name" autoComplete="name" required maxLength={150} value={data.name} onChange={event => setData({ ...data, name: event.target.value })} placeholder="How should I call you?" /></label><label>EMAIL ADDRESS<input name="email" type="email" autoComplete="email" required value={data.email} onChange={event => setData({ ...data, email: event.target.value })} placeholder="you@example.com" /></label><label>WHAT’S ON YOUR MIND?<textarea name="message" required maxLength={10000} value={data.message} onChange={event => setData({ ...data, message: event.target.value })} placeholder="A project, an idea, or just a hello…" /></label>{error && <p className="form-error" role="alert">{error}</p>}<button type="submit" className="solid-link" disabled={loading}>{loading ? 'Sending…' : 'Send message'} <FiArrowUpRight /></button></form></div>
+  </div>;
+}

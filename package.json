@@ -30,7 +30,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs",
+    "test": "node scripts/test-site.mjs",
     "preview": "vite preview"
   },
   "eslintConfig": {
@@ -53,6 +54,10 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.4",
+    "esbuild": "^0.28.2",
+    "jsdom": "^27.0.1",
+    "opentype.js": "^2.0.0",
+    "sharp": "^0.35.5",
     "vite": "^7.3.1"
   }
 }
